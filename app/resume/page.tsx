@@ -56,14 +56,42 @@ export default async function ResumePage() {
 
         {/* Header Dossier */}
         <header className="p-4 rounded border border-border bg-surface space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h1 className="text-xl font-bold tracking-tight text-text-primary font-mono">
-                Resume &amp; Technical Dossier
-              </h1>
-              <p className="text-xs text-text-secondary font-mono mt-1">
-                handle: r41n • security researcher &amp; engineer
-              </p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-border bg-surface-2 shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://github.com/0xraiven.png"
+                  alt="0xraiven"
+                  width={48}
+                  height={48}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl font-bold tracking-tight text-text-primary font-mono">
+                    r41n
+                  </h1>
+                  <span className="text-text-secondary text-xs">•</span>
+                  <span className="text-xs text-text-secondary font-mono">Resume &amp; Dossier</span>
+                </div>
+
+                <div className="flex items-center gap-2 mt-0.5">
+                  <a
+                    href="https://github.com/0xraiven"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-accent/15 border border-accent/35 text-accent hover:bg-accent/25 transition-colors font-mono text-[11px] font-semibold"
+                  >
+                    <span>@0xraiven</span>
+                  </a>
+                  <span className="text-xs text-text-secondary font-mono">
+                    Security Researcher &amp; Red Team Engineer
+                  </span>
+                </div>
+              </div>
             </div>
 
             {resumeData?.pdfFile && (

@@ -1,18 +1,22 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { GlassSurface } from "@/components/chrome/GlassSurface";
 import {
   Search,
   X,
-  FileCode2,
   FolderGit2,
   FlaskConical,
-  FileText,
-  Compass,
-  ArrowRight,
   CornerDownLeft,
+  Terminal,
+  ShieldAlert,
+  BookOpen,
+  Microscope,
+  UserCheck,
+  Award,
+  Layers,
+  Sparkles,
 } from "lucide-react";
 import type { SearchItem } from "@/lib/search-index";
 
@@ -21,9 +25,21 @@ export interface CommandPaletteProps {
   onClose: () => void;
 }
 
+type FilterCategory = "all" | "project" | "writeup" | "note" | "research" | "page";
+
+const FILTER_TABS: { id: FilterCategory; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "project", label: "Projects" },
+  { id: "writeup", label: "Writeups" },
+  { id: "note", label: "Notes" },
+  { id: "research", label: "Research" },
+  { id: "page", label: "Pages" },
+];
+
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const router = useRouter();
   const [query, setQuery] = useState("");
+  const [activeFilter, setActiveFilter] = useState<FilterCategory>("all");
   const [items, setItems] = useState<SearchItem[]>([]);
   const [rawSelectedIndex, setSelectedIndex] = useState(0);
   const [hasLoaded, setHasLoaded] = useState(false);
@@ -55,7 +71,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     };
   }, [isOpen, hasLoaded]);
 
-  // Focus input when opened
+  // Focus input and reset selection when opened
   useEffect(() => {
     if (!isOpen) return;
     const timer = setTimeout(() => {
@@ -63,6 +79,13 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     }, 50);
     return () => clearTimeout(timer);
   }, [isOpen]);
+
+  const handleClose = useCallback(() => {
+    setQuery("");
+    setActiveFilter("all");
+    setSelectedIndex(0);
+    onClose();
+  }, [onClose]);
 
   // Lock body scroll while open
   useEffect(() => {
@@ -74,16 +97,26 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     };
   }, [isOpen]);
 
-  // Filter items based on query
+  // Filter items based on query and active category filter
   const filteredItems = useMemo(() => {
+    let result = items;
+
+    // Filter by tab
+    if (activeFilter !== "all") {
+      if (activeFilter === "research") {
+        result = result.filter((i) => i.kind === "research" || i.kind === "lab-report");
+      } else {
+        result = result.filter((i) => i.kind === activeFilter);
+      }
+    }
+
     const trimmed = query.trim().toLowerCase();
     if (!trimmed) {
-      // Default / empty query view: show primary pages + top projects
-      return items.slice(0, 8);
+      return result;
     }
 
     const tokens = trimmed.split(/\s+/);
-    return items.filter((item) => {
+    return result.filter((item) => {
       const searchTarget = [
         item.title,
         item.description,
@@ -95,7 +128,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
       return tokens.every((token) => searchTarget.includes(token));
     });
-  }, [items, query]);
+  }, [items, query, activeFilter]);
 
   // Clamped selected index
   const selectedIndex = Math.min(
@@ -103,14 +136,34 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     Math.max(0, filteredItems.length - 1)
   );
 
-  // Keyboard navigation
+  const navigateToItem = useCallback(
+    (item: SearchItem) => {
+      handleClose();
+      router.push(item.url);
+    },
+    [handleClose, router]
+  );
+
+  // Keyboard navigation & Tab cycle
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
-        onClose();
+        handleClose();
+        return;
+      }
+
+      // Tab cycles through filter categories
+      if (e.key === "Tab") {
+        e.preventDefault();
+        const currentIndex = FILTER_TABS.findIndex((t) => t.id === activeFilter);
+        const nextIndex = e.shiftKey
+          ? (currentIndex - 1 + FILTER_TABS.length) % FILTER_TABS.length
+          : (currentIndex + 1) % FILTER_TABS.length;
+        setActiveFilter(FILTER_TABS[nextIndex].id);
+        setSelectedIndex(0);
         return;
       }
 
@@ -126,15 +179,14 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         e.preventDefault();
         const selected = filteredItems[selectedIndex];
         if (selected) {
-          onClose();
-          router.push(selected.url);
+          navigateToItem(selected);
         }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, filteredItems, selectedIndex, onClose, router]);
+  }, [isOpen, filteredItems, selectedIndex, activeFilter, handleClose, navigateToItem]);
 
   // Scroll active item into view
   useEffect(() => {
@@ -149,20 +201,114 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
   const isLoading = !hasLoaded;
 
-  const getKindIcon = (kind: SearchItem["kind"]) => {
-    switch (kind) {
+  // Semantic icon with container styling for each item
+  const getItemIcon = (item: SearchItem) => {
+    // Specific iconic overrides for top-level pages
+    if (item.id === "page-readme") {
+      return (
+        <div className="w-7 h-7 rounded-md bg-accent/15 border border-accent/30 text-accent flex items-center justify-center shrink-0">
+          <Terminal className="w-3.5 h-3.5" />
+        </div>
+      );
+    }
+    if (item.id === "page-projects") {
+      return (
+        <div className="w-7 h-7 rounded-md bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center shrink-0">
+          <FolderGit2 className="w-3.5 h-3.5" />
+        </div>
+      );
+    }
+    if (item.id === "page-writeups") {
+      return (
+        <div className="w-7 h-7 rounded-md bg-rose-500/15 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0">
+          <ShieldAlert className="w-3.5 h-3.5" />
+        </div>
+      );
+    }
+    if (item.id === "page-notes") {
+      return (
+        <div className="w-7 h-7 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
+          <BookOpen className="w-3.5 h-3.5" />
+        </div>
+      );
+    }
+    if (item.id === "page-research") {
+      return (
+        <div className="w-7 h-7 rounded-md bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0">
+          <Microscope className="w-3.5 h-3.5" />
+        </div>
+      );
+    }
+    if (item.id === "page-about") {
+      return (
+        <div className="w-7 h-7 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+          <UserCheck className="w-3.5 h-3.5" />
+        </div>
+      );
+    }
+    if (item.id === "page-resume") {
+      return (
+        <div className="w-7 h-7 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
+          <Award className="w-3.5 h-3.5" />
+        </div>
+      );
+    }
+
+    // Default icon mappings by item kind
+    switch (item.kind) {
       case "project":
-        return <FolderGit2 className="w-4 h-4 text-accent" />;
+        return (
+          <div className="w-7 h-7 rounded-md bg-blue-500/10 border border-blue-500/25 text-blue-400 flex items-center justify-center shrink-0">
+            <FolderGit2 className="w-3.5 h-3.5" />
+          </div>
+        );
       case "writeup":
-        return <FileCode2 className="w-4 h-4 text-emerald-400" />;
+        return (
+          <div className="w-7 h-7 rounded-md bg-rose-500/10 border border-rose-500/25 text-rose-400 flex items-center justify-center shrink-0">
+            <ShieldAlert className="w-3.5 h-3.5" />
+          </div>
+        );
       case "research":
       case "lab-report":
-        return <FlaskConical className="w-4 h-4 text-purple-400" />;
+        return (
+          <div className="w-7 h-7 rounded-md bg-purple-500/10 border border-purple-500/25 text-purple-400 flex items-center justify-center shrink-0">
+            <FlaskConical className="w-3.5 h-3.5" />
+          </div>
+        );
       case "note":
-        return <FileText className="w-4 h-4 text-blue-400" />;
+        return (
+          <div className="w-7 h-7 rounded-md bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 flex items-center justify-center shrink-0">
+            <BookOpen className="w-3.5 h-3.5" />
+          </div>
+        );
       case "page":
       default:
-        return <Compass className="w-4 h-4 text-amber-400" />;
+        return (
+          <div className="w-7 h-7 rounded-md bg-accent/10 border border-accent/25 text-accent flex items-center justify-center shrink-0">
+            <Layers className="w-3.5 h-3.5" />
+          </div>
+        );
+    }
+  };
+
+  // Color-coded badge for category tags
+  const getCategoryBadgeClass = (category?: string) => {
+    switch (category) {
+      case "red-team-tooling":
+      case "field-reports":
+        return "text-rose-400 bg-rose-500/10 border-rose-500/25";
+      case "cloud-security":
+      case "projects":
+        return "text-blue-400 bg-blue-500/10 border-blue-500/25";
+      case "research":
+      case "lab-environment":
+        return "text-purple-400 bg-purple-500/10 border-purple-500/25";
+      case "knowledge-base":
+        return "text-emerald-400 bg-emerald-500/10 border-emerald-500/25";
+      case "operator":
+      case "system":
+      default:
+        return "text-accent bg-accent/10 border-accent/25";
     }
   };
 
@@ -171,21 +317,21 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       role="dialog"
       aria-modal="true"
       aria-label="Search and command palette"
-      className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] px-4"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] sm:pt-[12vh] px-3 sm:px-4"
     >
-      {/* Dimmed backdrop - flat, unblurred per architecture §4.4 */}
+      {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/60 transition-opacity duration-150"
-        onClick={onClose}
+        className="fixed inset-0 bg-black/70 backdrop-blur-xs transition-opacity duration-150"
+        onClick={handleClose}
         aria-hidden="true"
       />
 
       {/* Palette Container */}
-      <div className="relative w-full max-w-xl z-10 animate-in fade-in zoom-in-95 duration-150 motion-reduce:animate-none">
-        <GlassSurface className="w-full rounded-lg border border-border shadow-2xl overflow-hidden flex flex-col">
+      <div className="relative w-full max-w-2xl z-10 animate-in fade-in zoom-in-95 duration-150 motion-reduce:animate-none">
+        <GlassSurface className="w-full rounded-xl border border-border shadow-2xl overflow-hidden flex flex-col ring-1 ring-white/10">
           {/* Search Input Bar */}
-          <div className="flex items-center gap-3 px-4 py-3 border-b border-border/70 bg-surface/40">
-            <Search className="w-4 h-4 text-text-secondary shrink-0" />
+          <div className="flex items-center gap-3 px-4 py-3.5 border-b border-border/70 bg-surface/50">
+            <Search className="w-4 h-4 text-accent shrink-0" />
             <input
               ref={inputRef}
               type="text"
@@ -194,8 +340,8 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                 setQuery(e.target.value);
                 setSelectedIndex(0);
               }}
-              placeholder="Search projects, writeups, research, pages..."
-              className="flex-1 bg-transparent text-sm text-text-primary placeholder:text-text-secondary/60 focus:outline-none font-mono"
+              placeholder="Search writeups, projects, notes, research, commands..."
+              className="flex-1 bg-transparent text-sm sm:text-base text-text-primary placeholder:text-text-secondary/50 focus:outline-none font-mono"
               aria-label="Search query"
               autoComplete="off"
               spellCheck="false"
@@ -206,11 +352,12 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                 onClick={() => {
                   setQuery("");
                   setSelectedIndex(0);
+                  inputRef.current?.focus();
                 }}
                 aria-label="Clear search query"
                 className="p-1 rounded text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-4 h-4" />
               </button>
             ) : (
               <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-2 border border-border text-text-secondary select-none">
@@ -219,29 +366,71 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             )}
           </div>
 
+          {/* Interactive Filter Pills */}
+          <div className="flex items-center gap-1.5 px-4 py-2 border-b border-border/40 bg-surface/30 overflow-x-auto text-xs font-mono select-none scrollbar-none">
+            <span className="text-[10px] uppercase tracking-wider text-text-secondary/60 font-semibold mr-1 shrink-0">
+              Filter:
+            </span>
+            {FILTER_TABS.map((tab) => {
+              const isActive = activeFilter === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    setActiveFilter(tab.id);
+                    setSelectedIndex(0);
+                  }}
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors shrink-0 ${
+                    isActive
+                      ? "bg-accent/20 text-accent border border-accent/40 shadow-xs"
+                      : "text-text-secondary hover:text-text-primary hover:bg-surface-2/60 border border-transparent"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
           {/* Results List */}
           <div
             ref={resultsContainerRef}
-            className="max-h-[60vh] overflow-y-auto p-2 divide-y divide-border/30 text-xs font-mono select-none"
+            className="max-h-[58vh] overflow-y-auto p-2 divide-y divide-border/20 text-xs font-mono select-none"
           >
             {isLoading ? (
-              <div className="p-6 text-center text-text-secondary text-xs">
-                Loading index...
+              <div className="p-8 text-center text-text-secondary text-xs flex items-center justify-center gap-2">
+                <span className="inline-block w-2 h-2 rounded-full bg-accent animate-ping" />
+                <span>Loading index...</span>
               </div>
             ) : filteredItems.length === 0 ? (
-              <div className="p-8 text-center space-y-1">
-                <p className="text-text-primary font-medium">No results found</p>
-                <p className="text-text-secondary text-[11px]">
-                  No matches found for &quot;{query}&quot;. Try searching for a technology or category.
+              <div className="p-10 text-center space-y-2">
+                <p className="text-text-primary font-medium text-sm">No matches found</p>
+                <p className="text-text-secondary text-xs">
+                  No records match &quot;{query}&quot;
+                  {activeFilter !== "all" && ` in ${activeFilter} category`}.
                 </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setQuery("");
+                    setActiveFilter("all");
+                  }}
+                  className="mt-2 text-xs text-accent hover:underline inline-flex items-center gap-1"
+                >
+                  <Sparkles className="w-3 h-3" />
+                  <span>Clear filters and reset</span>
+                </button>
               </div>
             ) : (
               <div className="space-y-1">
-                {!query.trim() && (
-                  <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-text-secondary/70 font-semibold">
-                    Quick Navigation
-                  </div>
-                )}
+                {/* Result count or Header */}
+                <div className="px-3 py-1 flex items-center justify-between text-[10px] uppercase tracking-wider text-text-secondary/70 font-semibold">
+                  <span>{query.trim() ? "Search Results" : "Quick Navigation & Index"}</span>
+                  <span className="font-normal text-text-secondary/50">
+                    {filteredItems.length} {filteredItems.length === 1 ? "result" : "results"}
+                  </span>
+                </div>
 
                 {filteredItems.map((item, index) => {
                   const isSelected = index === selectedIndex;
@@ -249,44 +438,45 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                     <div
                       key={item.id}
                       data-index={index}
-                      onClick={() => {
-                        onClose();
-                        router.push(item.url);
-                      }}
+                      onClick={() => navigateToItem(item)}
                       onMouseEnter={() => setSelectedIndex(index)}
-                      className={`flex items-center justify-between p-2.5 rounded cursor-pointer transition-colors ${
+                      className={`group flex items-center justify-between p-2.5 rounded-lg cursor-pointer transition-all border ${
                         isSelected
-                          ? "bg-surface-2 text-text-primary border-l-2 border-accent pl-2"
-                          : "text-text-secondary hover:text-text-primary hover:bg-surface-2/60"
+                          ? "bg-surface-2 border-accent/40 text-text-primary shadow-xs"
+                          : "border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-2/60"
                       }`}
                     >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="shrink-0">{getKindIcon(item.kind)}</div>
+                      <div className="flex items-center gap-3 min-w-0 pr-2">
+                        {getItemIcon(item)}
+
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="font-semibold text-text-primary truncate text-xs">
+                            <span className="font-semibold text-text-primary truncate text-xs group-hover:text-accent transition-colors">
                               {item.title}
                             </span>
                             {item.category && (
-                              <span className="text-[9px] uppercase tracking-wider px-1.5 py-0.2 rounded bg-surface border border-border text-text-secondary shrink-0">
+                              <span
+                                className={`text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded border font-semibold shrink-0 ${getCategoryBadgeClass(
+                                  item.category
+                                )}`}
+                              >
                                 {item.category}
                               </span>
                             )}
                           </div>
-                          <p className="text-[11px] text-text-secondary truncate mt-0.5">
+                          <p className="text-[11px] text-text-secondary truncate mt-0.5 leading-snug">
                             {item.description}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0 ml-3 text-text-secondary">
+                      <div className="flex items-center shrink-0 text-text-secondary">
                         {isSelected && (
-                          <span className="flex items-center gap-1 text-[10px] text-accent">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-accent/15 text-accent border border-accent/30 text-[10px] font-mono font-medium animate-in fade-in duration-100">
                             <span>Open</span>
                             <CornerDownLeft className="w-3 h-3" />
                           </span>
                         )}
-                        <ArrowRight className={`w-3.5 h-3.5 ${isSelected ? "opacity-100 text-accent" : "opacity-0"}`} />
                       </div>
                     </div>
                   );
@@ -295,22 +485,27 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             )}
           </div>
 
-          {/* Palette Footer Help Bar */}
-          <div className="px-4 py-2 bg-surface/60 border-t border-border/70 flex items-center justify-between text-[11px] text-text-secondary select-none font-mono">
-            <div className="flex items-center gap-4">
+          {/* Palette Footer Status Bar */}
+          <div className="px-4 py-2.5 bg-surface/70 border-t border-border/70 flex items-center justify-between text-[11px] text-text-secondary select-none font-mono">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <span className="flex items-center gap-1">
                 <kbd className="px-1 py-0.5 rounded bg-surface-2 border border-border text-[9px]">↑</kbd>
                 <kbd className="px-1 py-0.5 rounded bg-surface-2 border border-border text-[9px]">↓</kbd>
-                <span className="text-[10px]">to navigate</span>
+                <span className="text-[10px]">navigate</span>
               </span>
               <span className="flex items-center gap-1">
                 <kbd className="px-1.5 py-0.5 rounded bg-surface-2 border border-border text-[9px]">↵</kbd>
-                <span className="text-[10px]">to select</span>
+                <span className="text-[10px]">select</span>
+              </span>
+              <span className="hidden sm:flex items-center gap-1">
+                <kbd className="px-1.5 py-0.5 rounded bg-surface-2 border border-border text-[9px]">tab</kbd>
+                <span className="text-[10px]">filter</span>
               </span>
             </div>
+
             <span className="flex items-center gap-1">
               <kbd className="px-1.5 py-0.5 rounded bg-surface-2 border border-border text-[9px]">esc</kbd>
-              <span className="text-[10px]">to close</span>
+              <span className="text-[10px]">close</span>
             </span>
           </div>
         </GlassSurface>

@@ -84,9 +84,19 @@ export function TopBar({
 
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm tracking-tight font-mono focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded px-1 py-0.5"
+            className="flex items-center gap-2 text-sm tracking-tight font-mono focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded px-1 py-0.5 group"
           >
-            <span className="font-semibold text-text-primary hover:text-accent transition-colors">
+            <div className="relative w-6 h-6 rounded-full overflow-hidden border border-border group-hover:border-accent/60 transition-colors shrink-0 bg-surface-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://github.com/0xraiven.png"
+                alt="0xraiven"
+                width={24}
+                height={24}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <span className="font-semibold text-text-primary group-hover:text-accent transition-colors">
               r41n
             </span>
             <span className="text-text-secondary text-xs">•</span>
@@ -96,25 +106,24 @@ export function TopBar({
           </Link>
         </div>
 
-        {/* CENTER: ● Online status indicator */}
-        <div className="flex items-center gap-1.5 text-xs font-mono text-text-secondary select-none">
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="hidden xs:inline">Online</span>
-        </div>
-
-        {/* RIGHT: Search button, GitHub, LinkedIn, Theme toggle, overflow menu */}
-        <div className="flex items-center gap-1">
-          {/* Quick Search Button (⌘K) */}
+        {/* RIGHT: Search bar, GitHub, LinkedIn, Theme toggle, overflow menu */}
+        <div className="flex items-center gap-2">
+          {/* Expanded Search Bar (⌘K) */}
           <button
             type="button"
             onClick={openCommandPalette}
             aria-label="Search knowledge base (⌘K)"
-            className="flex items-center gap-1.5 px-2 py-1 rounded text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors text-xs font-mono focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            className="w-36 xs:w-48 sm:w-64 md:w-80 lg:w-96 h-8 px-2.5 sm:px-3 rounded border border-border bg-surface-2/60 hover:bg-surface-2 hover:border-accent/40 transition-all flex items-center justify-between text-xs font-mono text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent group"
           >
-            <Search className="w-3.5 h-3.5 text-accent" />
-            <span className="hidden md:inline text-[11px]">Search</span>
-            <kbd className="hidden sm:inline text-[10px] px-1 py-0.5 rounded bg-surface-2 border border-border text-text-secondary">
-              ⌘K
+            <div className="flex items-center gap-2 truncate">
+              <Search className="w-3.5 h-3.5 text-accent shrink-0 group-hover:scale-105 transition-transform" />
+              <span className="truncate text-[11px] sm:text-xs">
+                <span className="hidden md:inline">Search knowledge base...</span>
+                <span className="inline md:hidden">Search...</span>
+              </span>
+            </div>
+            <kbd className="hidden sm:inline-flex items-center text-[10px] px-1.5 py-0.5 rounded bg-surface border border-border/80 text-text-secondary font-mono">
+              ⌘K / ctrl+K
             </kbd>
           </button>
 

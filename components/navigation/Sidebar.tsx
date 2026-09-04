@@ -163,7 +163,7 @@ export function Sidebar() {
                             {Icon && <Icon className="w-3.5 h-3.5 shrink-0 text-accent" />}
                             <span className="truncate">{item.label}</span>
                             <kbd className="ml-auto text-[10px] px-1 rounded bg-surface border border-border text-text-secondary">
-                              ⌘K
+                              ⌘K / ctrl+K
                             </kbd>
                           </button>
                         </li>
@@ -174,11 +174,10 @@ export function Sidebar() {
                       <li key={item.label}>
                         <Link
                           href={item.href}
-                          className={`flex items-center gap-2 px-2 py-1.5 rounded font-mono transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
-                            isActive
+                          className={`flex items-center gap-2 px-2 py-1.5 rounded font-mono transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${isActive
                               ? "bg-surface-2 text-text-primary font-medium text-accent border-l-2 border-accent pl-1.5"
                               : "text-text-secondary hover:text-text-primary hover:bg-surface-2"
-                          }`}
+                            }`}
                         >
                           {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
                           <span className="truncate">{item.label}</span>
