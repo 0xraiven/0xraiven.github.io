@@ -102,9 +102,6 @@ export function GlyphMatrixSpinner({
 
   return (
     <div className={containerClasses}>
-      {/* Moving CRT scanline */}
-      <div className="animate-scanline" />
-
       <div className="relative font-mono text-xs space-y-3 w-full max-w-lg mx-auto select-none">
         {/* Top telemetry bar */}
         <div className="flex items-center justify-between border-b border-border/80 pb-2 text-[11px] text-text-secondary">

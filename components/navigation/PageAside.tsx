@@ -58,7 +58,7 @@ export function PageAside({ headings: initialHeadings, relatedItems }: PageAside
   return (
     <aside
       aria-label="Table of contents and related documents"
-      className="hidden xl:block w-60 shrink-0 border-l border-border bg-bg h-[calc(100vh-3rem)] sticky top-12 overflow-y-auto px-4 py-6 space-y-6 select-none"
+      className="hidden xl:block w-60 shrink-0 border-l border-border bg-bg h-full overflow-y-auto px-4 py-6 space-y-6 select-none terminal-scrollbar"
     >
       <TableOfContents headings={headings} />
       <RelatedContent items={relatedItems} />

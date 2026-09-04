@@ -1,13 +1,14 @@
 {
-  "title": "Persistence Hunter",
-  "description": "Linux persistence detection framework. Standardizes host anomaly telemetry across cron schedules, systemd service units, and shell environment initialization vectors.",
+  "title": "Persist Hunt",
+  "description": "Linux persistence detection framework. Standardizes host anomaly telemetry across cron schedules, systemd service units, and shell environment initialization vectors",
   "status": "active",
-  "category": "red-team-tooling",
+  "category": "detection-engineering",
   "technologies": [
     "Python",
-    "Linux Internals",
-    "Host Telemetry",
-    "Audit Engine"
+    "linux",
+    "persistent-storage",
+    "python3",
+    "security-audit"
   ],
   "githubUrl": "https://github.com/0xraiven/persistHunt",
   "screenshots": [],

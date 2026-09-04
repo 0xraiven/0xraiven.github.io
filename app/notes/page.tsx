@@ -5,6 +5,7 @@ import { KnowledgeBaseLayout } from "@/components/layout/KnowledgeBaseLayout";
 import { getArticles } from "@/lib/articles";
 import { StayTuned } from "@/components/content/StayTuned";
 import { ArrowRight, Clock, Calendar, Tag, FileText } from "lucide-react";
+import { ScrambleText } from "@/components/animation/ScrambleText";
 
 export const metadata: Metadata = {
   title: "Notes // r41n",
@@ -33,7 +34,7 @@ export default async function NotesPage() {
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
             <h1 className="text-xl font-bold tracking-tight text-text-primary uppercase flex items-center gap-2">
               <FileText className="w-5 h-5 text-accent" />
-              <span>Notes &amp; Tactical Cheat Sheets</span>
+              <ScrambleText text="Notes & Tactical Cheat Sheets" as="span" />
             </h1>
             <span className="text-xs text-text-secondary">
               [{notes.length} notes recorded]

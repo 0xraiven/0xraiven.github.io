@@ -7,6 +7,11 @@ export const ARTICLE_CATEGORY_OPTIONS = [
   { label: "Detection Engineering", value: "detection-engineering" },
   { label: "Red Team", value: "red-team" },
   { label: "CTF", value: "ctf" },
+  { label: "Hack The Box", value: "htb" },
+  { label: "HTB Low", value: "htb-low" },
+  { label: "HTB Medium", value: "htb-medium" },
+  { label: "HTB Hard", value: "htb-hard" },
+  { label: "HTB Insane", value: "htb-insane" },
   { label: "Tools", value: "tools" },
 ] as const;
 

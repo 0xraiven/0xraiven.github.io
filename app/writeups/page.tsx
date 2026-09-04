@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { KnowledgeBaseLayout } from '@/components/layout/KnowledgeBaseLayout';
 import { getArticles } from '@/lib/articles';
 import { ArrowRight, Clock, Calendar, Tag } from 'lucide-react';
+import { ScrambleText } from '@/components/animation/ScrambleText';
 
 export const metadata: Metadata = {
   title: 'Writeups // r41n',
@@ -30,9 +31,11 @@ export default async function WriteupsPage() {
             <span className="text-text-primary">writeups</span>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-            <h1 className="text-xl font-bold tracking-tight text-text-primary uppercase">
-              Security Writeups & Lab Walkthroughs
-            </h1>
+            <ScrambleText
+              text="Security Writeups & Lab Walkthroughs"
+              as="h1"
+              className="text-xl font-bold tracking-tight text-text-primary uppercase"
+            />
             <span className="text-xs text-text-secondary">
               [{writeups.length} documents published]
             </span>

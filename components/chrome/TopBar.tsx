@@ -164,7 +164,7 @@ export function TopBar({
             </button>
 
             {overflowOpen && (
-              <div className="absolute right-0 mt-1 w-48 py-1 rounded bg-surface border border-border shadow-lg z-50 text-xs font-mono">
+              <div className="absolute right-0 mt-1 w-48 py-1 rounded bg-surface border border-border shadow-lg z-50 text-xs font-mono animate-dropdown-slide-down">
                 <div className="px-3 py-1.5 text-text-secondary border-b border-border">
                   r41n knowledge base
                 </div>

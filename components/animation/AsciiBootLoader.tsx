@@ -4,11 +4,12 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Terminal, Shield, ArrowRight, X } from "lucide-react";
 
 const ASCII_BANNER = `
-  ____  _  _    _       ____  ____  ____  
- |  _ \\| || |  / | _ __/ ___||  _ \\| __ ) 
- | |_) | || |_ | || '__\\___ \\| |_) |  _ \\ 
- |  _ <|__   _|| || |   ___) |  _ <| |_) |
- |_| \\_\\  |_|  |_||_|  |____/|_| \\_\\____/ 
+██████╗      ██╗  ██╗       ██╗     ███╗   ██╗
+██╔══██╗     ██║  ██║      ███║     ████╗  ██║
+██████╔╝     ███████║      ╚██║     ██╔██╗ ██║
+██╔══██╗     ╚════██║       ██║     ██║╚██╗██║
+██║  ██║          ██║       ██║     ██║ ╚████║
+╚═╝  ╚═╝          ╚═╝       ╚═╝     ╚═╝  ╚═══╝
 `;
 
 const BOOT_STEPS = [
@@ -28,7 +29,7 @@ export function AsciiBootLoader() {
   const dismiss = useCallback(() => {
     setIsVisible(false);
     try {
-      sessionStorage.setItem("booted", "true");
+      sessionStorage.setItem("r41n_booted", "true");
     } catch {
       // ignore
     }
@@ -120,9 +121,6 @@ export function AsciiBootLoader() {
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-xl rounded border border-accent/40 bg-surface p-4 sm:p-6 font-mono text-xs shadow-2xl space-y-4 overflow-hidden"
       >
-        {/* CRT Scanline */}
-        <div className="animate-scanline" />
-
         {/* Window Top Bar */}
         <div className="flex items-center justify-between border-b border-border pb-2.5 text-[11px] text-text-secondary">
           <div className="flex items-center gap-2">

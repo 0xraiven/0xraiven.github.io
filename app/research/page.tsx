@@ -5,6 +5,7 @@ import { KnowledgeBaseLayout } from "@/components/layout/KnowledgeBaseLayout";
 import { getArticles } from "@/lib/articles";
 import { StayTuned } from "@/components/content/StayTuned";
 import { ArrowRight, Clock, Calendar, Tag, FlaskConical } from "lucide-react";
+import { ScrambleText } from "@/components/animation/ScrambleText";
 
 export const metadata: Metadata = {
   title: "Security Research // r41n",
@@ -33,7 +34,7 @@ export default async function ResearchPage() {
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
             <h1 className="text-xl font-bold tracking-tight text-text-primary uppercase flex items-center gap-2">
               <FlaskConical className="w-5 h-5 text-accent" />
-              <span>Vulnerability Research &amp; Whitepapers</span>
+              <ScrambleText text="Vulnerability Research & Whitepapers" as="span" />
             </h1>
             <span className="text-xs text-text-secondary">
               [{researchItems.length} papers published]

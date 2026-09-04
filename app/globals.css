@@ -160,6 +160,13 @@ html {
   color-scheme: dark;
 }
 
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
   background-color: var(--bg);
   color: var(--text-primary);
@@ -188,11 +195,6 @@ code, kbd, samp, pre {
 @keyframes terminalBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
-}
-
-@keyframes terminalScanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(1000%); }
 }
 
 @keyframes pageReveal {
@@ -237,18 +239,6 @@ code, kbd, samp, pre {
   animation: terminalBlink 0.9s step-start infinite;
 }
 
-.animate-scanline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity: 0.75;
-  animation: terminalScanline 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  pointer-events: none;
-}
-
 /* Progressive Stagger Reveal Classes */
 .animate-page-reveal {
   animation: pageReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -264,6 +254,10 @@ code, kbd, samp, pre {
 .stagger-8 { animation-delay: 470ms; }
 
 /* Custom Matrix Scrollbar */
+.terminal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--surface);
+}
 .terminal-scrollbar::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -275,4 +269,74 @@ code, kbd, samp, pre {
   background: var(--accent);
   border-radius: 2px;
 }
+
+/* Modal and Command Palette Opening Animations */
+@keyframes modalBackdropEnter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalContentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.96);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.animate-modal-backdrop {
+  animation: modalBackdropEnter 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-modal-content {
+  animation: modalContentEnter 0.26s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Smooth Accordion Slide Down for Sidebar Dropdowns */
+.accordion-content-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 220ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease-out;
+  pointer-events: none;
+}
+
+.accordion-content-expand {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition: grid-template-rows 220ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease-out;
+  pointer-events: auto;
+}
+
+.accordion-inner {
+  overflow: hidden;
+}
+
+/* Floating Dropdown Slide Down Menu */
+@keyframes dropdownSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-dropdown-slide-down {
+  animation: dropdownSlideDown 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: top right;
+}
+
 

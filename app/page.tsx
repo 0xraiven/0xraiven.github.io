@@ -33,20 +33,24 @@ export default async function Home() {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
-            {/* GitHub Profile Picture */}
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border border-border/90 bg-surface-2 shrink-0 shadow-sm">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://github.com/0xraiven.png"
-                alt="0xraiven profile"
-                width={80}
-                height={80}
-                className="w-full h-full object-cover"
-              />
+            {/* GitHub Profile Picture - Circular Cyber Badge */}
+            <div className="relative group shrink-0">
+              <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-accent/40 bg-surface-2 shadow-md shadow-accent/10 ring-2 ring-border/80 ring-offset-2 ring-offset-bg transition-all duration-300 group-hover:border-accent group-hover:ring-accent/50">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://github.com/0xraiven.png"
+                  alt="0xraiven profile"
+                  width={80}
+                  height={80}
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
               <span
-                className="absolute bottom-1 right-1 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-surface"
+                className="absolute bottom-0 right-0 sm:bottom-0.5 sm:right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-bg shadow-sm"
                 title="Status: Active"
-              />
+              >
+                <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
+              </span>
             </div>
 
             {/* Profile Info */}
@@ -121,7 +125,7 @@ export default async function Home() {
         <section id="technical-configuration" className="space-y-3">
           <h2 className="text-base font-semibold tracking-tight font-mono text-text-primary flex items-center gap-2 border-b border-border pb-2">
             <Terminal className="w-4 h-4 text-accent" />
-            <span>Technical Configuration</span>
+            <ScrambleText text="Technical Configuration" as="span" />
           </h2>
 
           <p className="text-xs text-text-secondary font-mono">
@@ -130,26 +134,7 @@ export default async function Home() {
 
           <TerminalBlock
             title="r41n.conf — /etc/profile"
-            commands={[
-              {
-                cmd: "cat /etc/profile/r41n.conf",
-                output: `handle      :: r41n
-focus       :: Offensive Security
-               Red Team Tooling
-               Cloud Security
-               Detection Engineering
-
-environment :: Linux (Arch / Debian)
-               Windows Active Directory
-               AWS Cloud Architecture
-               Docker / Podman Containers
-               KVM / Proxmox Virtualization
-
-status      :: building
-               breaking
-               documenting`,
-              },
-            ]}
+            interactive={true}
           />
         </section>
 
@@ -157,7 +142,7 @@ status      :: building
         <section id="repository-index" className="space-y-4">
           <h2 className="text-base font-semibold tracking-tight font-mono text-text-primary flex items-center gap-2 border-b border-border pb-2">
             <FolderGit2 className="w-4 h-4 text-accent" />
-            <span>Repository Index</span>
+            <ScrambleText text="Repository Index" as="span" />
           </h2>
 
           <p className="text-xs text-text-secondary font-mono">
@@ -239,7 +224,7 @@ status      :: building
           <div className="flex items-center justify-between border-b border-border pb-2">
             <h2 className="text-base font-semibold tracking-tight font-mono text-text-primary flex items-center gap-2">
               <Layers className="w-4 h-4 text-accent" />
-              <span>Pinned Proof-of-Work</span>
+              <ScrambleText text="Pinned Proof-of-Work" as="span" />
             </h2>
             <Link
               href="/projects"
@@ -305,7 +290,7 @@ status      :: building
         <section id="operational-philosophy" className="space-y-4">
           <h2 className="text-base font-semibold tracking-tight font-mono text-text-primary flex items-center gap-2 border-b border-border pb-2">
             <Shield className="w-4 h-4 text-accent" />
-            <span>Operational Philosophy</span>
+            <ScrambleText text="Operational Philosophy" as="span" />
           </h2>
 
           <div className="space-y-2 text-xs font-mono text-text-secondary leading-relaxed">

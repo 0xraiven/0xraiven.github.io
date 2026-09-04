@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUI } from "@/providers";
@@ -30,11 +30,10 @@ interface NavItem {
 interface NavGroup {
   title: string;
   collapsible?: boolean;
-  defaultOpen?: boolean;
   items: NavItem[];
 }
 
-const NAV_GROUPS: NavGroup[] = [
+const MAIN_NAV_GROUPS: NavGroup[] = [
   {
     title: "START HERE",
     items: [
@@ -45,7 +44,6 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "PROJECTS",
     collapsible: true,
-    defaultOpen: true,
     items: [
       { label: "PhishGuard", href: "/projects/phishguard", icon: ShieldAlert },
       { label: "persistHunt", href: "/projects/persisthunt", icon: Terminal },
@@ -55,7 +53,6 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "WRITEUPS",
     collapsible: true,
-    defaultOpen: true,
     items: [
       { label: "Web Security", href: "/writeups/web-security", icon: FileCode2 },
       { label: "Linux", href: "/writeups/linux", icon: FileCode2 },
@@ -69,7 +66,6 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "NOTES",
     collapsible: true,
-    defaultOpen: true,
     items: [
       { label: "Web Security", href: "/notes/web-security", icon: FileText },
       { label: "Linux", href: "/notes/linux", icon: FileText },
@@ -83,30 +79,40 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "RESEARCH",
     collapsible: true,
-    defaultOpen: true,
     items: [
       { label: "Security Research", href: "/research", icon: FlaskConical },
       { label: "Lab Reports", href: "/research/lab-reports", icon: FlaskConical },
     ],
   },
-  {
-    title: "MISC",
-    items: [
-      { label: "About", href: "/about", icon: User },
-      { label: "Resume", href: "/resume", icon: FileDown },
-    ],
-  },
 ];
+
+const MISC_ITEMS: NavItem[] = [
+  { label: "About", href: "/about", icon: User },
+  { label: "Resume", href: "/resume", icon: FileDown },
+];
+
+function getActiveGroupForPath(path: string | null | undefined): string | null {
+  if (!path) return null;
+  if (path.startsWith("/projects")) return "PROJECTS";
+  if (path.startsWith("/writeups")) return "WRITEUPS";
+  if (path.startsWith("/notes")) return "NOTES";
+  if (path.startsWith("/research")) return "RESEARCH";
+  return null;
+}
 
 export function Sidebar() {
   const pathname = usePathname();
   const { openCommandPalette } = useUI();
+
+  // Only open the section containing the active page by default
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
-    const state: Record<string, boolean> = {};
-    NAV_GROUPS.forEach((group) => {
-      state[group.title] = group.defaultOpen ?? true;
-    });
-    return state;
+    const active = getActiveGroupForPath(pathname);
+    return {
+      PROJECTS: active === "PROJECTS",
+      WRITEUPS: active === "WRITEUPS",
+      NOTES: active === "NOTES",
+      RESEARCH: active === "RESEARCH",
+    };
   });
 
   const toggleGroup = (title: string) => {
@@ -116,28 +122,26 @@ export function Sidebar() {
     }));
   };
 
-  // Automatically keep active section expanded on navigation
-  React.useEffect(() => {
-    NAV_GROUPS.forEach((group) => {
-      const hasActiveChild = group.items.some((item) => {
-        if (item.href === "/" && pathname === "/") return true;
-        if (item.href !== "/" && pathname.startsWith(item.href)) return true;
-        return false;
-      });
-      if (hasActiveChild) {
-        setOpenGroups((prev) => (prev[group.title] ? prev : { ...prev, [group.title]: true }));
-      }
+  // When route changes, sync open state so only current section is open
+  useEffect(() => {
+    const active = getActiveGroupForPath(pathname);
+    setOpenGroups({
+      PROJECTS: active === "PROJECTS",
+      WRITEUPS: active === "WRITEUPS",
+      NOTES: active === "NOTES",
+      RESEARCH: active === "RESEARCH",
     });
   }, [pathname]);
 
   return (
     <aside
       aria-label="Sidebar navigation"
-      className="w-64 shrink-0 bg-bg border-r border-border h-[calc(100vh-3rem)] sticky top-12 overflow-y-auto px-3 py-4 text-xs select-none"
+      className="w-64 shrink-0 bg-bg border-r border-border h-full flex flex-col justify-between text-xs select-none"
     >
-      <nav className="space-y-6">
-        {NAV_GROUPS.map((group) => {
-          const isOpen = openGroups[group.title] ?? true;
+      {/* Scrollable Documentation Navigation */}
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 terminal-scrollbar">
+        {MAIN_NAV_GROUPS.map((group) => {
+          const isOpen = group.collapsible ? Boolean(openGroups[group.title]) : true;
           return (
             <div key={group.title} className="space-y-1">
               {group.collapsible ? (
@@ -145,71 +149,113 @@ export function Sidebar() {
                   type="button"
                   onClick={() => toggleGroup(group.title)}
                   aria-expanded={isOpen}
-                  className="w-full flex items-center justify-between px-2 py-1 text-[11px] font-mono uppercase tracking-wider text-text-secondary hover:text-text-primary rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                  className="w-full flex items-center justify-between px-2 py-1 text-[11px] font-mono uppercase tracking-wider text-text-secondary hover:text-text-primary rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent group transition-colors"
                 >
-                  <span>{group.title}</span>
-                  {isOpen ? (
-                    <ChevronDown className="w-3.5 h-3.5 text-text-secondary" />
-                  ) : (
-                    <ChevronRight className="w-3.5 h-3.5 text-text-secondary" />
-                  )}
+                  <span className="transition-colors group-hover:text-text-primary">{group.title}</span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-text-secondary transition-transform duration-200 ease-out ${
+                      isOpen ? "rotate-0 text-text-primary" : "-rotate-90"
+                    }`}
+                  />
                 </button>
               ) : (
-                <div className="px-2 py-1 text-[11px] font-mono uppercase tracking-wider text-text-secondary">
+                <Link
+                  href="/"
+                  className="block px-2 py-1 text-[11px] font-mono uppercase tracking-wider text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
+                >
                   {group.title}
-                </div>
+                </Link>
               )}
 
-              {isOpen && (
-                <ul className="space-y-0.5">
-                  {group.items.map((item) => {
-                    const isActive = pathname === item.href;
-                    const Icon = item.icon;
+              <div
+                className={
+                  group.collapsible
+                    ? isOpen
+                      ? "accordion-content-expand"
+                      : "accordion-content-collapse"
+                    : "block"
+                }
+              >
+                <div className={group.collapsible ? "accordion-inner" : ""}>
+                  <ul className="space-y-0.5 pt-0.5">
+                    {group.items.map((item) => {
+                      const isActive = pathname === item.href;
+                      const Icon = item.icon;
 
-                    if (item.isSearch) {
+                      if (item.isSearch) {
+                        return (
+                          <li key={item.label}>
+                            <button
+                              type="button"
+                              onClick={openCommandPalette}
+                              className="w-full flex items-center gap-2 px-2 py-1.5 rounded font-mono transition-colors text-text-secondary hover:text-text-primary hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent text-left"
+                            >
+                              {Icon && <Icon className="w-3.5 h-3.5 shrink-0 text-accent" />}
+                              <span className="truncate">{item.label}</span>
+                              <kbd className="ml-auto text-[10px] px-1 rounded bg-surface border border-border text-text-secondary">
+                                ⌘K / ctrl+K
+                              </kbd>
+                            </button>
+                          </li>
+                        );
+                      }
+
                       return (
                         <li key={item.label}>
-                          <button
-                            type="button"
-                            onClick={openCommandPalette}
-                            className="w-full flex items-center gap-2 px-2 py-1.5 rounded font-mono transition-colors text-text-secondary hover:text-text-primary hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent text-left"
+                          <Link
+                            href={item.href}
+                            className={`flex items-center gap-2 px-2 py-1.5 rounded font-mono transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+                              isActive
+                                ? "bg-surface-2 text-text-primary font-medium text-accent border-l-2 border-accent pl-1.5"
+                                : "text-text-secondary hover:text-text-primary hover:bg-surface-2"
+                            }`}
                           >
-                            {Icon && <Icon className="w-3.5 h-3.5 shrink-0 text-accent" />}
+                            {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
                             <span className="truncate">{item.label}</span>
-                            <kbd className="ml-auto text-[10px] px-1 rounded bg-surface border border-border text-text-secondary">
-                              ⌘K / ctrl+K
-                            </kbd>
-                          </button>
+                            {item.badge && (
+                              <span className="ml-auto text-[10px] px-1 rounded bg-surface border border-border text-text-secondary">
+                                {item.badge}
+                              </span>
+                            )}
+                          </Link>
                         </li>
                       );
-                    }
-
-                    return (
-                      <li key={item.label}>
-                        <Link
-                          href={item.href}
-                          className={`flex items-center gap-2 px-2 py-1.5 rounded font-mono transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${isActive
-                              ? "bg-surface-2 text-text-primary font-medium text-accent border-l-2 border-accent pl-1.5"
-                              : "text-text-secondary hover:text-text-primary hover:bg-surface-2"
-                            }`}
-                        >
-                          {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
-                          <span className="truncate">{item.label}</span>
-                          {item.badge && (
-                            <span className="ml-auto text-[10px] px-1 rounded bg-surface border border-border text-text-secondary">
-                              {item.badge}
-                            </span>
-                          )}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
+                    })}
+                  </ul>
+                </div>
+              </div>
             </div>
           );
         })}
       </nav>
+
+      {/* Pinned Bottom MISC Section - ALWAYS REACHABLE */}
+      <div className="shrink-0 p-3 border-t border-border bg-surface/30 space-y-1">
+        <div className="px-2 py-1 text-[11px] font-mono uppercase tracking-wider text-text-secondary">
+          MISC
+        </div>
+        <ul className="space-y-0.5">
+          {MISC_ITEMS.map((item) => {
+            const isActive = pathname === item.href;
+            const Icon = item.icon;
+            return (
+              <li key={item.label}>
+                <Link
+                  href={item.href}
+                  className={`flex items-center gap-2 px-2 py-1.5 rounded font-mono transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+                    isActive
+                      ? "bg-surface-2 text-text-primary font-medium text-accent border-l-2 border-accent pl-1.5"
+                      : "text-text-secondary hover:text-text-primary hover:bg-surface-2"
+                  }`}
+                >
+                  {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
+                  <span className="truncate">{item.label}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </aside>
   );
 }

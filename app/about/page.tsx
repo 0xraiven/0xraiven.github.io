@@ -20,6 +20,7 @@ import {
   GitBranch,
   ExternalLink,
 } from "lucide-react";
+import { ScrambleText } from "@/components/animation/ScrambleText";
 
 export const metadata: Metadata = {
   title: "About // r41n",
@@ -131,26 +132,33 @@ export default async function AboutPage() {
         <header className="p-5 rounded border border-border bg-surface space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="relative w-14 h-14 rounded-lg overflow-hidden border border-border bg-surface-2 shrink-0">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://github.com/0xraiven.png"
-                  alt="0xraiven profile"
-                  width={56}
-                  height={56}
-                  className="w-full h-full object-cover"
-                />
+              {/* GitHub Profile Picture - Circular Cyber Badge */}
+              <div className="relative group shrink-0">
+                <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-accent/40 bg-surface-2 shadow-sm ring-2 ring-border/80 ring-offset-2 ring-offset-bg transition-all duration-300 group-hover:border-accent group-hover:ring-accent/50">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="https://github.com/0xraiven.png"
+                    alt="0xraiven profile"
+                    width={56}
+                    height={56}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
                 <span
-                  className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-surface"
+                  className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 border-2 border-bg shadow-sm"
                   title="Status: Active"
-                />
+                >
+                  <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
+                </span>
               </div>
 
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-text-primary font-mono">
-                    r41n
-                  </h1>
+                  <ScrambleText
+                    text="r41n"
+                    as="h1"
+                    className="text-xl sm:text-2xl font-bold tracking-tight text-text-primary font-mono"
+                  />
                   <span className="text-text-secondary text-xs">•</span>
                   <span className="text-xs text-text-secondary font-mono">Operator Dossier</span>
                   <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.2 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-mono ml-1">
@@ -213,7 +221,7 @@ export default async function AboutPage() {
             <div className="flex items-center gap-2">
               <Workflow className="w-4 h-4 text-accent" />
               <h2 className="text-xs font-semibold tracking-wider text-text-primary font-mono uppercase">
-                Core Engineering Workflow
+                <ScrambleText text="Core Engineering Workflow" as="span" />
               </h2>
             </div>
             <span className="text-[10px] font-mono text-text-secondary">Iterative Cycle</span>
@@ -247,7 +255,7 @@ export default async function AboutPage() {
             <div className="flex items-center gap-2">
               <Compass className="w-4 h-4 text-accent" />
               <h2 className="text-xs font-semibold tracking-wider text-text-primary font-mono uppercase">
-                Technical Focus &amp; Research Areas
+                <ScrambleText text="Technical Focus & Research Areas" as="span" />
               </h2>
             </div>
             <span className="text-[10px] font-mono text-text-secondary">7 focus areas</span>
@@ -279,7 +287,7 @@ export default async function AboutPage() {
             <div className="flex items-center gap-2">
               <Code2 className="w-4 h-4 text-accent" />
               <h2 className="text-xs font-semibold tracking-wider text-text-primary font-mono uppercase">
-                Selected Projects
+                <ScrambleText text="Selected Projects" as="span" />
               </h2>
             </div>
             <span className="text-[10px] font-mono text-text-secondary">Open Source Repositories</span>
@@ -333,7 +341,7 @@ export default async function AboutPage() {
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-accent" />
               <h2 className="text-xs font-semibold tracking-wider text-text-primary font-mono uppercase">
-                Practical Security Work
+                <ScrambleText text="Practical Security Work" as="span" />
               </h2>
             </div>
             <span className="text-[10px] font-mono text-text-secondary">Hands-On Practice</span>
@@ -367,7 +375,7 @@ export default async function AboutPage() {
             <div className="flex items-center gap-2">
               <Server className="w-4 h-4 text-accent" />
               <h2 className="text-xs font-semibold tracking-wider text-text-primary font-mono uppercase">
-                Lab &amp; Cyber Range Infrastructure
+                <ScrambleText text="Lab & Cyber Range Infrastructure" as="span" />
               </h2>
             </div>
             <span className="text-[10px] font-mono text-text-secondary">Arch Linux Homelab</span>
@@ -417,7 +425,7 @@ export default async function AboutPage() {
             <div className="flex items-center gap-2">
               <Layers className="w-4 h-4 text-accent" />
               <h2 className="text-xs font-semibold tracking-wider text-text-primary font-mono uppercase">
-                Software &amp; Systems Engineering Stack
+                <ScrambleText text="Software & Systems Engineering Stack" as="span" />
               </h2>
             </div>
             <span className="text-[10px] font-mono text-text-secondary">Engineering Tools</span>
@@ -449,7 +457,7 @@ export default async function AboutPage() {
             <div className="flex items-center gap-2">
               <Cpu className="w-4 h-4 text-accent" />
               <h2 className="text-xs font-semibold tracking-wider text-text-primary font-mono uppercase">
-                Practical Learning Progression
+                <ScrambleText text="Practical Learning Progression" as="span" />
               </h2>
             </div>
             <span className="text-[10px] font-mono text-text-secondary">Path Taken</span>
@@ -478,7 +486,7 @@ export default async function AboutPage() {
             <div className="flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-accent" />
               <h2 className="text-xs font-semibold tracking-wider text-text-primary font-mono uppercase">
-                Documentation &amp; Proof of Work
+                <ScrambleText text="Documentation & Proof of Work" as="span" />
               </h2>
             </div>
             <span className="text-[10px] font-mono text-text-secondary">Knowledge Base</span>

@@ -22,20 +22,26 @@ export function TableOfContents({ headings: initialHeadings }: TableOfContentsPr
       document.querySelectorAll("main h2, main h3")
     );
 
+    const idCounts = new Map<string, number>();
+
     const discovered: TOCItem[] = headingElements
       .map((el, index) => {
         const rawText = (el.textContent || "").replace(/^#+\s*/, "").trim();
-        let id = el.id;
-        if (!id) {
-          id =
-            rawText
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, "-")
-              .replace(/(^-|-$)/g, "") || `heading-${index}`;
-          el.id = id;
-        }
+        const baseSlug =
+          rawText
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "") || `heading-${index}`;
+
+        // Ensure unique ID for both DOM element and TOC link
+        const count = idCounts.get(baseSlug) || 0;
+        idCounts.set(baseSlug, count + 1);
+
+        const uniqueId = count === 0 ? baseSlug : `${baseSlug}-${count}`;
+        el.id = uniqueId;
+
         return {
-          id,
+          id: uniqueId,
           text: rawText,
           level: el.tagName.toLowerCase() === "h2" ? (2 as const) : (3 as const),
         };
@@ -53,6 +59,8 @@ export function TableOfContents({ headings: initialHeadings }: TableOfContentsPr
   useEffect(() => {
     if (headings.length === 0) return;
 
+    const mainContainer = document.getElementById("main-content") || document.querySelector("main");
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -62,7 +70,8 @@ export function TableOfContents({ headings: initialHeadings }: TableOfContentsPr
         });
       },
       {
-        rootMargin: "-80px 0% -60% 0%",
+        root: mainContainer || null,
+        rootMargin: "-20px 0% -60% 0%",
         threshold: 0,
       }
     );
@@ -82,15 +91,20 @@ export function TableOfContents({ headings: initialHeadings }: TableOfContentsPr
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     const target = document.getElementById(id);
-    if (target) {
-      const topOffset = 64; // Account for fixed TopBar
-      const elementPosition = target.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - topOffset;
+    const mainContainer = document.getElementById("main-content") || document.querySelector("main");
+    if (target && mainContainer) {
+      const targetRect = target.getBoundingClientRect();
+      const mainRect = mainContainer.getBoundingClientRect();
+      const offsetPosition = targetRect.top - mainRect.top + mainContainer.scrollTop - 24;
 
-      window.scrollTo({
-        top: offsetPosition,
+      mainContainer.scrollTo({
+        top: Math.max(0, offsetPosition),
         behavior: "smooth",
       });
+      setActiveId(id);
+      window.history.pushState(null, "", `#${id}`);
+    } else if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
       setActiveId(id);
       window.history.pushState(null, "", `#${id}`);
     }
@@ -104,11 +118,11 @@ export function TableOfContents({ headings: initialHeadings }: TableOfContentsPr
       </div>
 
       <ul className="space-y-1 border-l border-border pl-2">
-        {headings.map((heading) => {
+        {headings.map((heading, index) => {
           const isActive = activeId === heading.id;
           return (
             <li
-              key={heading.id}
+              key={`${heading.id}-${index}`}
               className={`${heading.level === 3 ? "pl-3 text-[11px]" : ""}`}
             >
               <a

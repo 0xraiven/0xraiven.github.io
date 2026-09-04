@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { GlassSurface } from "@/components/chrome/GlassSurface";
 import {
   Search,
@@ -17,6 +17,7 @@ import {
   Award,
   Layers,
   Sparkles,
+  Clock,
 } from "lucide-react";
 import type { SearchItem } from "@/lib/search-index";
 
@@ -38,11 +39,13 @@ const FILTER_TABS: { id: FilterCategory; label: string }[] = [
 
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterCategory>("all");
   const [items, setItems] = useState<SearchItem[]>([]);
   const [rawSelectedIndex, setSelectedIndex] = useState(0);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [recentIds, setRecentIds] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -70,6 +73,43 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       ignore = true;
     };
   }, [isOpen, hasLoaded]);
+
+  // Load recently viewed item IDs from localStorage
+  useEffect(() => {
+    if (!isOpen) return;
+    try {
+      const stored = localStorage.getItem("r41n_recent_items");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setRecentIds(parsed);
+          return;
+        }
+      }
+    } catch {
+      // Fallback
+    }
+    setRecentIds(["page-readme", "project-phishguard"]);
+  }, [isOpen]);
+
+  // Record visited page into recently viewed
+  useEffect(() => {
+    if (!pathname || items.length === 0) return;
+    const current = items.find((i) => i.url === pathname);
+    if (current) {
+      try {
+        const stored = localStorage.getItem("r41n_recent_items");
+        const existing: string[] = stored ? JSON.parse(stored) : [];
+        if (existing[0] !== current.id) {
+          const updated = [current.id, ...existing.filter((id) => id !== current.id)].slice(0, 10);
+          localStorage.setItem("r41n_recent_items", JSON.stringify(updated));
+          setRecentIds(updated);
+        }
+      } catch {
+        // Fallback
+      }
+    }
+  }, [pathname, items]);
 
   // Focus input and reset selection when opened
   useEffect(() => {
@@ -130,18 +170,58 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     });
   }, [items, query, activeFilter]);
 
+  // Resolve 1 or 2 recent items for the uncluttered default view
+  const recentItems = useMemo(() => {
+    if (items.length === 0) return [];
+    const found: SearchItem[] = [];
+
+    for (const id of recentIds) {
+      const match = items.find((i) => i.id === id);
+      if (match && !found.some((f) => f.id === match.id)) {
+        found.push(match);
+      }
+      if (found.length >= 2) break;
+    }
+
+    // Default fallback to ensure at least 1-2 items show
+    if (found.length < 2) {
+      const defaults = ["page-readme", "project-phishguard", "project-persisthunt"];
+      for (const defId of defaults) {
+        const match = items.find((i) => i.id === defId);
+        if (match && !found.some((f) => f.id === match.id)) {
+          found.push(match);
+        }
+        if (found.length >= 2) break;
+      }
+    }
+
+    return found;
+  }, [items, recentIds]);
+
+  // When search query is empty and 'All' is selected, show 1-2 recent items.
+  // When a category filter is selected or query is typed, show the filtered results!
+  const isRecentMode = !query.trim() && activeFilter === "all";
+  const displayedItems = isRecentMode ? recentItems : filteredItems;
+
   // Clamped selected index
   const selectedIndex = Math.min(
     rawSelectedIndex,
-    Math.max(0, filteredItems.length - 1)
+    Math.max(0, displayedItems.length - 1)
   );
 
   const navigateToItem = useCallback(
     (item: SearchItem) => {
+      try {
+        const updated = [item.id, ...recentIds.filter((id) => id !== item.id)].slice(0, 10);
+        localStorage.setItem("r41n_recent_items", JSON.stringify(updated));
+        setRecentIds(updated);
+      } catch {
+        // Fallback
+      }
       handleClose();
       router.push(item.url);
     },
-    [handleClose, router]
+    [handleClose, router, recentIds]
   );
 
   // Keyboard navigation & Tab cycle
@@ -167,17 +247,17 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         return;
       }
 
-      if (filteredItems.length === 0) return;
+      if (displayedItems.length === 0) return;
 
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setSelectedIndex((prev) => (prev + 1) % filteredItems.length);
+        setSelectedIndex((prev) => (prev + 1) % displayedItems.length);
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
-        setSelectedIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length);
+        setSelectedIndex((prev) => (prev - 1 + displayedItems.length) % displayedItems.length);
       } else if (e.key === "Enter") {
         e.preventDefault();
-        const selected = filteredItems[selectedIndex];
+        const selected = displayedItems[selectedIndex];
         if (selected) {
           navigateToItem(selected);
         }
@@ -186,7 +266,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, filteredItems, selectedIndex, activeFilter, handleClose, navigateToItem]);
+  }, [isOpen, displayedItems, selectedIndex, activeFilter, handleClose, navigateToItem]);
 
   // Scroll active item into view
   useEffect(() => {
@@ -203,7 +283,6 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
   // Semantic icon with container styling for each item
   const getItemIcon = (item: SearchItem) => {
-    // Specific iconic overrides for top-level pages
     if (item.id === "page-readme") {
       return (
         <div className="w-7 h-7 rounded-md bg-accent/15 border border-accent/30 text-accent flex items-center justify-center shrink-0">
@@ -213,21 +292,21 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     }
     if (item.id === "page-projects") {
       return (
-        <div className="w-7 h-7 rounded-md bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center shrink-0">
+        <div className="w-7 h-7 rounded-md bg-surface-2 border border-border text-text-secondary group-hover:text-accent group-hover:border-accent/40 flex items-center justify-center shrink-0 transition-colors">
           <FolderGit2 className="w-3.5 h-3.5" />
         </div>
       );
     }
     if (item.id === "page-writeups") {
       return (
-        <div className="w-7 h-7 rounded-md bg-rose-500/15 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0">
+        <div className="w-7 h-7 rounded-md bg-surface-2 border border-border text-text-secondary group-hover:text-accent group-hover:border-accent/40 flex items-center justify-center shrink-0 transition-colors">
           <ShieldAlert className="w-3.5 h-3.5" />
         </div>
       );
     }
     if (item.id === "page-notes") {
       return (
-        <div className="w-7 h-7 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
+        <div className="w-7 h-7 rounded-md bg-surface-2 border border-border text-text-secondary group-hover:text-accent group-hover:border-accent/40 flex items-center justify-center shrink-0 transition-colors">
           <BookOpen className="w-3.5 h-3.5" />
         </div>
       );
@@ -241,14 +320,14 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     }
     if (item.id === "page-about") {
       return (
-        <div className="w-7 h-7 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+        <div className="w-7 h-7 rounded-md bg-surface-2 border border-border text-text-secondary group-hover:text-accent group-hover:border-accent/40 flex items-center justify-center shrink-0 transition-colors">
           <UserCheck className="w-3.5 h-3.5" />
         </div>
       );
     }
     if (item.id === "page-resume") {
       return (
-        <div className="w-7 h-7 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
+        <div className="w-7 h-7 rounded-md bg-surface-2 border border-border text-text-secondary group-hover:text-accent group-hover:border-accent/40 flex items-center justify-center shrink-0 transition-colors">
           <Award className="w-3.5 h-3.5" />
         </div>
       );
@@ -258,13 +337,13 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     switch (item.kind) {
       case "project":
         return (
-          <div className="w-7 h-7 rounded-md bg-blue-500/10 border border-blue-500/25 text-blue-400 flex items-center justify-center shrink-0">
+          <div className="w-7 h-7 rounded-md bg-surface-2 border border-border text-text-secondary group-hover:text-accent group-hover:border-accent/40 flex items-center justify-center shrink-0 transition-colors">
             <FolderGit2 className="w-3.5 h-3.5" />
           </div>
         );
       case "writeup":
         return (
-          <div className="w-7 h-7 rounded-md bg-rose-500/10 border border-rose-500/25 text-rose-400 flex items-center justify-center shrink-0">
+          <div className="w-7 h-7 rounded-md bg-surface-2 border border-border text-text-secondary group-hover:text-accent group-hover:border-accent/40 flex items-center justify-center shrink-0 transition-colors">
             <ShieldAlert className="w-3.5 h-3.5" />
           </div>
         );
@@ -277,7 +356,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         );
       case "note":
         return (
-          <div className="w-7 h-7 rounded-md bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 flex items-center justify-center shrink-0">
+          <div className="w-7 h-7 rounded-md bg-surface-2 border border-border text-text-secondary group-hover:text-accent group-hover:border-accent/40 flex items-center justify-center shrink-0 transition-colors">
             <BookOpen className="w-3.5 h-3.5" />
           </div>
         );
@@ -291,24 +370,22 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     }
   };
 
-  // Color-coded badge for category tags
+  // Color-coded badge for category tags (all adhering strictly to palette)
   const getCategoryBadgeClass = (category?: string) => {
     switch (category) {
+      case "operator":
+      case "system":
+        return "text-accent bg-accent/15 border-accent/35 font-bold";
       case "red-team-tooling":
       case "field-reports":
-        return "text-rose-400 bg-rose-500/10 border-rose-500/25";
-      case "cloud-security":
-      case "projects":
-        return "text-blue-400 bg-blue-500/10 border-blue-500/25";
       case "research":
       case "lab-environment":
         return "text-accent bg-accent/10 border-accent/25";
+      case "cloud-security":
+      case "projects":
       case "knowledge-base":
-        return "text-emerald-400 bg-emerald-500/10 border-emerald-500/25";
-      case "operator":
-      case "system":
       default:
-        return "text-accent bg-accent/10 border-accent/25";
+        return "text-text-secondary bg-surface-2 border-border/80";
     }
   };
 
@@ -319,16 +396,16 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       aria-label="Search and command palette"
       className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] sm:pt-[12vh] px-3 sm:px-4"
     >
-      {/* Backdrop */}
+      {/* Animated Backdrop */}
       <div
-        className="fixed inset-0 bg-black/70 backdrop-blur-xs transition-opacity duration-150"
+        className="fixed inset-0 bg-black/80 backdrop-blur-md animate-modal-backdrop transition-opacity duration-200"
         onClick={handleClose}
         aria-hidden="true"
       />
 
-      {/* Palette Container */}
-      <div className="relative w-full max-w-2xl z-10 animate-in fade-in zoom-in-95 duration-150 motion-reduce:animate-none">
-        <GlassSurface className="w-full rounded-xl border border-border shadow-2xl overflow-hidden flex flex-col ring-1 ring-white/10">
+      {/* Palette Container with smooth entry animation */}
+      <div className="relative w-full max-w-2xl z-10 animate-modal-content">
+        <GlassSurface className="w-full rounded-xl border border-border shadow-2xl overflow-hidden flex flex-col ring-1 ring-border/50 relative">
           {/* Search Input Bar */}
           <div className="flex items-center gap-3 px-4 py-3.5 border-b border-border/70 bg-surface/50">
             <Search className="w-4 h-4 text-accent shrink-0" />
@@ -381,11 +458,10 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                     setActiveFilter(tab.id);
                     setSelectedIndex(0);
                   }}
-                  className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors shrink-0 ${
-                    isActive
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors shrink-0 ${isActive
                       ? "bg-accent/20 text-accent border border-accent/40 shadow-xs"
                       : "text-text-secondary hover:text-text-primary hover:bg-surface-2/60 border border-transparent"
-                  }`}
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -403,7 +479,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                 <span className="inline-block w-2 h-2 rounded-full bg-accent animate-ping" />
                 <span>Loading index...</span>
               </div>
-            ) : filteredItems.length === 0 ? (
+            ) : displayedItems.length === 0 ? (
               <div className="p-10 text-center space-y-2">
                 <p className="text-text-primary font-medium text-sm">No matches found</p>
                 <p className="text-text-secondary text-xs">
@@ -425,14 +501,25 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             ) : (
               <div className="space-y-1">
                 {/* Result count or Header */}
-                <div className="px-3 py-1 flex items-center justify-between text-[10px] uppercase tracking-wider text-text-secondary/70 font-semibold">
-                  <span>{query.trim() ? "Search Results" : "Quick Navigation & Index"}</span>
-                  <span className="font-normal text-text-secondary/50">
-                    {filteredItems.length} {filteredItems.length === 1 ? "result" : "results"}
+                <div className="px-3 py-1.5 flex items-center justify-between text-[10px] uppercase tracking-wider text-text-secondary/70 font-semibold">
+                  <span>
+                    {isRecentMode ? (
+                      <span className="flex items-center gap-1.5 text-text-secondary">
+                        <Clock className="w-3 h-3 text-accent" />
+                        <span>Recently Viewed</span>
+                      </span>
+                    ) : query.trim() ? (
+                      "Search Results"
+                    ) : (
+                      `${FILTER_TABS.find((t) => t.id === activeFilter)?.label || "Category"} Results`
+                    )}
+                  </span>
+                  <span className="font-mono text-text-secondary/50 text-[10px]">
+                    {displayedItems.length} {displayedItems.length === 1 ? (isRecentMode ? "item" : "result") : (isRecentMode ? "items" : "results")}
                   </span>
                 </div>
 
-                {filteredItems.map((item, index) => {
+                {displayedItems.map((item, index) => {
                   const isSelected = index === selectedIndex;
                   return (
                     <div
@@ -481,6 +568,19 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                     </div>
                   );
                 })}
+
+                {/* Helpful minimal discovery cue only when in Recently Viewed default mode */}
+                {isRecentMode && (
+                  <div className="mt-2.5 px-3 py-2 rounded-md border border-border/50 bg-surface/30 flex items-center justify-between text-[11px] text-text-secondary font-mono">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-3 h-3 text-accent shrink-0" />
+                      <span>Select a category filter above or type to search all {items.length} records</span>
+                    </div>
+                    <kbd className="hidden sm:inline-block text-[9px] px-1.5 py-0.5 rounded bg-surface-2 border border-border text-text-secondary/80">
+                      tab to filter
+                    </kbd>
+                  </div>
+                )}
               </div>
             )}
           </div>

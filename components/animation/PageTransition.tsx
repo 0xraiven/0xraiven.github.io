@@ -38,15 +38,11 @@ export function PageTransition({ children }: PageTransitionProps) {
     };
   }, [pathname]);
 
-  const activeSector = pathname === "/" ? "README // ROOT" : pathname.replace("/", "").replace(/-/g, "_").toUpperCase();
+  const safePath = pathname || "/";
+  const activeSector = safePath === "/" ? "README // ROOT" : safePath.replace("/", "").replace(/-/g, "_").toUpperCase();
 
   return (
     <div className="relative min-w-0 w-full overflow-hidden">
-      {/* Dynamic Digital Laser Shutter Blade */}
-      {isTransitioning && (
-        <div className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent z-50 shadow-[0_0_12px_var(--accent)] animate-pulse pointer-events-none" />
-      )}
-
       {/* Cyber Route Telemetry Bar */}
       <div
         className={`transition-all duration-300 font-mono text-[10px] sm:text-[11px] select-none flex items-center justify-between px-3 py-1.5 mb-4 rounded border border-border bg-surface-2/80 text-text-secondary ${

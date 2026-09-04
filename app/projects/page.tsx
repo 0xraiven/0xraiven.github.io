@@ -9,6 +9,7 @@ import {
   GitFork,
   ArrowRight,
 } from 'lucide-react';
+import { ScrambleText } from '@/components/animation/ScrambleText';
 
 export const metadata: Metadata = {
   title: 'Projects // r41n',
@@ -42,9 +43,11 @@ export default async function ProjectsPage() {
             <span className="text-text-primary">projects</span>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-            <h1 className="text-xl font-bold tracking-tight text-text-primary uppercase">
-              Projects & Engineering Artifacts
-            </h1>
+            <ScrambleText
+              text="Projects & Engineering Artifacts"
+              as="h1"
+              className="text-xl font-bold tracking-tight text-text-primary uppercase"
+            />
             <span className="text-xs text-text-secondary">
               [{projects.length} repositories loaded]
             </span>
