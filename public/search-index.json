@@ -102,7 +102,8 @@
       "batch-script",
       "gaming",
       "low-end-pc",
-      "performance-optimization"
+      "performance-optimization",
+      "windows"
     ]
   },
   {
@@ -134,7 +135,8 @@
       "css3",
       "framer-motion",
       "reactjs",
-      "typescipt"
+      "typescipt",
+      "vercel-deployment"
     ]
   },
   {
@@ -161,7 +163,14 @@
       "Python",
       "Linux Internals",
       "Host Telemetry",
-      "Audit Engine"
+      "Audit Engine",
+      "linux",
+      "persistent-storage",
+      "python3",
+      "security-audit",
+      "security-tools",
+      "shell",
+      "vulernability-scanner"
     ]
   },
   {
@@ -177,7 +186,21 @@
       "CatBoost ML",
       "SHAP (XAI)",
       "Chrome MV3",
-      "JavaScript"
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "chrome-extensions",
+      "cybersecurity",
+      "cybersecurity-tools",
+      "flask",
+      "machine-learning",
+      "phishing-detector",
+      "phishing-protection",
+      "python",
+      "security",
+      "shap",
+      "threat-detection",
+      "xai"
     ]
   },
   {
@@ -196,7 +219,8 @@
       "blockchain-technology",
       "icp",
       "internet-computer",
-      "motoko-lang"
+      "motoko-lang",
+      "on-chain"
     ]
   },
   {
@@ -213,7 +237,10 @@
       "css",
       "html",
       "js",
-      "open-street-map"
+      "open-street-map",
+      "openweathermap-api",
+      "weather-app",
+      "wttrin"
     ]
   },
   {

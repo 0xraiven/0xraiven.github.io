@@ -200,6 +200,20 @@ export function TopBar({
                 >
                   Writeups
                 </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOverflowOpen(false);
+                    try {
+                      sessionStorage.removeItem("r41n_booted");
+                    } catch {}
+                    window.dispatchEvent(new CustomEvent("r41n:boot"));
+                  }}
+                  className="w-full text-left px-3 py-1.5 text-text-secondary hover:text-accent hover:bg-surface-2 flex items-center justify-between font-mono"
+                >
+                  <span>Reboot Console</span>
+                  <span className="text-[10px] text-accent font-bold">[ASCII]</span>
+                </button>
 
                 {/* Theme Selector in Mobile Overflow */}
                 <div className="border-t border-border mt-1 pt-1.5 px-3">

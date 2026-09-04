@@ -51,6 +51,7 @@ export const metadata: Metadata = {
 };
 
 import { Providers } from "@/providers";
+import { AsciiBootLoader } from "@/components/animation/AsciiBootLoader";
 
 export default function RootLayout({
   children,
@@ -82,7 +83,10 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-bg text-text-primary antialiased font-sans">
-        <Providers>{children}</Providers>
+        <Providers>
+          <AsciiBootLoader />
+          {children}
+        </Providers>
       </body>
     </html>
   );

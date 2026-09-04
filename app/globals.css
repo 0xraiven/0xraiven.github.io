@@ -178,3 +178,101 @@ code, kbd, samp, pre {
   background-color: var(--accent);
   color: #ffffff;
 }
+
+/* 
+ * --------------------------------------------------------------------------
+ * CYBER & ASCII ANIMATIONS
+ * --------------------------------------------------------------------------
+ */
+
+@keyframes terminalBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes terminalScanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+@keyframes pageReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes matrixStream {
+  0% { transform: translateY(-20%); opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { transform: translateY(20%); opacity: 0.2; }
+}
+
+@keyframes shutterBladeTop {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+
+@keyframes shutterBladeBottom {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes cyberGlitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 1px); }
+  40% { transform: translate(2px, -1px); }
+  60% { transform: translate(-1px, -1px); }
+  80% { transform: translate(1px, 1px); }
+  100% { transform: translate(0); }
+}
+
+.animate-terminal-blink {
+  animation: terminalBlink 0.9s step-start infinite;
+}
+
+.animate-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.75;
+  animation: terminalScanline 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+/* Progressive Stagger Reveal Classes */
+.animate-page-reveal {
+  animation: pageReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.stagger-1 { animation-delay: 50ms; }
+.stagger-2 { animation-delay: 110ms; }
+.stagger-3 { animation-delay: 170ms; }
+.stagger-4 { animation-delay: 230ms; }
+.stagger-5 { animation-delay: 290ms; }
+.stagger-6 { animation-delay: 350ms; }
+.stagger-7 { animation-delay: 410ms; }
+.stagger-8 { animation-delay: 470ms; }
+
+/* Custom Matrix Scrollbar */
+.terminal-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.terminal-scrollbar::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+.terminal-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 2px;
+}
+

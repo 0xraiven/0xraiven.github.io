@@ -3,6 +3,7 @@ import Link from "next/link";
 import { KnowledgeBaseLayout } from "@/components/layout/KnowledgeBaseLayout";
 import { TerminalBlock } from "@/components/content/TerminalBlock";
 import { FileText, ArrowUpRight, FolderGit2, Shield, Terminal, Layers, ArrowRight } from "lucide-react";
+import { ScrambleText } from "@/components/animation/ScrambleText";
 import { RelatedItem } from "@/types";
 import { getProjects } from "@/lib/projects";
 
@@ -50,9 +51,11 @@ export default async function Home() {
 
             {/* Profile Info */}
             <div className="space-y-1.5">
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight font-mono text-text-primary">
-                r41n
-              </h1>
+              <ScrambleText
+                text="r41n"
+                as="h1"
+                className="text-2xl sm:text-3xl font-bold tracking-tight font-mono text-text-primary"
+              />
 
               {/* Highlighted GitHub Username */}
               <div className="flex flex-wrap items-center gap-2">
@@ -252,11 +255,11 @@ status      :: building
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-            {pinnedProjects.map((project) => (
+            {pinnedProjects.map((project, pIdx) => (
               <Link
                 key={project.slug}
                 href={`/projects/${project.slug}`}
-                className="p-3.5 rounded border border-border bg-surface space-y-2 hover:border-accent/40 transition-colors block group"
+                className={`p-3.5 rounded border border-border bg-surface space-y-2 hover:border-accent/40 transition-all hover:-translate-y-0.5 shadow-sm block group animate-page-reveal stagger-${pIdx + 1}`}
               >
                 <div className="flex items-center justify-between text-text-secondary">
                   <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-2 border border-border font-semibold">
