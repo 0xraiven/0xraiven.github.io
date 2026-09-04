@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { GlassSurface } from "./GlassSurface";
-import { Sun, Moon, MoreVertical, Menu, Search } from "lucide-react";
+import { Sun, Moon, Monitor, MoreVertical, Menu, Search } from "lucide-react";
 import { useUI } from "@/providers";
 
 export interface TopBarProps {
@@ -51,16 +51,8 @@ export function TopBar({
   linkedinUrl,
 }: TopBarProps) {
   const finalXUrl = xUrl || linkedinUrl || "https://x.com/0xraiven";
-  const { openCommandPalette, openMobileSidebar } = useUI();
-  const [isDark, setIsDark] = useState(true);
+  const { openCommandPalette, openMobileSidebar, theme, resolvedTheme, cycleTheme, setTheme } = useUI();
   const [overflowOpen, setOverflowOpen] = useState(false);
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    if (typeof document !== "undefined") {
-      document.documentElement.classList.toggle("dark");
-    }
-  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 h-12">
@@ -98,7 +90,7 @@ export function TopBar({
             </span>
             <span className="text-text-secondary text-xs">•</span>
             <span className="text-xs text-text-secondary hidden sm:inline truncate max-w-[200px] md:max-w-none">
-              Security Knowledge Base
+              Portfolio / Knowledge Base
             </span>
           </Link>
         </div>
@@ -146,11 +138,18 @@ export function TopBar({
 
           <button
             type="button"
-            onClick={toggleTheme}
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            className="p-1.5 rounded text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            onClick={cycleTheme}
+            aria-label={`Theme: ${theme} (currently ${resolvedTheme}). Click to cycle Dark, Light, System.`}
+            title={`Theme: ${theme.toUpperCase()} ${theme === "system" ? `(OS: ${resolvedTheme})` : ""} — Click to switch`}
+            className="p-1.5 rounded text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent flex items-center justify-center group"
           >
-            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {theme === "dark" ? (
+              <Moon className="w-4 h-4 text-accent transition-transform group-hover:-rotate-12" />
+            ) : theme === "light" ? (
+              <Sun className="w-4 h-4 text-accent transition-transform group-hover:rotate-45" />
+            ) : (
+              <Monitor className="w-4 h-4 text-accent transition-transform group-hover:scale-110" />
+            )}
           </button>
 
           <div className="relative">
@@ -201,6 +200,54 @@ export function TopBar({
                 >
                   Writeups
                 </Link>
+
+                {/* Theme Selector in Mobile Overflow */}
+                <div className="border-t border-border mt-1 pt-1.5 px-3">
+                  <div className="text-[10px] text-text-secondary uppercase tracking-wider mb-1.5">
+                    Theme: <span className="text-accent font-semibold">{theme}</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1 pb-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTheme("dark");
+                        setOverflowOpen(false);
+                      }}
+                      className={`py-1 rounded text-center text-[10px] font-bold uppercase transition-colors ${theme === "dark"
+                          ? "bg-accent text-white"
+                          : "text-text-secondary hover:bg-surface-2 hover:text-text-primary"
+                        }`}
+                    >
+                      Dark
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTheme("light");
+                        setOverflowOpen(false);
+                      }}
+                      className={`py-1 rounded text-center text-[10px] font-bold uppercase transition-colors ${theme === "light"
+                          ? "bg-accent text-white"
+                          : "text-text-secondary hover:bg-surface-2 hover:text-text-primary"
+                        }`}
+                    >
+                      Light
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTheme("system");
+                        setOverflowOpen(false);
+                      }}
+                      className={`py-1 rounded text-center text-[10px] font-bold uppercase transition-colors ${theme === "system"
+                          ? "bg-accent text-white"
+                          : "text-text-secondary hover:bg-surface-2 hover:text-text-primary"
+                        }`}
+                    >
+                      Auto
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
           </div>

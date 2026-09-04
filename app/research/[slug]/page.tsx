@@ -179,7 +179,7 @@ export default async function ResearchDetailPage({ params }: ResearchPageProps) 
           </div>
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold tracking-tight text-text-primary uppercase flex items-center gap-2">
-              <FlaskConical className="w-5 h-5 text-purple-400" />
+              <FlaskConical className="w-5 h-5 text-accent" />
               <span>{label}</span>
             </h1>
             <span className="text-xs text-text-secondary">

@@ -234,7 +234,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     }
     if (item.id === "page-research") {
       return (
-        <div className="w-7 h-7 rounded-md bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0">
+        <div className="w-7 h-7 rounded-md bg-accent/15 border border-accent/30 text-accent flex items-center justify-center shrink-0">
           <Microscope className="w-3.5 h-3.5" />
         </div>
       );
@@ -271,7 +271,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       case "research":
       case "lab-report":
         return (
-          <div className="w-7 h-7 rounded-md bg-purple-500/10 border border-purple-500/25 text-purple-400 flex items-center justify-center shrink-0">
+          <div className="w-7 h-7 rounded-md bg-accent/15 border border-accent/30 text-accent flex items-center justify-center shrink-0">
             <FlaskConical className="w-3.5 h-3.5" />
           </div>
         );
@@ -302,7 +302,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         return "text-blue-400 bg-blue-500/10 border-blue-500/25";
       case "research":
       case "lab-environment":
-        return "text-purple-400 bg-purple-500/10 border-purple-500/25";
+        return "text-accent bg-accent/10 border-accent/25";
       case "knowledge-base":
         return "text-emerald-400 bg-emerald-500/10 border-emerald-500/25";
       case "operator":

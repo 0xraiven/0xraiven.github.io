@@ -58,7 +58,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${sansFont.variable} ${monoFont.variable} dark`}>
+    <html lang="en" className={`${sansFont.variable} ${monoFont.variable} dark`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var stored = localStorage.getItem('theme') || 'dark';
+                  var resolved = stored;
+                  if (stored === 'system') {
+                    resolved = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+                  }
+                  var doc = document.documentElement;
+                  doc.classList.remove('dark', 'light');
+                  doc.classList.add(resolved);
+                  doc.setAttribute('data-theme', resolved);
+                  doc.setAttribute('data-mode', stored);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-bg text-text-primary antialiased font-sans">
         <Providers>{children}</Providers>
       </body>

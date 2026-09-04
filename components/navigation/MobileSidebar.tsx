@@ -18,7 +18,11 @@ import {
   ShieldAlert,
   Terminal,
   X,
+  Sun,
+  Moon,
+  Monitor,
 } from "lucide-react";
+import { useUI } from "@/providers";
 
 interface NavItem {
   label: string;
@@ -107,6 +111,7 @@ export interface MobileSidebarProps {
 
 export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarProps) {
   const pathname = usePathname();
+  const { theme, setTheme } = useUI();
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     const state: Record<string, boolean> = {};
     NAV_GROUPS.forEach((group) => {
@@ -284,6 +289,52 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
               );
             })}
           </nav>
+
+          {/* Drawer Footer: Theme Selector */}
+          <div className="p-3 border-t border-border/70 shrink-0 bg-surface/50">
+            <div className="flex items-center justify-between text-[11px] font-mono text-text-secondary mb-2">
+              <span>Theme</span>
+              <span className="text-accent uppercase font-bold text-[10px]">{theme}</span>
+            </div>
+            <div className="grid grid-cols-3 gap-1 p-0.5 rounded bg-surface-2 border border-border">
+              <button
+                type="button"
+                onClick={() => setTheme("dark")}
+                className={`flex items-center justify-center gap-1 py-1.5 px-1.5 rounded text-[11px] font-mono transition-colors ${
+                  theme === "dark"
+                    ? "bg-accent text-white font-semibold"
+                    : "text-text-secondary hover:text-text-primary"
+                }`}
+              >
+                <Moon className="w-3 h-3" />
+                <span>Dark</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setTheme("light")}
+                className={`flex items-center justify-center gap-1 py-1.5 px-1.5 rounded text-[11px] font-mono transition-colors ${
+                  theme === "light"
+                    ? "bg-accent text-white font-semibold"
+                    : "text-text-secondary hover:text-text-primary"
+                }`}
+              >
+                <Sun className="w-3 h-3" />
+                <span>Light</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setTheme("system")}
+                className={`flex items-center justify-center gap-1 py-1.5 px-1.5 rounded text-[11px] font-mono transition-colors ${
+                  theme === "system"
+                    ? "bg-accent text-white font-semibold"
+                    : "text-text-secondary hover:text-text-primary"
+                }`}
+              >
+                <Monitor className="w-3 h-3" />
+                <span>Auto</span>
+              </button>
+            </div>
+          </div>
         </GlassSurface>
       </aside>
     </div>

@@ -8,7 +8,14 @@ import { getProjects } from "@/lib/projects";
 
 export default async function Home() {
   const projects = await getProjects();
-  const pinnedRelated: RelatedItem[] = projects.slice(0, 4).map((p) => ({
+  
+  // Pin authentic cyber-focused security repositories
+  const cyberSlugs = ["persisthunt", "phishguard", "owt-bandit"];
+  const pinnedProjects = cyberSlugs
+    .map((slug) => projects.find((p) => p.slug === slug))
+    .filter((p): p is (typeof projects)[0] => Boolean(p));
+
+  const pinnedRelated: RelatedItem[] = pinnedProjects.map((p) => ({
     title: p.title,
     href: `/projects/${p.slug}`,
     category: p.category,
@@ -244,8 +251,8 @@ status      :: building
             Security engineering repositories, machine learning models, and telemetry artifacts:
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-            {projects.slice(0, 4).map((project) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
+            {pinnedProjects.map((project) => (
               <Link
                 key={project.slug}
                 href={`/projects/${project.slug}`}

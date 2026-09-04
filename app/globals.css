@@ -1,27 +1,98 @@
 @import "tailwindcss";
 
 :root {
-  /* base */
-  --bg: #0c0c0e;
-  --surface: #16161a;
-  --surface-2: #1d1d22;
-  --border: rgba(255, 255, 255, 0.07);
-  --text-primary: #eae6dd;
-  --text-secondary: #8d8d94;
-  --accent: #a873ad;
+  /* Common geometry tokens */
   --radius: 6px;
-
-  /* glass — used only on chrome/overlays, see §4.4 */
-  --glass-bg: rgba(22, 22, 26, 0.74);
-  --glass-border: rgba(234, 230, 221, 0.10);
-  --glass-highlight: rgba(234, 230, 221, 0.05);
   --glass-blur: 14px;
-  --glass-shadow: 0 8px 28px rgba(0, 0, 0, 0.38);
   --glass-radius: 8px;
+
+  /* Default Dark Obsidian with Wine Red palette */
+  --bg: #0b0b0e;
+  --surface: #141318;
+  --surface-2: #1c1a22;
+  --border: rgba(245, 240, 245, 0.08);
+  --border-focus: rgba(209, 44, 75, 0.5);
+  --text-primary: #f2eeea;
+  --text-secondary: #9b949a;
+  --accent: #d12c4b;
+  --accent-hover: #e63956;
+  --accent-subtle: rgba(209, 44, 75, 0.12);
+
+  /* Glass tokens (Dark) */
+  --glass-bg: rgba(18, 17, 23, 0.78);
+  --glass-border: rgba(242, 238, 234, 0.09);
+  --glass-highlight: rgba(209, 44, 75, 0.06);
+  --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+/* Explicit Dark Theme: Dark Obsidian with Wine Red palette */
+html.dark,
+[data-theme="dark"] {
+  --bg: #0b0b0e;
+  --surface: #141318;
+  --surface-2: #1c1a22;
+  --border: rgba(245, 240, 245, 0.08);
+  --border-focus: rgba(209, 44, 75, 0.5);
+  --text-primary: #f2eeea;
+  --text-secondary: #9b949a;
+  --accent: #d12c4b;
+  --accent-hover: #e63956;
+  --accent-subtle: rgba(209, 44, 75, 0.12);
+
+  --glass-bg: rgba(18, 17, 23, 0.78);
+  --glass-border: rgba(242, 238, 234, 0.09);
+  --glass-highlight: rgba(209, 44, 75, 0.06);
+  --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+/* Explicit Light Theme: Vanilla White with Wine / Blood Red palette */
+html.light,
+[data-theme="light"] {
+  --bg: #fbf9f4;
+  --surface: #ffffff;
+  --surface-2: #f3eee4;
+  --border: rgba(55, 30, 36, 0.11);
+  --border-focus: rgba(158, 27, 50, 0.45);
+  --text-primary: #191214;
+  --text-secondary: #6c6065;
+  --accent: #9e1b32;
+  --accent-hover: #b8233d;
+  --accent-subtle: rgba(158, 27, 50, 0.09);
+
+  --glass-bg: rgba(251, 249, 244, 0.85);
+  --glass-border: rgba(55, 30, 36, 0.11);
+  --glass-highlight: rgba(158, 27, 50, 0.05);
+  --glass-shadow: 0 8px 28px rgba(45, 25, 30, 0.07);
+  color-scheme: light;
+}
+
+/* Automatic system preference fallback */
+@media (prefers-color-scheme: light) {
+  html:not(.dark) {
+    --bg: #fbf9f4;
+    --surface: #ffffff;
+    --surface-2: #f3eee4;
+    --border: rgba(55, 30, 36, 0.11);
+    --border-focus: rgba(158, 27, 50, 0.45);
+    --text-primary: #191214;
+    --text-secondary: #6c6065;
+    --accent: #9e1b32;
+    --accent-hover: #b8233d;
+    --accent-subtle: rgba(158, 27, 50, 0.09);
+
+    --glass-bg: rgba(251, 249, 244, 0.85);
+    --glass-border: rgba(55, 30, 36, 0.11);
+    --glass-highlight: rgba(158, 27, 50, 0.05);
+    --glass-shadow: 0 8px 28px rgba(45, 25, 30, 0.07);
+    color-scheme: light;
+  }
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  :root {
+  :root,
+  html.dark,
+  html.light {
     --glass-bg: var(--surface);
     --glass-blur: 0px;
     --glass-highlight: transparent;
@@ -53,6 +124,8 @@
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-subtle: var(--accent-subtle);
 
   /* Convenience aliases */
   --color-primary: var(--text-primary);
@@ -94,6 +167,7 @@ body {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 code, kbd, samp, pre {
@@ -102,5 +176,5 @@ code, kbd, samp, pre {
 
 ::selection {
   background-color: var(--accent);
-  color: var(--bg);
+  color: #ffffff;
 }

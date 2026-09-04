@@ -48,12 +48,12 @@ export const tipBlock = component({
 
 export const labBlock = component({
   preview: (props) => (
-    <div className="p-3 my-2 border border-purple-500/40 bg-purple-950/20 text-purple-200 text-xs font-mono rounded">
-      <div className="flex items-center justify-between border-b border-purple-500/20 pb-1 mb-2">
+    <div className="p-3 my-2 border border-accent/40 bg-accent/10 text-accent text-xs font-mono rounded">
+      <div className="flex items-center justify-between border-b border-accent/20 pb-1 mb-2">
         <span className="font-bold uppercase tracking-wider text-[10px]">
           Lab :: {props.fields.target.value || "Target"}
         </span>
-        <span className="text-[10px] uppercase px-1 rounded bg-purple-900/50">
+        <span className="text-[10px] uppercase px-1 rounded bg-accent/20 text-text-primary">
           {props.fields.difficulty.value}
         </span>
       </div>
@@ -117,7 +117,7 @@ export const terminalBlock = component({
       <NotEditable>
         {props.fields.commands.elements.map((cmd, i) => (
           <div key={i} className="mb-1">
-            <span className="text-purple-400">$ </span>
+            <span className="text-accent">$ </span>
             <span>{cmd.fields.cmd.value || "..."}</span>
           </div>
         ))}
