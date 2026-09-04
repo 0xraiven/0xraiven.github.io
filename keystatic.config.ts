@@ -138,7 +138,8 @@ export default config({
   singletons: {
     siteSettings: singleton({
       label: "Site Settings",
-      path: "content/site-settings",
+      path: "content/site-settings/",
+      format: { data: "json" },
       schema: {
         siteTitle: fields.text({
           label: "Site Title",
@@ -158,7 +159,8 @@ export default config({
     }),
     homepage: singleton({
       label: "Homepage",
-      path: "content/homepage",
+      path: "content/homepage/",
+      format: { data: "json" },
       schema: {
         name: fields.text({ label: "Handle", defaultValue: "r41n" }),
         tagline: fields.text({
@@ -188,7 +190,8 @@ export default config({
     }),
     about: singleton({
       label: "About",
-      path: "content/about",
+      path: "content/about/",
+      format: { data: "json" },
       schema: {
         body: fields.document({
           label: "Body",
@@ -202,7 +205,8 @@ export default config({
     }),
     resume: singleton({
       label: "Resume",
-      path: "content/resume",
+      path: "content/resume/",
+      format: { data: "json" },
       schema: {
         pdfFile: fields.file({
           label: "Resume PDF",

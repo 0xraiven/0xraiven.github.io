@@ -15,8 +15,39 @@ const monoFont = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "r41n • Security Knowledge Base",
-  description: "Cybersecurity portfolio, research notebook, and technical knowledge base.",
+  metadataBase: new URL("https://0xraiven.github.io"),
+  title: {
+    default: "r41n // Offensive Security & Technical Knowledge Base",
+    template: "%s // r41n",
+  },
+  description: "Cybersecurity portfolio, offensive security research, red team notes, and technical knowledge base.",
+  keywords: [
+    "Cybersecurity",
+    "Offensive Security",
+    "Red Team",
+    "Cloud Security",
+    "Vulnerability Research",
+    "r41n",
+    "0xraiven",
+  ],
+  authors: [{ name: "r41n", url: "https://0xraiven.github.io" }],
+  creator: "r41n",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://0xraiven.github.io",
+    siteName: "r41n Knowledge Base",
+    title: "r41n // Offensive Security & Technical Knowledge Base",
+    description: "Cybersecurity portfolio, offensive security research, red team notes, and technical knowledge base.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "r41n // Offensive Security & Technical Knowledge Base",
+    description: "Cybersecurity portfolio, offensive security research, red team notes, and technical knowledge base.",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 import { Providers } from "@/providers";

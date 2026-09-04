@@ -10,7 +10,8 @@
     "prebuild": "npm run sync:repos && npm run build:search",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@keystatic/core": "^0.6.9",
