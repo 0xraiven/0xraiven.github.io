@@ -86,6 +86,15 @@ const STATIC_PAGES: SearchItem[] = [
     category: "operator",
     tags: ["resume", "experience", "skills"],
   },
+  {
+    id: "page-contact",
+    title: "Contact & Communications",
+    description: "Verified social coordinates, PGP encryption keys, and direct operator communication channels.",
+    url: "/contact",
+    kind: "page",
+    category: "operator",
+    tags: ["contact", "socials", "email", "pgp", "discord", "channels"],
+  },
 ];
 
 export async function generateSearchIndex(): Promise<SearchItem[]> {

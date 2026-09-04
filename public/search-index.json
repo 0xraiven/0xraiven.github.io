@@ -106,6 +106,71 @@
     ]
   },
   {
+    "id": "page-contact",
+    "title": "Contact & Communications",
+    "description": "Verified social coordinates, PGP encryption keys, and direct operator communication channels.",
+    "url": "/contact",
+    "kind": "page",
+    "category": "operator",
+    "tags": [
+      "contact",
+      "socials",
+      "email",
+      "pgp",
+      "discord",
+      "channels"
+    ]
+  },
+  {
+    "id": "project-0xraiven",
+    "title": "0xraiven",
+    "description": "Operator GitHub profile repository featuring live security telemetry streams, dynamic SVG widgets, and active research overview.",
+    "url": "/projects/0xraiven",
+    "kind": "project",
+    "category": "detection-engineering",
+    "tags": [
+      "Markdown",
+      "SVG",
+      "GitHub Actions",
+      "Telemetry Stream",
+      "Automation"
+    ]
+  },
+  {
+    "id": "project-0xraiven-github-io",
+    "title": "0xraiven.github.io",
+    "description": "Personal cybersecurity research portfolio, knowledge base, and interactive terminal system built with Next.js and Keystatic CMS.",
+    "url": "/projects/0xraiven-github-io",
+    "kind": "project",
+    "category": "red-team-tooling",
+    "tags": [
+      "TypeScript",
+      "Next.js",
+      "React",
+      "Tailwind CSS",
+      "Keystatic CMS",
+      "Markdoc",
+      "Roff",
+      "CSS",
+      "JavaScript"
+    ]
+  },
+  {
+    "id": "project-aenexz",
+    "title": "Aenexz",
+    "description": "SecureCorp project security assessment documentation, audit reports, reconstructed terminal transcripts, and working evidence.",
+    "url": "/projects/aenexz",
+    "kind": "project",
+    "category": "lab-environment",
+    "tags": [
+      "Documentation",
+      "Security Audit",
+      "Evidence Analysis",
+      "Terminal Transcripts",
+      "Master Reporting"
+    ]
+  },
+  {
     "id": "project-gameoptimizer",
     "title": "Game Optimizer",
     "description": "A simple program built using windows batch script to optimize the games on low end devices",
@@ -227,7 +292,8 @@
       "blockchain-technology",
       "icp",
       "internet-computer",
-      "motoko-lang"
+      "motoko-lang",
+      "on-chain"
     ]
   },
   {
@@ -244,34 +310,10 @@
       "css",
       "html",
       "js",
-      "open-street-map"
-    ]
-  },
-  {
-    "id": "writeup-authoring-verification",
-    "title": "Authoring Verification Document",
-    "description": "Dynamic block authoring test suite verifying rendering of all 19 Keystatic content blocks.",
-    "url": "/writeups/authoring-verification",
-    "kind": "writeup",
-    "category": "web-security",
-    "tags": [
-      "verification",
-      "components",
-      "test"
-    ]
-  },
-  {
-    "id": "writeup-ssrf-lab",
-    "title": "SSRF Lab Investigation",
-    "description": "[Sample Placeholder] Demonstrating server-side request forgery exploitation vectors in cloud metadata environments and mitigation patterns.",
-    "url": "/writeups/ssrf-lab",
-    "kind": "writeup",
-    "category": "web-security",
-    "tags": [
-      "ssrf",
-      "cloud-security",
-      "aws",
-      "metadata"
+      "open-street-map",
+      "openweathermap-api",
+      "weather-app",
+      "wttrin"
     ]
   }
 ]

@@ -22,6 +22,7 @@ import {
   Sun,
   Moon,
   Monitor,
+  Mail,
 } from "lucide-react";
 import { useUI } from "@/providers";
 
@@ -114,6 +115,7 @@ const MAIN_NAV_GROUPS: NavGroup[] = [
 const MISC_ITEMS: NavItem[] = [
   { label: "About", href: "/about", icon: User },
   { label: "Resume", href: "/resume", icon: FileDown },
+  { label: "Contact", href: "/contact", icon: Mail },
 ];
 
 function getActiveGroupForPath(path: string | null | undefined): string | null {

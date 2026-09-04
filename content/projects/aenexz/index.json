@@ -1,0 +1,16 @@
+{
+  "title": "Aenexz",
+  "description": "SecureCorp project security assessment documentation, audit reports, reconstructed terminal transcripts, and working evidence.",
+  "status": "active",
+  "category": "lab-environment",
+  "technologies": [
+    "Documentation",
+    "Security Audit",
+    "Evidence Analysis",
+    "Terminal Transcripts",
+    "Master Reporting"
+  ],
+  "githubUrl": "https://github.com/0xraiven/aenexz",
+  "screenshots": [],
+  "relatedWriteupSlugs": []
+}

@@ -26,11 +26,7 @@ export interface SyncResult {
 }
 
 const GITHUB_USERNAME = '0xraiven';
-const EXCLUDED_REPOS = new Set([
-  '0xraiven.github.io', // Portfolio website itself
-  '0xraiven',           // GitHub profile README repository
-  'aenexz',             // Personal assignment reports
-]);
+const EXCLUDED_REPOS = new Set<string>();
 
 function toSlug(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9_-]/g, '-');

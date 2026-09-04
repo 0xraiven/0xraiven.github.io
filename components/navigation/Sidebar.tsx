@@ -17,6 +17,7 @@ import {
   ShieldAlert,
   Terminal,
   Box,
+  Mail,
 } from "lucide-react";
 
 interface NavSubItem {
@@ -107,6 +108,7 @@ const MAIN_NAV_GROUPS: NavGroup[] = [
 const MISC_ITEMS: NavItem[] = [
   { label: "About", href: "/about", icon: User },
   { label: "Resume", href: "/resume", icon: FileDown },
+  { label: "Contact", href: "/contact", icon: Mail },
 ];
 
 function getActiveGroupForPath(path: string | null | undefined): string | null {

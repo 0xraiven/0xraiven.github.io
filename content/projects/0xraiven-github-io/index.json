@@ -1,0 +1,17 @@
+{
+  "title": "0xraiven.github.io",
+  "description": "Personal cybersecurity research portfolio, knowledge base, and interactive terminal system built with Next.js and Keystatic CMS.",
+  "status": "active",
+  "category": "red-team-tooling",
+  "technologies": [
+    "TypeScript",
+    "Next.js",
+    "React",
+    "Tailwind CSS",
+    "Keystatic CMS",
+    "Markdoc"
+  ],
+  "githubUrl": "https://github.com/0xraiven/0xraiven.github.io",
+  "screenshots": [],
+  "relatedWriteupSlugs": []
+}
