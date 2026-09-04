@@ -116,6 +116,20 @@ export function Sidebar() {
     }));
   };
 
+  // Automatically keep active section expanded on navigation
+  React.useEffect(() => {
+    NAV_GROUPS.forEach((group) => {
+      const hasActiveChild = group.items.some((item) => {
+        if (item.href === "/" && pathname === "/") return true;
+        if (item.href !== "/" && pathname.startsWith(item.href)) return true;
+        return false;
+      });
+      if (hasActiveChild) {
+        setOpenGroups((prev) => (prev[group.title] ? prev : { ...prev, [group.title]: true }));
+      }
+    });
+  }, [pathname]);
+
   return (
     <aside
       aria-label="Sidebar navigation"

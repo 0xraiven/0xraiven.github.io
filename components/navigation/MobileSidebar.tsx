@@ -70,7 +70,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "NOTES",
     collapsible: true,
-    defaultOpen: false,
+    defaultOpen: true,
     items: [
       { label: "Web Security", href: "/notes/web-security", icon: FileText },
       { label: "Linux", href: "/notes/linux", icon: FileText },
@@ -114,6 +114,20 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
     });
     return state;
   });
+
+  // Automatically keep active section expanded on navigation
+  useEffect(() => {
+    NAV_GROUPS.forEach((group) => {
+      const hasActiveChild = group.items.some((item) => {
+        if (item.href === "/" && pathname === "/") return true;
+        if (item.href !== "/" && pathname.startsWith(item.href)) return true;
+        return false;
+      });
+      if (hasActiveChild) {
+        setOpenGroups((prev) => (prev[group.title] ? prev : { ...prev, [group.title]: true }));
+      }
+    });
+  }, [pathname]);
 
   // Automatically close on navigation
   useEffect(() => {
@@ -248,11 +262,10 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
                             <Link
                               href={item.href}
                               onClick={onClose}
-                              className={`flex items-center gap-2 px-2 py-1.5 rounded transition-colors ${
-                                isActive
-                                  ? "bg-surface-2 text-text-primary font-medium text-accent border-l-2 border-accent pl-1.5"
-                                  : "text-text-secondary hover:text-text-primary hover:bg-surface-2"
-                              }`}
+                              className={`flex items-center gap-2 px-2 py-1.5 rounded transition-colors ${isActive
+                                ? "bg-surface-2 text-text-primary font-medium text-accent border-l-2 border-accent pl-1.5"
+                                : "text-text-secondary hover:text-text-primary hover:bg-surface-2"
+                                }`}
                             >
                               {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
                               <span className="truncate">{item.label}</span>
