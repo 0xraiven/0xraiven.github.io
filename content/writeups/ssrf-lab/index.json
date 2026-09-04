@@ -1,0 +1,15 @@
+{
+  "title": "SSRF Lab Investigation",
+  "description": "[Sample Placeholder] Demonstrating server-side request forgery exploitation vectors in cloud metadata environments and mitigation patterns.",
+  "kind": "writeup",
+  "category": "web-security",
+  "tags": [
+    "ssrf",
+    "cloud-security",
+    "aws",
+    "metadata"
+  ],
+  "date": "2026-09-04",
+  "published": true,
+  "relatedSlugs": []
+}

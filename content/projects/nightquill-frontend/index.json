@@ -1,0 +1,18 @@
+{
+  "title": "Nightquill Frontend",
+  "description": "frontend repository for the \"nightquill\" => a dedicated blogging platform",
+  "status": "active",
+  "category": "red-team-tooling",
+  "technologies": [
+    "TypeScript",
+    "HTML",
+    "CSS",
+    "css3",
+    "framer-motion",
+    "reactjs",
+    "typescipt"
+  ],
+  "githubUrl": "https://github.com/0xraiven/nightquill-frontend",
+  "screenshots": [],
+  "relatedWriteupSlugs": []
+}

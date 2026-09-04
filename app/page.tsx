@@ -2,35 +2,20 @@ import React from "react";
 import Link from "next/link";
 import { KnowledgeBaseLayout } from "@/components/layout/KnowledgeBaseLayout";
 import { TerminalBlock } from "@/components/content/TerminalBlock";
-import { FileText, ArrowUpRight, FolderGit2, Shield, Terminal, Layers } from "lucide-react";
+import { FileText, ArrowUpRight, FolderGit2, Shield, Terminal, Layers, ArrowRight } from "lucide-react";
 import { RelatedItem } from "@/types";
+import { getProjects } from "@/lib/projects";
 
-const PINNED_RELATED: RelatedItem[] = [
-  {
-    title: "Aegis · Persistence Hunter",
-    href: "/projects/aegis",
-    category: "red-team-tooling",
-  },
-  {
-    title: "PhishGuard Specification",
-    href: "/projects/phishguard",
-    category: "browser-security",
-  },
-  {
-    title: "Linux Observe",
-    href: "/projects/linux-observe",
-    category: "detection-engineering",
-  },
-  {
-    title: "Active Directory Lab",
-    href: "/projects/ad-lab",
-    category: "lab-environment",
-  },
-];
+export default async function Home() {
+  const projects = await getProjects();
+  const pinnedRelated: RelatedItem[] = projects.slice(0, 4).map((p) => ({
+    title: p.title,
+    href: `/projects/${p.slug}`,
+    category: p.category,
+  }));
 
-export default function Home() {
   return (
-    <KnowledgeBaseLayout relatedItems={PINNED_RELATED}>
+    <KnowledgeBaseLayout relatedItems={pinnedRelated}>
       <article className="space-y-10 text-text-primary">
         {/* Document Header (README file header) */}
         <header className="border-b border-border pb-6 space-y-4">
@@ -195,75 +180,68 @@ status      :: building
 
         {/* Section 3: Pinned Proof-of-Work */}
         <section id="pinned-proof-of-work" className="space-y-4">
-          <h2 className="text-base font-semibold tracking-tight font-mono text-text-primary flex items-center gap-2 border-b border-border pb-2">
-            <Layers className="w-4 h-4 text-accent" />
-            <span>Pinned Proof-of-Work</span>
-          </h2>
+          <div className="flex items-center justify-between border-b border-border pb-2">
+            <h2 className="text-base font-semibold tracking-tight font-mono text-text-primary flex items-center gap-2">
+              <Layers className="w-4 h-4 text-accent" />
+              <span>Pinned Proof-of-Work</span>
+            </h2>
+            <Link
+              href="/projects"
+              className="text-xs font-mono text-accent hover:underline flex items-center gap-1"
+            >
+              <span>View all ({projects.length})</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
 
           <p className="text-xs text-text-secondary font-mono">
-            Sample research projects and engineering artifacts (specifications and prototypes):
+            Security engineering repositories, machine learning models, and telemetry artifacts:
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-            <div className="p-3.5 rounded border border-border bg-surface space-y-2">
-              <div className="flex items-center justify-between text-text-secondary">
-                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-2 border border-border">
-                  red-team-tooling
-                </span>
-                <span className="text-[11px] text-text-secondary">planned</span>
-              </div>
-              <h3 className="font-semibold text-text-primary text-sm">
-                Aegis · Persistence Hunter
-              </h3>
-              <p className="text-text-secondary text-[11px] leading-relaxed">
-                Triage and enumeration utility scanning Linux persistence mechanisms (systemd units, cron, udev rules, shell rc files).
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded border border-border bg-surface space-y-2">
-              <div className="flex items-center justify-between text-text-secondary">
-                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-2 border border-border">
-                  browser-security
-                </span>
-                <span className="text-[11px] text-emerald-400">spec ready</span>
-              </div>
-              <h3 className="font-semibold text-text-primary text-sm">
-                PhishGuard
-              </h3>
-              <p className="text-text-secondary text-[11px] leading-relaxed">
-                Client-side browser extension utilizing DOM entropy heuristics and visual similarity checks to detect credential-harvesting pages.
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded border border-border bg-surface space-y-2">
-              <div className="flex items-center justify-between text-text-secondary">
-                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-2 border border-border">
-                  detection-engineering
-                </span>
-                <span className="text-[11px] text-text-secondary">prototype</span>
-              </div>
-              <h3 className="font-semibold text-text-primary text-sm">
-                Linux Observe
-              </h3>
-              <p className="text-text-secondary text-[11px] leading-relaxed">
-                Auditd and eBPF event stream collector forwarding structured JSON telemetry into detection analysis pipelines.
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded border border-border bg-surface space-y-2">
-              <div className="flex items-center justify-between text-text-secondary">
-                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-2 border border-border">
-                  lab-environment
-                </span>
-                <span className="text-[11px] text-text-secondary">active</span>
-              </div>
-              <h3 className="font-semibold text-text-primary text-sm">
-                Active Directory Attack Lab
-              </h3>
-              <p className="text-text-secondary text-[11px] leading-relaxed">
-                Dual-forest Windows Server environment configured with intentional misconfigurations for Kerberos delegation research.
-              </p>
-            </div>
+            {projects.slice(0, 4).map((project) => (
+              <Link
+                key={project.slug}
+                href={`/projects/${project.slug}`}
+                className="p-3.5 rounded border border-border bg-surface space-y-2 hover:border-accent/40 transition-colors block group"
+              >
+                <div className="flex items-center justify-between text-text-secondary">
+                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-2 border border-border font-semibold">
+                    {project.category}
+                  </span>
+                  <span
+                    className={`text-[11px] font-semibold ${
+                      project.status === "active"
+                        ? "text-emerald-400"
+                        : project.status === "building"
+                        ? "text-amber-400"
+                        : "text-text-secondary"
+                    }`}
+                  >
+                    {project.status}
+                  </span>
+                </div>
+                <h3 className="font-semibold text-text-primary text-sm group-hover:text-accent transition-colors flex items-center justify-between">
+                  <span>{project.title}</span>
+                  <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </h3>
+                <p className="text-text-secondary text-[11px] leading-relaxed line-clamp-2">
+                  {project.description}
+                </p>
+                {project.technologies && project.technologies.length > 0 && (
+                  <div className="flex flex-wrap gap-1 pt-1">
+                    {project.technologies.slice(0, 3).map((t) => (
+                      <span
+                        key={t}
+                        className="text-[9px] px-1 py-0.5 rounded bg-surface-2 text-text-secondary border border-border/60"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </Link>
+            ))}
           </div>
         </section>
 

@@ -1,0 +1,20 @@
+{
+  "title": "Studysphere",
+  "description": "A community platfrom built on ICP network which is built for students by students",
+  "status": "active",
+  "category": "cloud-security",
+  "technologies": [
+    "TypeScript",
+    "Motoko",
+    "CSS",
+    "JavaScript",
+    "HTML",
+    "blockchain-technology",
+    "icp",
+    "internet-computer",
+    "motoko-lang"
+  ],
+  "githubUrl": "https://github.com/0xraiven/studysphere",
+  "screenshots": [],
+  "relatedWriteupSlugs": []
+}

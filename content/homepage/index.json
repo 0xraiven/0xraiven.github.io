@@ -1,0 +1,10 @@
+{
+  "name": "r41n",
+  "tagline": "Offensive Security • Red Team • Cloud Security",
+  "profileTerminal": [
+    {
+      "command": "cat /etc/profile/r41n.conf",
+      "output": "handle      :: r41n\nfocus       :: Offensive Security\n               Red Team Tooling\n               Cloud Security\n               Detection Engineering\n\nenvironment :: Linux (Arch / Debian)\n               Windows Active Directory Lab\n               AWS Cloud Architecture\n               Docker / Podman Containers\n               KVM / Proxmox Virtualization\n\nstatus      :: building\n               breaking\n               documenting"
+    }
+  ]
+}

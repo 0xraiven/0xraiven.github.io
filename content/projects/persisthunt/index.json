@@ -1,0 +1,15 @@
+{
+  "title": "Aegis · Persistence Hunter",
+  "description": "Linux persistence detection framework. Standardizes host anomaly telemetry across cron schedules, systemd service units, and shell environment initialization vectors.",
+  "status": "active",
+  "category": "red-team-tooling",
+  "technologies": [
+    "Python",
+    "Linux Internals",
+    "Host Telemetry",
+    "Audit Engine"
+  ],
+  "githubUrl": "https://github.com/0xraiven/persistHunt",
+  "screenshots": [],
+  "relatedWriteupSlugs": []
+}

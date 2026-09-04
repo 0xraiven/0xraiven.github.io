@@ -1,0 +1,14 @@
+{
+  "title": "OWT Bandit",
+  "description": "bandit linux fundamentals lab practises",
+  "status": "active",
+  "category": "lab-environment",
+  "technologies": [
+    "bandit",
+    "linux",
+    "terminal"
+  ],
+  "githubUrl": "https://github.com/0xraiven/OWT-bandit",
+  "screenshots": [],
+  "relatedWriteupSlugs": []
+}

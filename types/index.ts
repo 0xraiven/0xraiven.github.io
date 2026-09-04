@@ -1,15 +1,19 @@
-export type ArticleCategory =
-  | "web-security"
-  | "linux"
-  | "networking"
-  | "active-directory"
-  | "cloud-security"
-  | "detection-engineering"
-  | "red-team"
-  | "ctf"
-  | "tools";
+import type {
+  ArticleCategory,
+  ArticleKind,
+  ProjectCategory,
+  ProjectStatus,
+} from "@/lib/taxonomy";
 
-export type ArticleKind = "writeup" | "note" | "research" | "lab-report";
+export type { ArticleCategory, ArticleKind, ProjectCategory, ProjectStatus };
+
+declare module "js-yaml" {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export function dump(obj: any, opts?: any): string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export function load(str: string): any;
+}
+
 
 export interface ArticleMeta {
   kind: ArticleKind;
@@ -24,15 +28,6 @@ export interface ArticleMeta {
   relatedSlugs?: string[];
   readingTime?: number;
 }
-
-export type ProjectCategory =
-  | "red-team-tooling"
-  | "detection-engineering"
-  | "cloud-security"
-  | "lab-environment"
-  | "browser-security";
-
-export type ProjectStatus = "active" | "building" | "archived" | "planned";
 
 export interface Project {
   title: string;

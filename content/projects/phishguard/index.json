@@ -1,0 +1,17 @@
+{
+  "title": "PhishGuard",
+  "description": "Privacy-first ML phishing detection platform & Chrome extension. Defense-in-depth pipeline decoupling URL canonicalization, heuristics, and CatBoost inference with SHAP explainability.",
+  "status": "building",
+  "category": "browser-security",
+  "technologies": [
+    "Python",
+    "Flask",
+    "CatBoost ML",
+    "SHAP (XAI)",
+    "Chrome MV3",
+    "JavaScript"
+  ],
+  "githubUrl": "https://github.com/0xraiven/phishGuard",
+  "screenshots": [],
+  "relatedWriteupSlugs": []
+}

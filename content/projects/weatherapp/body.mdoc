@@ -1,0 +1,87 @@
+# WEATHER BLOCK
+
+## Overview
+
+This project is a fully rebuilt weather dashboard focused on **same-day, near-live weather updates**.
+
+It supports:
+
+- Place search (city/location name)
+- Device geolocation (optional)
+- Near-real environmental metrics at selected coordinates
+- 7-day daily summary and recent hourly history
+- Interactive location map
+
+## Data Source
+
+Primary weather data is fetched from:
+
+- Open-Meteo Forecast API: https://open-meteo.com/
+
+Key datasets used:
+
+- Current conditions: temperature, apparent temperature, humidity, pressure, wind, dew point, precipitation
+- Hourly timeline: same-day/recent hourly weather metrics
+- Daily summary: max/min temperature, precipitation sum, humidity mean, wind max
+
+Location lookup is done with OpenStreetMap Nominatim:
+
+- Forward geocoding: place name -> latitude/longitude
+- Reverse geocoding: coordinates -> place label
+
+## Accuracy Notes
+
+- Live feeds are updated frequently, but exact refresh cadence depends on the upstream weather provider.
+- Data can still differ from hyper-local station sensors due to model/grid resolution.
+
+## Features
+
+- Live/same-day weather metrics (temperature, humidity, wind, pressure, precipitation, dew point)
+- Computed "feels like" estimate for warm/humid conditions
+- Latest valid hourly observation in UTC
+- Latest 24 hourly records table
+- 7-day daily summary cards
+- Hyper-prism UI style (glass layers, gradient atmosphere, neon accents)
+- Skeleton loading states for metric fields, table rows, and map panel
+- Responsive desktop/mobile layout
+- Satellite map preview with place label overlay and marker
+
+## Project Structure
+
+```
+weatherApp/
+|-- index.html
+|-- style.css
+|-- script.js
+|-- README.md
+```
+
+## Run Locally
+
+No build step is required.
+
+1. Open `index.html` directly in a browser, or
+2. Use a lightweight local server (recommended):
+
+```bash
+python3 -m http.server 8000
+```
+
+Then open `http://localhost:8000`.
+
+## Usage
+
+1. Enter a city/place in the search field and click **Search**.
+2. Or click **Use My Location** and grant location permission.
+3. Read current metrics, daily summary, and hourly history.
+4. Use the map panel to confirm the exact coordinates being queried.
+
+## Stack
+
+- HTML5
+- Tailwind CSS (CDN)
+- CSS3
+- Vanilla JavaScript
+- Leaflet.js (map rendering)
+- Open-Meteo API (live weather)
+- Nominatim API (geocoding)

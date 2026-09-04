@@ -1,0 +1,17 @@
+## Overview
+
+PhishGuard is a privacy-first machine learning phishing detection platform and Chrome extension (Manifest v3). It implements a defense-in-depth pipeline decoupling URL canonicalization, structural heuristics, and CatBoost gradient boosted decision tree inference with SHAP (SHapley Additive exPlanations) for transparent model explainability.
+
+## Pipeline Architecture
+
+The detection pipeline evaluates web pages through five sequential stages:
+
+1. **Ingress**: Capture URL parameters and DOM characteristics via the Manifest v3 background service worker without transmitting sensitive credential tokens.
+2. **Canonicalize**: Normalizes homoglyph/punycode obfuscations, strips tracking parameters, and computes URL lexical entropy.
+3. **CatBoost Inference**: High-precision classification evaluating tabular feature vectors across lexical, structural, and network indicators.
+4. **SHAP (XAI)**: Generates feature attribution values explaining why a specific target triggered a warning.
+5. **Verdict**: Enforces automated client risk policies (Allow, Caution, Block).
+
+{% terminal title="phishguard-cli" commands=[{"cmd":"python -m phishguard.cli --url \"https://sec-auth.legit-portal.net/login\"","output":"[*] Ingress: URL parsing completed\n[*] Canonical: Normalized to sec-auth.legit-portal.net (Punycode: None)\n[*] Features: Extracted 28 lexical & structural signals\n[+] CatBoost Model Inference: Probability = 0.942\n[+] SHAP Attribution: Domain entropy (+0.42), Form action discrepancy (+0.31)\n[!] VERDICT: PHISHING (Action: BLOCK_INGRESS)"}] /%}
+
+{% warning text="PhishGuard operates client-side where possible to guarantee that user browsing histories and session tokens never leave the local environment." /%}
