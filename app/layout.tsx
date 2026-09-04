@@ -46,7 +46,11 @@ export const metadata: Metadata = {
     description: "Cybersecurity portfolio, offensive security research, red team notes, and technical knowledge base.",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
 };
 

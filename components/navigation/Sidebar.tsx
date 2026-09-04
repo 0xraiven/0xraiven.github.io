@@ -44,10 +44,7 @@ interface NavGroup {
 const MAIN_NAV_GROUPS: NavGroup[] = [
   {
     title: "START HERE",
-    items: [
-      { label: "README", href: "/", icon: BookOpen },
-      { label: "Search (⌘K)", href: "#search", icon: Search, isSearch: true },
-    ],
+    items: [{ label: "README", href: "/", icon: BookOpen }],
   },
   {
     title: "PROJECTS",

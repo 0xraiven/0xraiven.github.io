@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { reader } from "@/lib/keystatic-reader";
 
+export const dynamic = "force-static";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://0xraiven.github.io";
 

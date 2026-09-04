@@ -2,6 +2,12 @@ import { makeRouteHandler } from "@keystatic/next/route-handler";
 import config from "@/keystatic.config";
 import { notFound } from "next/navigation";
 
+export const dynamic = "force-static";
+
+export function generateStaticParams() {
+  return [{ params: ["keystatic"] }];
+}
+
 const handler = makeRouteHandler({ config });
 
 export const GET: typeof handler.GET = (...args) => {

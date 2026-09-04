@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "export",
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -12,15 +14,6 @@ const nextConfig: NextConfig = {
         hostname: "github.com",
       },
     ],
-  },
-  async redirects() {
-    return [
-      {
-        source: "/keystat",
-        destination: "/keystatic",
-        permanent: false,
-      },
-    ];
   },
 };
 
