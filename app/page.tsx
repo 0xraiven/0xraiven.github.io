@@ -9,7 +9,7 @@ import { getProjects } from "@/lib/projects";
 
 export default async function Home() {
   const projects = await getProjects();
-  
+
   // Pin authentic cyber-focused security repositories
   const cyberSlugs = ["persisthunt", "phishguard", "owt-bandit"];
   const pinnedProjects = cyberSlugs
@@ -122,17 +122,6 @@ export default async function Home() {
             </span>
           </div>
         </header>
-
-        {/* Purpose / Mission Brief */}
-        <section className="p-4 rounded-lg bg-surface border border-border/80 text-xs font-mono space-y-2">
-          <div className="flex items-center gap-2 text-text-primary font-semibold">
-            <Shield className="w-3.5 h-3.5 text-accent" />
-            <span>KNOWLEDGE_BASE // MISSION_BRIEF</span>
-          </div>
-          <p className="text-text-secondary font-sans leading-relaxed text-xs">
-            Welcome to <span className="text-text-primary font-mono font-semibold">r41n</span>—a public offensive security repository and technical knowledge base maintained by <span className="text-accent font-mono font-semibold">@0xraiven</span>. This platform serves as an operational archive for red teaming methodologies, Hack The Box &amp; CTF machine writeups, active directory tactics, vulnerability research, and open-source cybersecurity engineering projects.
-          </p>
-        </section>
 
         {/* Section 1: Technical Profile Configuration */}
         <section id="technical-configuration" className="space-y-3">
@@ -275,13 +264,12 @@ export default async function Home() {
                     {project.category}
                   </span>
                   <span
-                    className={`text-[11px] font-semibold ${
-                      project.status === "active"
+                    className={`text-[11px] font-semibold ${project.status === "active"
                         ? "text-emerald-400"
                         : project.status === "building"
-                        ? "text-amber-400"
-                        : "text-text-secondary"
-                    }`}
+                          ? "text-amber-400"
+                          : "text-text-secondary"
+                      }`}
                   >
                     {project.status}
                   </span>
