@@ -34,7 +34,7 @@ focus       :: Offensive Security
 
 environment :: Linux (Arch / Debian)
                Windows Active Directory
-               AWS Cloud Architecture
+               AWS / Cloud Security
                Docker / Podman Containers
                KVM / Proxmox Virtualization
 

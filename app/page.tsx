@@ -56,42 +56,20 @@ export default async function Home() {
             </div>
 
             {/* Profile Info */}
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               <ScrambleText
                 text="r41n"
                 as="h1"
                 className="text-2xl sm:text-3xl font-bold tracking-tight font-mono text-text-primary"
               />
 
-              {/* Highlighted GitHub Username */}
-              <div className="flex flex-wrap items-center gap-2">
-                <a
-                  href="https://github.com/0xraiven"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-accent/15 border border-accent/35 text-accent hover:bg-accent/25 transition-colors font-mono text-xs font-semibold shadow-xs"
-                >
-                  <svg
-                    role="img"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="w-3.5 h-3.5"
-                    aria-hidden="true"
-                  >
-                    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                    <path d="M9 18c-4.51 2-5-2-7-2" />
-                  </svg>
-                  <span>@0xraiven</span>
-                </a>
+              <p className="text-sm font-sans text-text-primary font-medium">
+                Computer Science Engineering Student
+              </p>
 
-                <span className="text-xs text-text-secondary font-mono">
-                  Offensive Security • Red Team • Cloud Security
-                </span>
-              </div>
+              <p className="text-xs text-text-secondary font-mono">
+                Offensive Security · Red Team · Cloud Security
+              </p>
             </div>
           </div>
 
@@ -123,11 +101,11 @@ export default async function Home() {
           </div>
         </header>
 
-        {/* Section 1: Technical Profile Configuration */}
-        <section id="technical-configuration" className="space-y-3">
-          <h2 className="text-base font-semibold tracking-tight font-mono text-text-primary flex items-center gap-2 border-b border-border pb-2">
+        {/* Section 1: Technical Profile */}
+        <section id="technical-profile" className="space-y-3">
+          <h2 id="technical-profile" className="text-base font-semibold tracking-tight font-mono text-text-primary flex items-center gap-2 border-b border-border pb-2">
             <Terminal className="w-4 h-4 text-accent" />
-            <ScrambleText text="Technical Configuration" as="span" />
+            <ScrambleText text="Technical Profile" as="span" />
           </h2>
 
           <p className="text-xs text-text-secondary font-mono">
