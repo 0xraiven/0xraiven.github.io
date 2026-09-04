@@ -69,7 +69,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "NOTES",
     collapsible: true,
-    defaultOpen: false,
+    defaultOpen: true,
     items: [
       { label: "Web Security", href: "/notes/web-security", icon: FileText },
       { label: "Linux", href: "/notes/linux", icon: FileText },

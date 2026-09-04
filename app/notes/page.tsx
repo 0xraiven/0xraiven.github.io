@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { KnowledgeBaseLayout } from "@/components/layout/KnowledgeBaseLayout";
 import { getArticles } from "@/lib/articles";
+import { StayTuned } from "@/components/content/StayTuned";
 import { ArrowRight, Clock, Calendar, Tag, FileText } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -45,12 +46,13 @@ export default async function NotesPage() {
 
         {/* Notes List */}
         {notes.length === 0 ? (
-          <div className="p-8 rounded border border-border bg-surface text-center space-y-2">
-            <p className="text-sm font-semibold text-text-primary">No notes published yet</p>
-            <p className="text-xs text-text-secondary font-sans">
-              Create notes in the Keystatic CMS or directly in <code className="font-mono text-accent">content/notes/</code>.
-            </p>
-          </div>
+          <StayTuned
+            title="Operational Notes & Tactical Runbooks Compiling"
+            category="notes-in-progress"
+            description="Field notes, system command cheat sheets, telemetry queries, and tactical playbooks are actively being organized and prepared. Stay tuned for upcoming entries."
+            returnUrl="/projects"
+            returnLabel="Explore Active Repositories"
+          />
         ) : (
           <div className="space-y-3">
             {notes.map((item) => (

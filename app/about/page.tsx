@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { KnowledgeBaseLayout } from "@/components/layout/KnowledgeBaseLayout";
 import { DocumentContent } from "@/components/content/DocumentRenderer";
+import { StayTuned } from "@/components/content/StayTuned";
 import { reader } from "@/lib/keystatic-reader";
 import { User, Shield, Terminal } from "lucide-react";
 
@@ -65,9 +66,13 @@ export default async function AboutPage() {
           {body ? (
             <DocumentContent document={body as unknown as Parameters<typeof DocumentContent>[0]["document"]} />
           ) : (
-            <p className="text-sm text-text-secondary italic">
-              Profile documentation currently being synchronized.
-            </p>
+            <StayTuned
+              title="Operator Dossier Undergoing Compilation"
+              category="profile-in-progress"
+              description="Full operator bio, methodology breakdown, and disclosure ethics are being synchronized. Stay tuned for the complete technical profile."
+              returnUrl="/projects"
+              returnLabel="Explore Proof-of-Work Projects"
+            />
           )}
         </div>
       </article>

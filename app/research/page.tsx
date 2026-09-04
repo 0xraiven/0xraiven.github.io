@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { KnowledgeBaseLayout } from "@/components/layout/KnowledgeBaseLayout";
 import { getArticles } from "@/lib/articles";
+import { StayTuned } from "@/components/content/StayTuned";
 import { ArrowRight, Clock, Calendar, Tag, FlaskConical } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -45,12 +46,13 @@ export default async function ResearchPage() {
 
         {/* Research List */}
         {researchItems.length === 0 ? (
-          <div className="p-8 rounded border border-border bg-surface text-center space-y-2">
-            <p className="text-sm font-semibold text-text-primary">No research papers published yet</p>
-            <p className="text-xs text-text-secondary font-sans">
-              Create research articles in the Keystatic CMS or directly in <code className="font-mono text-accent">content/research/</code>.
-            </p>
-          </div>
+          <StayTuned
+            title="Security Research & Whitepapers Pending Release"
+            category="research-in-progress"
+            description="Novel vulnerability research, exploitation primitives, and laboratory whitepapers are actively being evaluated, peer-reviewed, and coordinated for disclosure. Stay tuned for upcoming publications."
+            returnUrl="/projects"
+            returnLabel="Explore Active Repositories"
+          />
         ) : (
           <div className="space-y-3">
             {researchItems.map((item) => (

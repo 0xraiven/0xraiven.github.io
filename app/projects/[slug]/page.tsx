@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { KnowledgeBaseLayout } from '@/components/layout/KnowledgeBaseLayout';
 import { DocumentContent } from '@/components/content/DocumentRenderer';
+import { StayTuned } from '@/components/content/StayTuned';
 import { getProjectBySlug, getProjects } from '@/lib/projects';
 import {
   FolderGit2,
@@ -158,9 +159,13 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           {project.body ? (
             <DocumentContent document={project.body as unknown as Parameters<typeof DocumentContent>[0]['document']} />
           ) : (
-            <p className="text-xs text-text-secondary italic">
-              No technical documentation body currently available for this project.
-            </p>
+            <StayTuned
+              title="Project Architecture Dossier In Progress"
+              category="documentation-pending"
+              description="This project repository has been synchronized. Deep architecture notes, benchmark data, and exploit demonstrations are being compiled for publication."
+              returnUrl="/projects"
+              returnLabel="All Projects"
+            />
           )}
         </div>
 
