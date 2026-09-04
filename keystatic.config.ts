@@ -150,7 +150,7 @@ export default config({
           multiline: true,
         }),
         githubUrl: fields.url({ label: "GitHub URL" }),
-        linkedinUrl: fields.url({ label: "LinkedIn URL" }),
+        xUrl: fields.url({ label: "X (formerly Twitter) URL" }),
         ogImage: fields.image({
           label: "Default OG Image",
           directory: "public/images/og",

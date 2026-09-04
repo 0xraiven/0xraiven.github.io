@@ -8,6 +8,7 @@ import { useUI } from "@/providers";
 
 export interface TopBarProps {
   githubUrl?: string;
+  xUrl?: string;
   linkedinUrl?: string;
 }
 
@@ -30,30 +31,26 @@ function GithubIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
-function LinkedinIcon({ className = "w-4 h-4" }: { className?: string }) {
+function XIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg
       role="img"
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      fill="currentColor"
       className={className}
       aria-hidden="true"
     >
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect width="4" height="12" x="2" y="9" />
-      <circle cx="4" cy="4" r="2" />
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
     </svg>
   );
 }
 
 export function TopBar({
   githubUrl = "https://github.com/0xraiven",
-  linkedinUrl = "https://linkedin.com",
+  xUrl = "https://x.com/0xraiven",
+  linkedinUrl,
 }: TopBarProps) {
+  const finalXUrl = xUrl || linkedinUrl || "https://x.com/0xraiven";
   const { openCommandPalette, openMobileSidebar } = useUI();
   const [isDark, setIsDark] = useState(true);
   const [overflowOpen, setOverflowOpen] = useState(false);
@@ -138,13 +135,13 @@ export function TopBar({
           </a>
 
           <a
-            href={linkedinUrl}
+            href={finalXUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="LinkedIn profile"
+            aria-label="X (formerly Twitter) profile"
             className="p-1.5 rounded text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
           >
-            <LinkedinIcon className="w-4 h-4" />
+            <XIcon className="w-3.5 h-3.5" />
           </a>
 
           <button

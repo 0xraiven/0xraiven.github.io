@@ -9,6 +9,7 @@ export interface KnowledgeBaseLayoutProps {
   headings?: TOCItem[];
   relatedItems?: RelatedItem[];
   githubUrl?: string;
+  xUrl?: string;
   linkedinUrl?: string;
 }
 
@@ -17,12 +18,13 @@ export function KnowledgeBaseLayout({
   headings,
   relatedItems,
   githubUrl,
+  xUrl,
   linkedinUrl,
 }: KnowledgeBaseLayoutProps) {
   return (
     <div className="min-h-screen bg-bg text-text-primary flex flex-col">
       {/* MANDATORY FIXED TOPBAR */}
-      <TopBar githubUrl={githubUrl} linkedinUrl={linkedinUrl} />
+      <TopBar githubUrl={githubUrl} xUrl={xUrl} linkedinUrl={linkedinUrl} />
 
       {/* THREE-COLUMN SHELL (Desktop: Sidebar | Main | PageAside) */}
       <div className="pt-12 flex flex-1 w-full max-w-[1600px] mx-auto">

@@ -91,12 +91,12 @@ export default async function Home() {
             </a>
 
             <a
-              href="https://linkedin.com"
+              href="https://x.com/0xraiven"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-border bg-surface hover:bg-surface-2 text-text-primary hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
-              <span>linkedin.com/in</span>
+              <span>x.com/0xraiven</span>
               <ArrowUpRight className="w-3 h-3 text-text-secondary" />
             </a>
 
