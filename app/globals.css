@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+:root {
+  /* base */
+  --bg: #0c0c0e;
+  --surface: #16161a;
+  --surface-2: #1d1d22;
+  --border: rgba(255, 255, 255, 0.07);
+  --text-primary: #eae6dd;
+  --text-secondary: #8d8d94;
+  --accent: #a873ad;
+  --radius: 6px;
+
+  /* glass — used only on chrome/overlays, see §4.4 */
+  --glass-bg: rgba(22, 22, 26, 0.74);
+  --glass-border: rgba(234, 230, 221, 0.10);
+  --glass-highlight: rgba(234, 230, 221, 0.05);
+  --glass-blur: 14px;
+  --glass-shadow: 0 8px 28px rgba(0, 0, 0, 0.38);
+  --glass-radius: 8px;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-bg: var(--surface);
+    --glass-blur: 0px;
+    --glass-highlight: transparent;
+  }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-surface {
+    background: var(--surface) !important;
+  }
+}
+
+@theme {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-accent: var(--accent);
+
+  /* Convenience aliases */
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+
+  --font-sans: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-glass: var(--glass-radius);
+}
+
+/* Glass surface foundation utility */
+.glass-surface {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Base resets */
+* {
+  box-sizing: border-box;
+  border-color: var(--border);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+}
+
+::selection {
+  background-color: var(--accent);
+  color: var(--bg);
+}
