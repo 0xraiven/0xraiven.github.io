@@ -1,1 +1,41 @@
-# 0xraiven.github.io
+# r41n // 0xraiven.github.io
+
+> Public offensive security portfolio, red teaming repository, and technical knowledge base maintained by **[@0xraiven](https://github.com/0xraiven)**.
+
+---
+
+## Purpose & Scope
+
+This platform serves as a centralized, open-access operational archive for:
+
+- **Security Engineering & Tools ([`/projects`](https://0xraiven.github.io/projects))**: Open-source cybersecurity tools, threat detection sensors, and security architectures.
+- **Offensive Security Walkthroughs ([`/writeups`](https://0xraiven.github.io/writeups))**: Detailed attack paths, Active Directory escalation vectors, and Hack The Box machine writeups categorized across Low, Medium, Hard, and Insane tiers.
+- **Tactical Field Notes ([`/notes`](https://0xraiven.github.io/notes))**: Incident runbooks, command cheatsheets, and privilege escalation techniques.
+- **Vulnerability Research ([`/research`](https://0xraiven.github.io/research))**: Threat modeling, vulnerability analysis, and exploit research.
+- **Operator Profile & Resume ([`/about`](https://0xraiven.github.io/about), [`/resume`](https://0xraiven.github.io/resume))**: Background, technical competencies, and professional credentials.
+- **Direct Dispatch & Communications ([`/contact`](https://0xraiven.github.io/contact))**: Verified public coordinates, ProtonMail E2EE WKD routing, and direct dispatch channel.
+
+---
+
+## Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router, Static HTML Export)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) v4 with custom Obsidian & Wine Red aesthetic tokens
+- **CMS**: [Keystatic](https://keystatic.com/) (File-based Markdown & MDOC collections)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Deployment**: [GitHub Pages](https://pages.github.com/) via GitHub Actions CI/CD
+
+---
+
+## 💻 Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run repo sync and local dev server
+npm run dev
+
+# Build static production bundle
+npm run build
+```
