@@ -53,9 +53,9 @@ export default async function WriteupDetailPage({ params }: WriteupPageProps) {
 
   return (
     <KnowledgeBaseLayout relatedItems={relatedItems}>
-      <article className="space-y-6 font-mono">
+      <article className="space-y-6">
         {/* Navigation & Breadcrumb */}
-        <div className="flex items-center justify-between text-xs text-text-secondary border-b border-border pb-3">
+        <div className="flex items-center justify-between text-xs text-text-secondary border-b border-border pb-3 font-mono">
           <div className="flex items-center gap-1.5">
             <Link href="/writeups" className="hover:text-accent flex items-center gap-1">
               <ArrowLeft className="w-3.5 h-3.5" />
@@ -76,7 +76,7 @@ export default async function WriteupDetailPage({ params }: WriteupPageProps) {
             {article.meta.title}
           </h1>
 
-          <p className="text-xs text-text-secondary leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {article.meta.description}
           </p>
 

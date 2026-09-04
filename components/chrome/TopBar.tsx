@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { GlassSurface } from "./GlassSurface";
-import { Sun, Moon, MoreVertical } from "lucide-react";
+import { Sun, Moon, MoreVertical, Menu, Search } from "lucide-react";
+import { useUI } from "@/providers";
 
 export interface TopBarProps {
   githubUrl?: string;
@@ -53,6 +54,7 @@ export function TopBar({
   githubUrl = "https://github.com/0xraiven",
   linkedinUrl = "https://linkedin.com",
 }: TopBarProps) {
+  const { openCommandPalette, openMobileSidebar } = useUI();
   const [isDark, setIsDark] = useState(true);
   const [overflowOpen, setOverflowOpen] = useState(false);
 
@@ -66,11 +68,20 @@ export function TopBar({
   return (
     <header className="fixed top-0 left-0 right-0 z-40 h-12">
       <GlassSurface
-        className="w-full h-full rounded-none border-t-0 border-x-0 border-b px-4 flex items-center justify-between"
+        className="w-full h-full rounded-none border-t-0 border-x-0 border-b px-3 sm:px-4 flex items-center justify-between"
         style={{ borderRadius: 0 }}
       >
-        {/* LEFT: r41n • Security Knowledge Base */}
-        <div className="flex items-center gap-2">
+        {/* LEFT: Mobile hamburger + r41n • Security Knowledge Base */}
+        <div className="flex items-center gap-1 sm:gap-2">
+          <button
+            type="button"
+            onClick={openMobileSidebar}
+            aria-label="Open mobile navigation menu"
+            className="p-1.5 rounded text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors md:hidden focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          >
+            <Menu className="w-4 h-4" />
+          </button>
+
           <Link
             href="/"
             className="flex items-center gap-2 text-sm tracking-tight font-mono focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded px-1 py-0.5"
@@ -79,7 +90,7 @@ export function TopBar({
               r41n
             </span>
             <span className="text-text-secondary text-xs">•</span>
-            <span className="text-xs text-text-secondary hidden sm:inline">
+            <span className="text-xs text-text-secondary hidden sm:inline truncate max-w-[200px] md:max-w-none">
               Security Knowledge Base
             </span>
           </Link>
@@ -88,11 +99,25 @@ export function TopBar({
         {/* CENTER: ● Online status indicator */}
         <div className="flex items-center gap-1.5 text-xs font-mono text-text-secondary select-none">
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Online</span>
+          <span className="hidden xs:inline">Online</span>
         </div>
 
-        {/* RIGHT: GitHub, LinkedIn, Theme toggle, overflow menu */}
+        {/* RIGHT: Search button, GitHub, LinkedIn, Theme toggle, overflow menu */}
         <div className="flex items-center gap-1">
+          {/* Quick Search Button (⌘K) */}
+          <button
+            type="button"
+            onClick={openCommandPalette}
+            aria-label="Search knowledge base (⌘K)"
+            className="flex items-center gap-1.5 px-2 py-1 rounded text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors text-xs font-mono focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          >
+            <Search className="w-3.5 h-3.5 text-accent" />
+            <span className="hidden md:inline text-[11px]">Search</span>
+            <kbd className="hidden sm:inline text-[10px] px-1 py-0.5 rounded bg-surface-2 border border-border text-text-secondary">
+              ⌘K
+            </kbd>
+          </button>
+
           <a
             href={githubUrl}
             target="_blank"
@@ -138,6 +163,17 @@ export function TopBar({
                 <div className="px-3 py-1.5 text-text-secondary border-b border-border">
                   r41n knowledge base
                 </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOverflowOpen(false);
+                    openCommandPalette();
+                  }}
+                  className="w-full text-left px-3 py-1.5 text-text-secondary hover:text-text-primary hover:bg-surface-2 flex items-center justify-between"
+                >
+                  <span>Search</span>
+                  <span className="text-[10px] text-accent">⌘K</span>
+                </button>
                 <Link
                   href="/"
                   onClick={() => setOverflowOpen(false)}

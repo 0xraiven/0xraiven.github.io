@@ -70,9 +70,9 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
   return (
     <KnowledgeBaseLayout relatedItems={relatedProjects}>
-      <article className="space-y-6 font-mono">
+      <article className="space-y-6">
         {/* Navigation & Breadcrumb */}
-        <div className="flex items-center justify-between text-xs text-text-secondary border-b border-border pb-3">
+        <div className="flex items-center justify-between text-xs text-text-secondary border-b border-border pb-3 font-mono">
           <div className="flex items-center gap-1.5">
             <Link href="/projects" className="hover:text-accent flex items-center gap-1">
               <ArrowLeft className="w-3.5 h-3.5" />
@@ -103,7 +103,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-accent hover:underline flex items-center gap-1 shrink-0"
+                className="text-xs font-mono text-accent hover:underline flex items-center gap-1 shrink-0"
               >
                 <FolderGit2 className="w-3.5 h-3.5" />
                 <span>Source Repository</span>
@@ -112,7 +112,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             )}
           </div>
 
-          <p className="text-xs text-text-secondary leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {project.description}
           </p>
 

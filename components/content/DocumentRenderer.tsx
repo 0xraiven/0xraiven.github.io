@@ -124,7 +124,7 @@ export function DocumentContent({ document }: DocumentContentProps) {
   }
 
   return (
-    <div className="space-y-4 text-xs font-mono text-text-secondary leading-relaxed">
+    <div className="space-y-4 text-sm font-sans text-text-secondary leading-relaxed">
       <KeystaticDocumentRenderer
         document={document}
         componentBlocks={componentBlocks}
@@ -143,7 +143,7 @@ export function DocumentContent({ document }: DocumentContentProps) {
             ),
             bold: ({ children }) => <strong className="font-semibold text-text-primary">{children}</strong>,
             code: ({ children }) => (
-              <code className="px-1.5 py-0.5 rounded bg-surface-2 border border-border text-text-primary text-[11px] font-mono">
+              <code className="px-1.5 py-0.5 rounded bg-surface-2 border border-border text-accent text-xs font-mono">
                 {children}
               </code>
             ),
@@ -158,10 +158,16 @@ export function DocumentContent({ document }: DocumentContentProps) {
             blockquote: ({ children }) => <QuoteBlock>{children}</QuoteBlock>,
             divider: () => <DividerBlock />,
             list: ({ type, children }) => {
-              if (type === 'ordered') {
-                return <OrderedListBlock>{children}</OrderedListBlock>;
-              }
-              return <UnorderedListBlock>{children}</UnorderedListBlock>;
+              const ListComponent = type === 'ordered' ? OrderedListBlock : UnorderedListBlock;
+              return (
+                <ListComponent>
+                  {React.Children.map(children, (child, idx) => (
+                    <li key={idx} className="leading-relaxed pl-1">
+                      {child}
+                    </li>
+                  ))}
+                </ListComponent>
+              );
             },
             table: ({ head, body }) => (
               <div className="my-4 overflow-x-auto rounded border border-border bg-surface">

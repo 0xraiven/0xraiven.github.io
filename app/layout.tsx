@@ -19,6 +19,8 @@ export const metadata: Metadata = {
   description: "Cybersecurity portfolio, research notebook, and technical knowledge base.",
 };
 
+import { Providers } from "@/providers";
+
 export default function RootLayout({
   children,
 }: {
@@ -27,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sansFont.variable} ${monoFont.variable} dark`}>
       <body className="min-h-screen bg-bg text-text-primary antialiased font-sans">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

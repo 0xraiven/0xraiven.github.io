@@ -1,7 +1,10 @@
 ---
-title: Aegis · Persistence Hunter
-description: Linux persistence detection framework. Standardizes host anomaly telemetry across cron schedules, systemd service units, and shell environment initialization vectors.
-status: active
+title: persistHunt
+description: >-
+  Linux persistence detection framework. Standardizes host anomaly telemetry
+  across cron schedules, systemd service units, and shell environment
+  initialization vectors.
+status: building
 category: red-team-tooling
 technologies:
   - Python
@@ -12,7 +15,6 @@ githubUrl: https://github.com/0xraiven/persistHunt
 screenshots: []
 relatedWriteupSlugs: []
 ---
-
 ## Overview
 
 Aegis (persistHunt) inspects Linux hosts for covert persistence mechanisms across initialization vectors, daemon definitions, and user environment hooks.
@@ -23,4 +25,6 @@ Aegis (persistHunt) inspects Linux hosts for covert persistence mechanisms acros
 - **Cron**: Inspects `/etc/crontab`, `/etc/cron.*`, and spool tables for hidden scheduled executions.
 - **Shell Startup**: Scans `.bashrc`, `.bash_profile`, `/etc/profile.d/`, and fish/zsh configurations for alias hijacking or command injections.
 
-{% terminal title="persisthunt-scan" commands=[{"cmd":"python3 -m persisthunt.audit --target / --level aggressive","output":"[+] Initializing Host Audit Engine\n[*] Scanning systemd service paths...\n[*] Auditing crontab definitions...\n[*] Inspecting shell initialization scripts...\n[!] Finding: 0 anomalous triggers identified in core initialization pathways.\n[+] Audit Complete: Integrity Verified."}] /%}
+{% terminal
+   title="persisthunt-scan"
+   commands=[{cmd: "python3 -m persisthunt.audit --target / --level aggressive", output: "[+] Initializing Host Audit Engine\n[*] Scanning systemd service paths...\n[*] Auditing crontab definitions...\n[*] Inspecting shell initialization scripts...\n[!] Finding: 0 anomalous triggers identified in core initialization pathways.\n[+] Audit Complete: Integrity Verified."}] /%}

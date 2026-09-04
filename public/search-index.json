@@ -1,0 +1,246 @@
+[
+  {
+    "id": "page-readme",
+    "title": "README",
+    "description": "System architecture, operator configuration, technical profile, and active security focus areas.",
+    "url": "/",
+    "kind": "page",
+    "category": "system",
+    "tags": [
+      "profile",
+      "configuration",
+      "overview"
+    ]
+  },
+  {
+    "id": "page-projects",
+    "title": "Projects Directory",
+    "description": "Browse all security tooling, machine learning detectors, lab environments, and proof-of-work repositories.",
+    "url": "/projects",
+    "kind": "page",
+    "category": "projects",
+    "tags": [
+      "directory",
+      "tools",
+      "repositories"
+    ]
+  },
+  {
+    "id": "page-writeups",
+    "title": "Writeups",
+    "description": "Technical post-mortems, exploit analysis, vulnerable lab walkthroughs, and vulnerability reports.",
+    "url": "/writeups",
+    "kind": "page",
+    "category": "field-reports",
+    "tags": [
+      "writeups",
+      "analysis",
+      "reports"
+    ]
+  },
+  {
+    "id": "page-notes",
+    "title": "Notes & References",
+    "description": "Operational notes, cheat sheets, command references, and defensive & offensive security runbooks.",
+    "url": "/notes",
+    "kind": "page",
+    "category": "knowledge-base",
+    "tags": [
+      "notes",
+      "cheatsheets",
+      "commands"
+    ]
+  },
+  {
+    "id": "page-research",
+    "title": "Security Research",
+    "description": "In-depth vulnerability research, protocol audits, whitepapers, and target lab evaluations.",
+    "url": "/research",
+    "kind": "page",
+    "category": "research",
+    "tags": [
+      "research",
+      "papers",
+      "labs"
+    ]
+  },
+  {
+    "id": "page-about",
+    "title": "About Operator",
+    "description": "Operator profile, defensive & offensive philosophy, security methodology, and contact details.",
+    "url": "/about",
+    "kind": "page",
+    "category": "operator",
+    "tags": [
+      "bio",
+      "contact",
+      "philosophy"
+    ]
+  },
+  {
+    "id": "page-resume",
+    "title": "Resume & Dossier",
+    "description": "Curriculum vitae, technical competencies, security credentials, and engineering experience.",
+    "url": "/resume",
+    "kind": "page",
+    "category": "operator",
+    "tags": [
+      "resume",
+      "experience",
+      "skills"
+    ]
+  },
+  {
+    "id": "project-gameoptimizer",
+    "title": "Game Optimizer",
+    "description": "A simple program built using windows batch script to optimize the games on low end devices",
+    "url": "/projects/gameoptimizer",
+    "kind": "project",
+    "category": "red-team-tooling",
+    "tags": [
+      "Batchfile",
+      "batch-script",
+      "gaming",
+      "low-end-pc",
+      "performance-optimization"
+    ]
+  },
+  {
+    "id": "project-nightquill-backend",
+    "title": "Nightquill Backend",
+    "description": "Backend mongodb-atlas supported service for the nightquill-frontend ",
+    "url": "/projects/nightquill-backend",
+    "kind": "project",
+    "category": "red-team-tooling",
+    "tags": [
+      "JavaScript",
+      "mern",
+      "mongodb",
+      "mongodb-atlas-database",
+      "nodejs-server"
+    ]
+  },
+  {
+    "id": "project-nightquill-frontend",
+    "title": "Nightquill Frontend",
+    "description": "frontend repository for the \"nightquill\" => a dedicated blogging platform",
+    "url": "/projects/nightquill-frontend",
+    "kind": "project",
+    "category": "red-team-tooling",
+    "tags": [
+      "TypeScript",
+      "HTML",
+      "CSS",
+      "css3",
+      "framer-motion",
+      "reactjs",
+      "typescipt"
+    ]
+  },
+  {
+    "id": "project-owt-bandit",
+    "title": "OWT Bandit",
+    "description": "bandit linux fundamentals lab practises",
+    "url": "/projects/owt-bandit",
+    "kind": "project",
+    "category": "lab-environment",
+    "tags": [
+      "bandit",
+      "linux",
+      "terminal"
+    ]
+  },
+  {
+    "id": "project-persisthunt",
+    "title": "persistHunt",
+    "description": "Linux persistence detection framework. Standardizes host anomaly telemetry across cron schedules, systemd service units, and shell environment initialization vectors.",
+    "url": "/projects/persisthunt",
+    "kind": "project",
+    "category": "red-team-tooling",
+    "tags": [
+      "Python",
+      "Linux Internals",
+      "Host Telemetry",
+      "Audit Engine"
+    ]
+  },
+  {
+    "id": "project-phishguard",
+    "title": "PhishGuard",
+    "description": "Privacy-first ML phishing detection platform & Chrome extension. Defense-in-depth pipeline decoupling URL canonicalization, heuristics, and CatBoost inference with SHAP explainability.",
+    "url": "/projects/phishguard",
+    "kind": "project",
+    "category": "browser-security",
+    "tags": [
+      "Python",
+      "Flask",
+      "CatBoost ML",
+      "SHAP (XAI)",
+      "Chrome MV3",
+      "JavaScript"
+    ]
+  },
+  {
+    "id": "project-studysphere",
+    "title": "Studysphere",
+    "description": "A community platfrom built on ICP network which is built for students by students",
+    "url": "/projects/studysphere",
+    "kind": "project",
+    "category": "cloud-security",
+    "tags": [
+      "TypeScript",
+      "Motoko",
+      "CSS",
+      "JavaScript",
+      "HTML",
+      "blockchain-technology",
+      "icp",
+      "internet-computer",
+      "motoko-lang"
+    ]
+  },
+  {
+    "id": "project-weatherapp",
+    "title": "Weather App",
+    "description": "A simple weather app built using html,css,js",
+    "url": "/projects/weatherapp",
+    "kind": "project",
+    "category": "red-team-tooling",
+    "tags": [
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "css",
+      "html",
+      "js",
+      "open-street-map"
+    ]
+  },
+  {
+    "id": "writeup-authoring-verification",
+    "title": "Authoring Verification Document",
+    "description": "Dynamic block authoring test suite verifying rendering of all 19 Keystatic content blocks.",
+    "url": "/writeups/authoring-verification",
+    "kind": "writeup",
+    "category": "web-security",
+    "tags": [
+      "verification",
+      "components",
+      "test"
+    ]
+  },
+  {
+    "id": "writeup-ssrf-lab",
+    "title": "SSRF Lab Investigation",
+    "description": "[Sample Placeholder] Demonstrating server-side request forgery exploitation vectors in cloud metadata environments and mitigation patterns.",
+    "url": "/writeups/ssrf-lab",
+    "kind": "writeup",
+    "category": "web-security",
+    "tags": [
+      "ssrf",
+      "cloud-security",
+      "aws",
+      "metadata"
+    ]
+  }
+]

@@ -24,22 +24,23 @@ export function TableOfContents({ headings: initialHeadings }: TableOfContentsPr
 
     const discovered: TOCItem[] = headingElements
       .map((el, index) => {
+        const rawText = (el.textContent || "").replace(/^#+\s*/, "").trim();
         let id = el.id;
         if (!id) {
           id =
-            el.textContent
-              ?.toLowerCase()
+            rawText
+              .toLowerCase()
               .replace(/[^a-z0-9]+/g, "-")
               .replace(/(^-|-$)/g, "") || `heading-${index}`;
           el.id = id;
         }
         return {
           id,
-          text: el.textContent || "",
+          text: rawText,
           level: el.tagName.toLowerCase() === "h2" ? (2 as const) : (3 as const),
         };
       })
-      .filter((h) => h.text.trim().length > 0);
+      .filter((h) => h.text.length > 0);
 
     const raf = requestAnimationFrame(() => {
       setDiscoveredHeadings(discovered);

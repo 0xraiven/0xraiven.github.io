@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUI } from "@/providers";
 import {
   BookOpen,
   Search,
@@ -23,6 +24,7 @@ interface NavItem {
   href: string;
   icon?: React.ComponentType<{ className?: string }>;
   badge?: string;
+  isSearch?: boolean;
 }
 
 interface NavGroup {
@@ -37,7 +39,7 @@ const NAV_GROUPS: NavGroup[] = [
     title: "START HERE",
     items: [
       { label: "README", href: "/", icon: BookOpen },
-      { label: "Search (⌘K)", href: "#search", icon: Search },
+      { label: "Search (⌘K)", href: "#search", icon: Search, isSearch: true },
     ],
   },
   {
@@ -45,9 +47,8 @@ const NAV_GROUPS: NavGroup[] = [
     collapsible: true,
     defaultOpen: true,
     items: [
-      { label: "Aegis · Persistence Hunter", href: "/projects/aegis", icon: Terminal },
       { label: "PhishGuard", href: "/projects/phishguard", icon: ShieldAlert },
-      { label: "Linux Observe", href: "/projects/linux-observe", icon: FolderGit2 },
+      { label: "persistHunt", href: "/projects/persisthunt", icon: Terminal },
       { label: "View all projects", href: "/projects", icon: FolderGit2 },
     ],
   },
@@ -99,6 +100,7 @@ const NAV_GROUPS: NavGroup[] = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { openCommandPalette } = useUI();
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     const state: Record<string, boolean> = {};
     NAV_GROUPS.forEach((group) => {
@@ -149,6 +151,25 @@ export function Sidebar() {
                   {group.items.map((item) => {
                     const isActive = pathname === item.href;
                     const Icon = item.icon;
+
+                    if (item.isSearch) {
+                      return (
+                        <li key={item.label}>
+                          <button
+                            type="button"
+                            onClick={openCommandPalette}
+                            className="w-full flex items-center gap-2 px-2 py-1.5 rounded font-mono transition-colors text-text-secondary hover:text-text-primary hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent text-left"
+                          >
+                            {Icon && <Icon className="w-3.5 h-3.5 shrink-0 text-accent" />}
+                            <span className="truncate">{item.label}</span>
+                            <kbd className="ml-auto text-[10px] px-1 rounded bg-surface border border-border text-text-secondary">
+                              ⌘K
+                            </kbd>
+                          </button>
+                        </li>
+                      );
+                    }
+
                     return (
                       <li key={item.label}>
                         <Link

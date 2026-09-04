@@ -8,7 +8,7 @@ export interface ParagraphBlockProps {
 
 export function ParagraphBlock({ text, children, className = '' }: ParagraphBlockProps) {
   return (
-    <p className={`text-xs font-mono text-text-secondary leading-relaxed my-3 ${className}`}>
+    <p className={`text-sm text-text-secondary leading-relaxed my-3.5 ${className}`}>
       {children || text}
     </p>
   );

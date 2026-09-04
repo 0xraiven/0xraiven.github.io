@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
+import KeystaticApp from "./keystatic";
 
-export default function Page() {
+export default function Layout() {
   if (process.env.NODE_ENV === "production") {
     notFound();
   }
-  return null;
+  return <KeystaticApp />;
 }

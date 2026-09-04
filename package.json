@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "sync:repos": "tsx scripts/sync-repos.ts",
-    "predev": "npm run sync:repos",
+    "build:search": "tsx scripts/build-search-index.ts",
+    "predev": "npm run sync:repos && npm run build:search",
     "dev": "next dev",
-    "prebuild": "npm run sync:repos",
+    "prebuild": "npm run sync:repos && npm run build:search",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
