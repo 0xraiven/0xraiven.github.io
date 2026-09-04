@@ -93,7 +93,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           </div>
         </div>
 
-        {/* Project Header Dossier */}
+        {/* Project Header */}
         <header className="p-4 rounded border border-border bg-surface space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
             <h1 className="text-xl font-bold tracking-tight text-text-primary">
@@ -160,7 +160,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             <DocumentContent document={project.body as unknown as Parameters<typeof DocumentContent>[0]['document']} />
           ) : (
             <StayTuned
-              title="Project Architecture Dossier In Progress"
+              title="Project Architecture Documentation In Progress"
               category="documentation-pending"
               description="This project repository has been synchronized. Deep architecture notes, benchmark data, and exploit demonstrations are being compiled for publication."
               returnUrl="/projects"

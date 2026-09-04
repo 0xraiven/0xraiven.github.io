@@ -45,7 +45,7 @@ status      :: building
   {
     label: "neofetch",
     cmd: "neofetch --telemetry",
-    output: `        /\\_/\\          r41n@cyber-range
+    output: `        /\\_/\\          r41n@0xraiven
        ( o.o )         ----------------
         > ^ <          OS: Arch Linux x86_64
    0xraiven::ops       Host: Homelab Proxmox VE 8.2 (Self-Hosted)
@@ -83,7 +83,7 @@ clearance  :: LEVEL-4 RESEARCH OPERATOR`,
   neofetch              - Display system specs, homelab & telemetry
   cat /etc/arsenal      - View security toolchain & technical arsenal
   whoami                - Display active user identity & clearance
-  ls                    - List dossier directories & files
+  ls                    - List directories & files
   uptime                - Print homelab cluster uptime
   clear                 - Reset terminal session
   help                  - Show this manual`,
@@ -335,7 +335,7 @@ drwxr-xr-x  r41n  staff   4096 Sep 04 23:40 research/
             {/* Prompt execution line */}
             <div className="flex items-start gap-2">
               <span className="text-accent font-bold select-none shrink-0 font-mono">
-                r41n@cyber-range:~$
+                r41n@0xraiven:~$
               </span>
               <span className="font-medium text-white whitespace-pre font-mono">
                 {item.cmd}
@@ -362,7 +362,7 @@ drwxr-xr-x  r41n  staff   4096 Sep 04 23:40 research/
             className="flex items-center gap-2 pt-1 font-mono text-xs"
           >
             <span className="text-accent font-bold select-none shrink-0">
-              r41n@cyber-range:~$
+              r41n@0xraiven:~$
             </span>
             <div className="relative flex-1 flex items-center">
               <input
@@ -389,7 +389,7 @@ drwxr-xr-x  r41n  staff   4096 Sep 04 23:40 research/
         {!interactive && (
           <div className="flex items-center gap-1 pt-1 font-mono">
             <span className="text-accent font-bold select-none shrink-0">
-              r41n@cyber-range:~$
+              r41n@0xraiven:~$
             </span>
             <span className="inline-block w-2 h-3.5 bg-accent animate-pulse" />
           </div>
@@ -410,11 +410,10 @@ drwxr-xr-x  r41n  staff   4096 Sep 04 23:40 research/
                   key={preset.label}
                   type="button"
                   onClick={() => handleRunPreset(preset)}
-                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded border transition-all ${
-                    isSelected
-                      ? "bg-accent/15 border-accent/60 text-accent font-semibold shadow-xs"
-                      : "border-border bg-surface hover:bg-surface-2 text-text-secondary hover:text-text-primary"
-                  }`}
+                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded border transition-all ${isSelected
+                    ? "bg-accent/15 border-accent/60 text-accent font-semibold shadow-xs"
+                    : "border-border bg-surface hover:bg-surface-2 text-text-secondary hover:text-text-primary"
+                    }`}
                 >
                   <span className="text-accent select-none font-bold text-[10px]">&gt;</span>
                   <span>{preset.label}</span>

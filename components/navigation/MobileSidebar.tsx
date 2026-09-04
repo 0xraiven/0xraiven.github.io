@@ -17,6 +17,7 @@ import {
   ChevronRight,
   ShieldAlert,
   Terminal,
+  Box,
   X,
   Sun,
   Moon,
@@ -24,12 +25,19 @@ import {
 } from "lucide-react";
 import { useUI } from "@/providers";
 
+interface NavSubItem {
+  label: string;
+  href: string;
+  badge?: string;
+}
+
 interface NavItem {
   label: string;
   href: string;
   icon?: React.ComponentType<{ className?: string }>;
   badge?: string;
   isSearch?: boolean;
+  children?: NavSubItem[];
 }
 
 interface NavGroup {
@@ -67,6 +75,18 @@ const MAIN_NAV_GROUPS: NavGroup[] = [
       { label: "Detection Engineering", href: "/writeups/detection-engineering", icon: FileCode2 },
       { label: "Red Team", href: "/writeups/red-team", icon: FileCode2 },
       { label: "CTF", href: "/writeups/ctf", icon: FileCode2 },
+      {
+        label: "Hack The Box",
+        href: "/writeups/htb",
+        icon: Box,
+        badge: "HTB",
+        children: [
+          { label: "Low", href: "/writeups/htb/low" },
+          { label: "Medium", href: "/writeups/htb/medium" },
+          { label: "Hard", href: "/writeups/htb/hard" },
+          { label: "Insane", href: "/writeups/htb/insane" },
+        ],
+      },
     ],
   },
   {
@@ -87,7 +107,6 @@ const MAIN_NAV_GROUPS: NavGroup[] = [
     collapsible: true,
     items: [
       { label: "Security Research", href: "/research", icon: FlaskConical },
-      { label: "Lab Reports", href: "/research/lab-reports", icon: FlaskConical },
     ],
   },
 ];
@@ -125,6 +144,13 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
     };
   });
 
+  const [openSubgroups, setOpenSubgroups] = useState<Record<string, boolean>>(() => {
+    const isHtb = Boolean(pathname && pathname.startsWith("/writeups/htb"));
+    return {
+      "Hack The Box": isHtb,
+    };
+  });
+
   // When route changes, sync open state
   useEffect(() => {
     const active = getActiveGroupForPath(pathname);
@@ -134,6 +160,10 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
       NOTES: active === "NOTES",
       RESEARCH: active === "RESEARCH",
     });
+
+    if (pathname && pathname.startsWith("/writeups/htb")) {
+      setOpenSubgroups((prev) => ({ ...prev, "Hack The Box": true }));
+    }
   }, [pathname]);
 
   // Automatically close on navigation
@@ -273,6 +303,89 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
                                   {Icon && <Icon className="w-3.5 h-3.5 shrink-0 text-accent" />}
                                   <span className="truncate">{item.label}</span>
                                 </button>
+                              </li>
+                            );
+                          }
+
+                          if (item.children && item.children.length > 0) {
+                            const isSubOpen = Boolean(openSubgroups[item.label]);
+                            const isParentActive = pathname === item.href;
+                            const hasActiveChild = item.children.some((c) => pathname === c.href);
+
+                            return (
+                              <li key={item.label} className="space-y-0.5">
+                                <div
+                                  className={`flex items-center justify-between rounded transition-colors ${
+                                    isParentActive || hasActiveChild
+                                      ? "bg-surface-2 text-text-primary font-medium text-accent border-l-2 border-accent pl-1.5"
+                                      : "text-text-secondary hover:text-text-primary hover:bg-surface-2"
+                                  }`}
+                                >
+                                  <Link
+                                    href={item.href}
+                                    onClick={onClose}
+                                    className="flex items-center gap-2 px-2 py-1.5 flex-1 min-w-0"
+                                  >
+                                    {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
+                                    <span className="truncate">{item.label}</span>
+                                    {item.badge && (
+                                      <span className="text-[10px] px-1 rounded bg-surface border border-border text-text-secondary">
+                                        {item.badge}
+                                      </span>
+                                    )}
+                                  </Link>
+
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setOpenSubgroups((prev) => ({
+                                        ...prev,
+                                        [item.label]: !prev[item.label],
+                                      }));
+                                    }}
+                                    aria-label={`Toggle ${item.label} subsections`}
+                                    aria-expanded={isSubOpen}
+                                    className="p-1.5 hover:text-accent transition-colors rounded focus-visible:outline-none"
+                                  >
+                                    <ChevronDown
+                                      className={`w-3 h-3 text-text-secondary transition-transform duration-200 ease-out ${
+                                        isSubOpen ? "rotate-0 text-accent" : "-rotate-90"
+                                      }`}
+                                    />
+                                  </button>
+                                </div>
+
+                                {/* Nested Subsections Accordion */}
+                                <div className={isSubOpen ? "accordion-content-expand" : "accordion-content-collapse"}>
+                                  <div className="accordion-inner">
+                                    <ul className="pl-5 pr-1 py-0.5 space-y-0.5 border-l border-border/50 ml-3.5 my-0.5">
+                                      {item.children.map((sub) => {
+                                        const isSubActive = pathname === sub.href;
+                                        return (
+                                          <li key={sub.label}>
+                                            <Link
+                                              href={sub.href}
+                                              onClick={onClose}
+                                              className={`flex items-center justify-between px-2 py-1 rounded text-[11px] font-mono transition-colors ${
+                                                isSubActive
+                                                  ? "bg-surface-2 text-accent font-semibold border-l-2 border-accent pl-1.5"
+                                                  : "text-text-secondary hover:text-text-primary hover:bg-surface-2/60"
+                                              }`}
+                                            >
+                                              <span>{sub.label}</span>
+                                              {sub.badge && (
+                                                <span className="text-[9px] px-1 rounded bg-surface border border-border text-text-secondary">
+                                                  {sub.badge}
+                                                </span>
+                                              )}
+                                            </Link>
+                                          </li>
+                                        );
+                                      })}
+                                    </ul>
+                                  </div>
+                                </div>
                               </li>
                             );
                           }

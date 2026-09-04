@@ -90,7 +90,7 @@ export default async function NoteDetailPage({ params }: NotePageProps) {
             </span>
           </div>
 
-          {/* Note Header Dossier */}
+          {/* Note Header */}
           <header className="p-4 rounded border border-border bg-surface space-y-3">
             <div className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-accent" />

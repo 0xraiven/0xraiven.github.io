@@ -25,7 +25,7 @@ export default async function Home() {
   return (
     <KnowledgeBaseLayout relatedItems={pinnedRelated}>
       <article className="space-y-10 text-text-primary">
-        {/* Document Header (Technical README dossier) */}
+        {/* Document Header (Technical README) */}
         <header className="border-b border-border pb-6 space-y-4">
           <div className="flex items-center gap-2 text-xs text-text-secondary font-mono">
             <FileText className="w-3.5 h-3.5 text-accent" />
@@ -34,19 +34,21 @@ export default async function Home() {
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
             {/* GitHub Profile Picture - Circular Cyber Badge */}
-            <div className="relative group shrink-0">
-              <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-accent/40 bg-surface-2 shadow-md shadow-accent/10 ring-2 ring-border/80 ring-offset-2 ring-offset-bg transition-all duration-300 group-hover:border-accent group-hover:ring-accent/50">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://github.com/0xraiven.png"
-                  alt="0xraiven profile"
-                  width={80}
-                  height={80}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
+            <div className="relative group shrink-0 p-1">
+              <div className="relative p-1 rounded-full border border-border/80 bg-surface-2 transition-all duration-300 group-hover:border-accent/60 group-hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-accent/40 bg-surface transition-all duration-300 group-hover:border-accent">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="https://github.com/0xraiven.png"
+                    alt="0xraiven profile"
+                    width={80}
+                    height={80}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
               </div>
               <span
-                className="absolute bottom-0 right-0 sm:bottom-0.5 sm:right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-bg shadow-sm"
+                className="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-bg shadow-sm z-10"
                 title="Status: Active"
               >
                 <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />

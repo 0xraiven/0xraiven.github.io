@@ -36,11 +36,21 @@ export const PROJECT_STATUS_OPTIONS = [
 
 export type ProjectStatus = (typeof PROJECT_STATUS_OPTIONS)[number]["value"];
 
+export const HTB_DIFFICULTY_OPTIONS = [
+  { label: "None / Not HTB", value: "none" },
+  { label: "Low", value: "low" },
+  { label: "Medium", value: "medium" },
+  { label: "Hard", value: "hard" },
+  { label: "Insane", value: "insane" },
+] as const;
+
+export type HTBDifficulty = (typeof HTB_DIFFICULTY_OPTIONS)[number]["value"];
+
 export const ARTICLE_KIND_OPTIONS = [
   { label: "Writeup", value: "writeup" },
   { label: "Note", value: "note" },
   { label: "Security Research", value: "research" },
-  { label: "Lab Report", value: "lab-report" },
 ] as const;
 
 export type ArticleKind = (typeof ARTICLE_KIND_OPTIONS)[number]["value"];
+

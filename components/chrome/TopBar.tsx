@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { GlassSurface } from "./GlassSurface";
-import { Sun, Moon, Monitor, MoreVertical, Menu, Search } from "lucide-react";
+import { TopbarSearch } from "./TopbarSearch";
+import { Sun, Moon, Monitor, MoreVertical, Menu } from "lucide-react";
 import { useUI } from "@/providers";
 
 export interface TopBarProps {
@@ -51,7 +52,7 @@ export function TopBar({
   linkedinUrl,
 }: TopBarProps) {
   const finalXUrl = xUrl || linkedinUrl || "https://x.com/0xraiven";
-  const { openCommandPalette, openMobileSidebar, theme, resolvedTheme, cycleTheme, setTheme } = useUI();
+  const { openMobileSidebar, theme, resolvedTheme, cycleTheme, setTheme } = useUI();
   const [overflowOpen, setOverflowOpen] = useState(false);
 
   return (
@@ -97,24 +98,8 @@ export function TopBar({
 
         {/* RIGHT: Search bar, GitHub, LinkedIn, Theme toggle, overflow menu */}
         <div className="flex items-center gap-2">
-          {/* Expanded Search Bar (⌘K) */}
-          <button
-            type="button"
-            onClick={openCommandPalette}
-            aria-label="Search knowledge base (⌘K)"
-            className="w-36 xs:w-48 sm:w-64 md:w-80 lg:w-96 h-8 px-2.5 sm:px-3 rounded border border-border bg-surface-2/60 hover:bg-surface-2 hover:border-accent/40 transition-all flex items-center justify-between text-xs font-mono text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent group"
-          >
-            <div className="flex items-center gap-2 truncate">
-              <Search className="w-3.5 h-3.5 text-accent shrink-0 group-hover:scale-105 transition-transform" />
-              <span className="truncate text-[11px] sm:text-xs">
-                <span className="hidden md:inline">Search knowledge base...</span>
-                <span className="inline md:hidden">Search...</span>
-              </span>
-            </div>
-            <kbd className="hidden sm:inline-flex items-center text-[10px] px-1.5 py-0.5 rounded bg-surface border border-border/80 text-text-secondary font-mono">
-              ⌘K / ctrl+K
-            </kbd>
-          </button>
+          {/* Topbar Search Box */}
+          <TopbarSearch />
 
           <a
             href={githubUrl}
@@ -172,7 +157,9 @@ export function TopBar({
                   type="button"
                   onClick={() => {
                     setOverflowOpen(false);
-                    openCommandPalette();
+                    if (typeof window !== "undefined") {
+                      window.dispatchEvent(new CustomEvent("focus-topbar-search"));
+                    }
                   }}
                   className="w-full text-left px-3 py-1.5 text-text-secondary hover:text-text-primary hover:bg-surface-2 flex items-center justify-between"
                 >

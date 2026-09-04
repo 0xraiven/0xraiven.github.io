@@ -42,7 +42,7 @@ export function PageTransition({ children }: PageTransitionProps) {
   const activeSector = safePath === "/" ? "README // ROOT" : safePath.replace("/", "").replace(/-/g, "_").toUpperCase();
 
   return (
-    <div className="relative min-w-0 w-full overflow-hidden">
+    <div className="relative min-w-0 w-full">
       {/* Cyber Route Telemetry Bar */}
       <div
         className={`transition-all duration-300 font-mono text-[10px] sm:text-[11px] select-none flex items-center justify-between px-3 py-1.5 mb-4 rounded border border-border bg-surface-2/80 text-text-secondary ${

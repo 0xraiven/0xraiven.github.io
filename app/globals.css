@@ -339,4 +339,36 @@ code, kbd, samp, pre {
   transform-origin: top right;
 }
 
+/* Topbar Search Dropdown Revealing Animations */
+@keyframes searchReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
 
+.animate-search-reveal {
+  animation: searchReveal 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: top center;
+}
+
+@keyframes searchItemReveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-search-item {
+  animation: searchItemReveal 0.16s cubic-bezier(0.16, 1, 0.3, 1) both;
+}

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { CommandPalette } from "@/components/overlay/CommandPalette";
 import { MobileSidebar } from "@/components/navigation/MobileSidebar";
 
 export type ThemeMode = "dark" | "light" | "system";
@@ -101,12 +100,17 @@ export function Providers({ children }: { children: React.ReactNode }) {
     setTheme(nextTheme);
   }, [theme, setTheme]);
 
-  const openCommandPalette = useCallback(() => setCommandPaletteOpen(true), []);
+  const openCommandPalette = useCallback(() => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("focus-topbar-search"));
+    }
+  }, []);
   const closeCommandPalette = useCallback(() => setCommandPaletteOpen(false), []);
-  const toggleCommandPalette = useCallback(
-    () => setCommandPaletteOpen((prev) => !prev),
-    []
-  );
+  const toggleCommandPalette = useCallback(() => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("focus-topbar-search"));
+    }
+  }, []);
 
   const openMobileSidebar = useCallback(() => setMobileSidebarOpen(true), []);
   const closeMobileSidebar = useCallback(() => setMobileSidebarOpen(false), []);
@@ -115,22 +119,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
     []
   );
 
-  // Global keyboard shortcuts (⌘K on macOS, Ctrl+K on Windows/Linux, Escape)
+  // Global keyboard shortcuts (Escape for mobile sidebar)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Toggle Command Palette on ⌘K or Ctrl+K
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setCommandPaletteOpen((prev) => !prev);
-        return;
-      }
-
       // Close overlays on Escape if any are open
       if (e.key === "Escape") {
-        if (commandPaletteOpen) {
-          e.preventDefault();
-          setCommandPaletteOpen(false);
-        } else if (mobileSidebarOpen) {
+        if (mobileSidebarOpen) {
           e.preventDefault();
           setMobileSidebarOpen(false);
         }
@@ -139,7 +133,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [commandPaletteOpen, mobileSidebarOpen]);
+  }, [mobileSidebarOpen]);
 
   const value: UIContextType = {
     commandPaletteOpen,
@@ -159,10 +153,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <UIContext.Provider value={value}>
       {children}
-      <CommandPalette
-        isOpen={commandPaletteOpen}
-        onClose={closeCommandPalette}
-      />
       <MobileSidebar
         isOpen={mobileSidebarOpen}
         onClose={closeMobileSidebar}

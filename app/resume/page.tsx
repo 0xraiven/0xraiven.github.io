@@ -144,24 +144,26 @@ export default async function ResumePage() {
           </span>
         </div>
 
-        {/* Header Dossier */}
+        {/* Resume Header */}
         <header className="p-5 rounded border border-border bg-surface space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               {/* GitHub Profile Picture - Circular Cyber Badge */}
-              <div className="relative group shrink-0">
-                <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-accent/40 bg-surface-2 shadow-sm ring-2 ring-border/80 ring-offset-2 ring-offset-bg transition-all duration-300 group-hover:border-accent group-hover:ring-accent/50">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="https://github.com/0xraiven.png"
-                    alt="0xraiven profile"
-                    width={56}
-                    height={56}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+              <div className="relative group shrink-0 p-1">
+                <div className="relative p-1 rounded-full border border-border/80 bg-surface-2 transition-all duration-300 group-hover:border-accent/60 group-hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                  <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-accent/40 bg-surface transition-all duration-300 group-hover:border-accent">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="https://github.com/0xraiven.png"
+                      alt="0xraiven profile"
+                      width={56}
+                      height={56}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
                 </div>
                 <span
-                  className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 border-2 border-bg shadow-sm"
+                  className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-bg shadow-sm z-10"
                   title="Status: Active"
                 >
                   <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
@@ -412,11 +414,10 @@ export default async function ResumePage() {
                       {proj.name}
                     </h3>
                     <span
-                      className={`text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded border ${
-                        proj.status === "Active"
+                      className={`text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded border ${proj.status === "Active"
                           ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
                           : "border-amber-500/30 bg-amber-500/10 text-amber-400"
-                      }`}
+                        }`}
                     >
                       {proj.status}
                     </span>

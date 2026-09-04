@@ -16,6 +16,7 @@ import {
   PROJECT_CATEGORY_OPTIONS,
   PROJECT_STATUS_OPTIONS,
   ARTICLE_KIND_OPTIONS,
+  HTB_DIFFICULTY_OPTIONS,
 } from "./lib/taxonomy";
 
 const componentBlocks = {
@@ -53,6 +54,16 @@ function buildArticleCollection(path: "writeups" | "notes" | "research") {
         options: ARTICLE_CATEGORY_OPTIONS,
         defaultValue: "web-security",
       }),
+      ...(path === "writeups"
+        ? {
+            htbDifficulty: fields.select({
+              label: "HTB Difficulty",
+              description: "Machine difficulty tier (Low, Medium, Hard, Insane) if Hack The Box writeup",
+              options: HTB_DIFFICULTY_OPTIONS,
+              defaultValue: "none",
+            }),
+          }
+        : {}),
       tags: fields.array(fields.text({ label: "Tag" }), {
         label: "Tags",
         itemLabel: (p) => p.value,

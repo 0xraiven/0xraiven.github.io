@@ -91,7 +91,7 @@ export default async function WriteupDetailPage({ params }: WriteupPageProps) {
             </span>
           </div>
 
-          {/* Article Header Dossier */}
+          {/* Article Header */}
           <header className="p-4 rounded border border-border bg-surface space-y-3">
             <h1 className="text-xl font-bold tracking-tight text-text-primary">
               {article.meta.title}

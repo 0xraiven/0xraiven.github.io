@@ -42,6 +42,15 @@ const STATIC_PAGES: SearchItem[] = [
     tags: ["writeups", "analysis", "reports"],
   },
   {
+    id: "page-writeups-htb",
+    title: "Hack The Box Writeups",
+    description: "Hack The Box machine walkthroughs, exploit chains, privilege escalation techniques, and difficulty tiers.",
+    url: "/writeups/htb",
+    kind: "writeup",
+    category: "htb",
+    tags: ["htb", "hackthebox", "machines", "writeups", "ctf"],
+  },
+  {
     id: "page-notes",
     title: "Notes & References",
     description: "Operational notes, cheat sheets, command references, and defensive & offensive security runbooks.",
@@ -70,7 +79,7 @@ const STATIC_PAGES: SearchItem[] = [
   },
   {
     id: "page-resume",
-    title: "Resume & Dossier",
+    title: "Resume & Profile",
     description: "Curriculum vitae, technical competencies, security credentials, and engineering experience.",
     url: "/resume",
     kind: "page",

@@ -3,9 +3,10 @@ import type {
   ArticleKind,
   ProjectCategory,
   ProjectStatus,
+  HTBDifficulty,
 } from "@/lib/taxonomy";
 
-export type { ArticleCategory, ArticleKind, ProjectCategory, ProjectStatus };
+export type { ArticleCategory, ArticleKind, ProjectCategory, ProjectStatus, HTBDifficulty };
 
 declare module "js-yaml" {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,6 +28,7 @@ export interface ArticleMeta {
   coverImage?: string;
   relatedSlugs?: string[];
   readingTime?: number;
+  htbDifficulty?: HTBDifficulty;
 }
 
 export interface Project {

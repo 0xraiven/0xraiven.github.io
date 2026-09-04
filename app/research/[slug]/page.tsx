@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { KnowledgeBaseLayout } from "@/components/layout/KnowledgeBaseLayout";
 import { DocumentContent } from "@/components/content/DocumentRenderer";
@@ -12,7 +13,6 @@ interface ResearchPageProps {
 }
 
 function formatCategoryLabel(slug: string): string {
-  if (slug === "lab-reports") return "Lab Reports";
   return slug
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: ResearchPageProps): Promise<M
   const label = formatCategoryLabel(slug);
   return {
     title: `${label} // Security Research // r41n`,
-    description: `Vulnerability assessments, laboratory reports, and whitepapers for ${label}.`,
+    description: `Vulnerability assessments and whitepapers for ${label}.`,
   };
 }
 
@@ -41,7 +41,6 @@ export async function generateStaticParams() {
   const research = await getArticles("research");
   const slugs = new Set(research.map((r) => r.slug));
 
-  slugs.add("lab-reports");
   slugs.add("security-research");
 
   return Array.from(slugs).map((slug) => ({ slug }));
@@ -82,7 +81,7 @@ export default async function ResearchDetailPage({ params }: ResearchPageProps) 
             </span>
           </div>
 
-          {/* Research Header Dossier */}
+          {/* Research Header */}
           <header className="p-4 rounded border border-border bg-surface space-y-3">
             <div className="flex items-center gap-2">
               <Microscope className="w-5 h-5 text-accent" />
@@ -157,79 +156,80 @@ export default async function ResearchDetailPage({ params }: ResearchPageProps) 
     );
   }
 
-  // If slug is a category/subsection like lab-reports
-  const allArticles = await getArticles();
-  const labReports = allArticles.filter(
-    (a) => a.kind === "lab-report"
-  );
-  const label = formatCategoryLabel(slug);
+  // If slug is the category "security-research"
+  if (slug === "security-research") {
+    const allResearch = await getArticles("research");
+    const label = "Security Research";
 
-  return (
-    <KnowledgeBaseLayout>
-      <div className="space-y-8 font-mono">
-        {/* Navigation & Breadcrumb */}
-        <header className="space-y-2 border-b border-border pb-4">
-          <div className="text-xs text-text-secondary flex items-center gap-1.5">
-            <Link href="/research" className="hover:text-accent flex items-center gap-1">
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>research</span>
-            </Link>
-            <span>/</span>
-            <span className="text-text-primary">{slug}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold tracking-tight text-text-primary uppercase flex items-center gap-2">
-              <FlaskConical className="w-5 h-5 text-accent" />
-              <span>{label}</span>
-            </h1>
-            <span className="text-xs text-text-secondary">
-              [{labReports.length} reports]
-            </span>
-          </div>
-        </header>
+    return (
+      <KnowledgeBaseLayout>
+        <div className="space-y-8 font-mono">
+          {/* Navigation & Breadcrumb */}
+          <header className="space-y-2 border-b border-border pb-4">
+            <div className="text-xs text-text-secondary flex items-center gap-1.5">
+              <Link href="/research" className="hover:text-accent flex items-center gap-1">
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>research</span>
+              </Link>
+              <span>/</span>
+              <span className="text-text-primary">{slug}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <h1 className="text-xl font-bold tracking-tight text-text-primary uppercase flex items-center gap-2">
+                <FlaskConical className="w-5 h-5 text-accent" />
+                <span>{label}</span>
+              </h1>
+              <span className="text-xs text-text-secondary">
+                [{allResearch.length} papers]
+              </span>
+            </div>
+          </header>
 
-        {labReports.length === 0 ? (
-          <StayTuned
-            sector={`Security Research // ${label}`}
-            category={slug}
-            description="Target environment laboratory studies, simulated network walk-throughs, and reproducibility benchmarks are undergoing active validation and documentation."
-            returnUrl="/research"
-            returnLabel="Research Directory"
-          />
-        ) : (
-          <div className="space-y-3">
-            {labReports.map((item) => (
-              <article
-                key={item.slug}
-                className="p-4 rounded border border-border bg-surface hover:border-accent/40 transition-colors group space-y-2.5"
-              >
-                <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-text-secondary">
-                  <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border font-semibold text-text-primary">
-                    {item.category}
-                  </span>
-                  {item.date && <span>{item.date}</span>}
-                </div>
+          {allResearch.length === 0 ? (
+            <StayTuned
+              sector={`Security Research // ${label}`}
+              category={slug}
+              description="Security vulnerability research, exploit primitives, and protocol analysis are actively undergoing validation and peer review."
+              returnUrl="/research"
+              returnLabel="Research Directory"
+            />
+          ) : (
+            <div className="space-y-3">
+              {allResearch.map((item) => (
+                <article
+                  key={item.slug}
+                  className="p-4 rounded border border-border bg-surface hover:border-accent/40 transition-colors group space-y-2.5"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-text-secondary">
+                    <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border font-semibold text-text-primary">
+                      {item.category}
+                    </span>
+                    {item.date && <span>{item.date}</span>}
+                  </div>
 
-                <div>
-                  <Link
-                    href={`/research/${item.slug}`}
-                    className="text-base font-bold text-text-primary group-hover:text-accent transition-colors flex items-center justify-between"
-                  >
-                    <span>{item.title}</span>
-                    <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-accent shrink-0 ml-2" />
-                  </Link>
+                  <div>
+                    <Link
+                      href={`/research/${item.slug}`}
+                      className="text-base font-bold text-text-primary group-hover:text-accent transition-colors flex items-center justify-between"
+                    >
+                      <span>{item.title}</span>
+                      <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-accent shrink-0 ml-2" />
+                    </Link>
 
-                  {item.description && (
-                    <p className="text-xs text-text-secondary leading-relaxed mt-1 font-sans">
-                      {item.description}
-                    </p>
-                  )}
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
-      </div>
-    </KnowledgeBaseLayout>
-  );
+                    {item.description && (
+                      <p className="text-xs text-text-secondary leading-relaxed mt-1 font-sans">
+                        {item.description}
+                      </p>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </KnowledgeBaseLayout>
+    );
+  }
+
+  notFound();
 }

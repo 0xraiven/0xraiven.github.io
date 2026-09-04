@@ -1,5 +1,5 @@
 import { reader } from "./keystatic-reader";
-import { ArticleKind, ArticleCategory } from "./taxonomy";
+import { ArticleKind, ArticleCategory, HTBDifficulty } from "./taxonomy";
 import { ArticleMeta } from "@/types";
 
 function calculateReadingTime(textOrBody: unknown): number {
@@ -7,6 +7,17 @@ function calculateReadingTime(textOrBody: unknown): number {
   const str = typeof textOrBody === "string" ? textOrBody : JSON.stringify(textOrBody);
   const words = str.trim().split(/\s+/).length;
   return Math.max(1, Math.ceil(words / 200));
+}
+
+function resolveHtbDifficulty(item: { category?: string; htbDifficulty?: string }): HTBDifficulty | undefined {
+  if (item.htbDifficulty && item.htbDifficulty !== "none") {
+    return item.htbDifficulty as HTBDifficulty;
+  }
+  if (item.category === "htb-low") return "low";
+  if (item.category === "htb-medium") return "medium";
+  if (item.category === "htb-hard") return "hard";
+  if (item.category === "htb-insane") return "insane";
+  return undefined;
 }
 
 export async function getArticles(kind?: ArticleKind): Promise<ArticleMeta[]> {
@@ -58,6 +69,7 @@ export async function getArticles(kind?: ArticleKind): Promise<ArticleMeta[]> {
           coverImage: item.coverImage || undefined,
           relatedSlugs,
           readingTime: calculateReadingTime(body),
+          htbDifficulty: resolveHtbDifficulty(item as { category?: string; htbDifficulty?: string }),
         });
       }
     } catch {
@@ -105,6 +117,7 @@ export async function getArticleBySlug(
       coverImage: item.coverImage || undefined,
       relatedSlugs,
       readingTime: calculateReadingTime(body),
+      htbDifficulty: resolveHtbDifficulty(item as { category?: string; htbDifficulty?: string }),
     };
 
     return {
