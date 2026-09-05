@@ -52,14 +52,14 @@ export function StayTuned({
         <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
 
         {/* Hardware Status Header */}
-        <div className="flex items-center justify-between border-b border-border/80 pb-3">
-          <div className="flex items-center gap-3">
-            <span className="font-pixel text-xs text-text-secondary tracking-widest">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 border-b border-border/80 pb-3.5">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <span className="font-pixel text-xs text-text-secondary tracking-widest whitespace-nowrap shrink-0">
               ( 00 )
             </span>
-            <div className="h-3 w-px bg-border" />
+            <div className="h-3 w-px bg-border shrink-0" />
             {/* 5-dot micro array */}
-            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/50 border border-border/80 shadow-inner">
+            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/50 border border-border/80 shadow-inner shrink-0">
               {[0, 1, 2, 3, 4].map((i) => (
                 <span
                   key={i}
@@ -69,20 +69,20 @@ export function StayTuned({
                 />
               ))}
             </div>
-            <span className="font-pixel text-[11px] uppercase tracking-wider text-text-primary">
+            <span className="font-pixel text-[10px] sm:text-[11px] uppercase tracking-wider text-text-primary whitespace-nowrap truncate">
               RELEASE PIPELINE // MATRIX
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="font-pixel text-[9px] uppercase tracking-wider text-text-secondary">
+          <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
+            <span className="font-pixel text-[9px] uppercase tracking-wider text-text-secondary px-2 py-0.5 rounded bg-surface-2 border border-border whitespace-nowrap">
               PENDING RELEASE
             </span>
           </div>
         </div>
 
         {/* Title & Metadata */}
-        <div className="space-y-2 border-t border-border/70 pt-4">
+        <div className="space-y-2 pt-1">
           <div className="flex flex-wrap items-center gap-2 text-xs">
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-accent/15 border border-accent/30 text-accent font-semibold text-[10px] uppercase tracking-wider">
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />

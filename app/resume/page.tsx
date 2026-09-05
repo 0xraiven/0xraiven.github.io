@@ -149,9 +149,9 @@ export default async function ResumePage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               {/* GitHub Profile Picture - Circular Cyber Badge */}
-              <div className="relative group shrink-0 p-1">
+              <div className="relative group shrink-0 p-1 w-fit">
                 <div className="relative p-1 rounded-full border border-border/80 bg-surface-2 transition-all duration-300 group-hover:border-accent/60 group-hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]">
-                  <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-accent/40 bg-surface transition-all duration-300 group-hover:border-accent">
+                  <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-accent/40 bg-surface transition-all duration-300 group-hover:border-accent shrink-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="https://github.com/0xraiven.png"
@@ -171,7 +171,7 @@ export default async function ResumePage() {
               </div>
 
               <div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <ScrambleText
                     text="r41n"
                     as="h1"
@@ -179,7 +179,7 @@ export default async function ResumePage() {
                   />
                   <span className="text-text-secondary text-xs">•</span>
                   <span className="text-xs text-text-secondary font-mono">Curriculum Vitae</span>
-                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.2 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-mono ml-1">
+                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.2 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-mono ml-1 whitespace-nowrap shrink-0">
                     active
                   </span>
                 </div>

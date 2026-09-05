@@ -116,14 +116,14 @@ export default async function AboutPage() {
     <KnowledgeBaseLayout>
       <article className="space-y-8">
         {/* Navigation & Breadcrumb */}
-        <div className="flex items-center justify-between text-xs text-text-secondary border-b border-border pb-3 font-mono">
-          <div className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-3 text-xs text-text-secondary border-b border-border pb-3 font-mono">
+          <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
             <span className="text-text-secondary">operator</span>
-            <span>/</span>
-            <span className="text-text-primary">about</span>
+            <span className="shrink-0">/</span>
+            <span className="text-text-primary font-semibold">about</span>
           </div>
 
-          <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border text-accent font-semibold">
+          <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border text-accent font-semibold whitespace-nowrap shrink-0">
             profile
           </span>
         </div>
@@ -133,9 +133,9 @@ export default async function AboutPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               {/* GitHub Profile Picture - Circular Cyber Badge */}
-              <div className="relative group shrink-0 p-1">
+              <div className="relative group shrink-0 p-1 w-fit">
                 <div className="relative p-1 rounded-full border border-border/80 bg-surface-2 transition-all duration-300 group-hover:border-accent/60 group-hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]">
-                  <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-accent/40 bg-surface transition-all duration-300 group-hover:border-accent">
+                  <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-accent/40 bg-surface transition-all duration-300 group-hover:border-accent shrink-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="https://github.com/0xraiven.png"

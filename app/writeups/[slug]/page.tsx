@@ -37,6 +37,8 @@ export async function generateMetadata({ params }: WriteupPageProps): Promise<Me
   };
 }
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const writeups = await getArticles("writeup");
   const slugs = new Set(writeups.map((w) => w.slug));
@@ -76,17 +78,17 @@ export default async function WriteupDetailPage({ params }: WriteupPageProps) {
       <KnowledgeBaseLayout relatedItems={relatedItems}>
         <article className="space-y-6 font-mono">
           {/* Navigation & Breadcrumb */}
-          <div className="flex items-center justify-between text-xs text-text-secondary border-b border-border pb-3">
-            <div className="flex items-center gap-1.5">
-              <Link href="/writeups" className="hover:text-accent flex items-center gap-1">
+          <div className="flex flex-wrap items-center justify-between gap-y-2.5 gap-x-3 text-xs text-text-secondary border-b border-border pb-3">
+            <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
+              <Link href="/writeups" className="hover:text-accent flex items-center gap-1 shrink-0">
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>writeups</span>
               </Link>
-              <span>/</span>
-              <span className="text-text-primary">{article.meta.slug}</span>
+              <span className="shrink-0">/</span>
+              <span className="text-text-primary font-semibold break-all">{article.meta.slug}</span>
             </div>
 
-            <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border text-text-primary font-semibold">
+            <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border text-text-primary font-semibold whitespace-nowrap shrink-0">
               {article.meta.category}
             </span>
           </div>
@@ -146,15 +148,15 @@ export default async function WriteupDetailPage({ params }: WriteupPageProps) {
           </div>
 
           {/* Footer Back Link */}
-          <div className="pt-8 border-t border-border flex justify-between items-center text-xs">
+          <div className="pt-8 border-t border-border flex flex-wrap justify-between items-center gap-2 text-xs">
             <Link
               href="/writeups"
-              className="text-text-secondary hover:text-accent flex items-center gap-1.5"
+              className="text-text-secondary hover:text-accent flex items-center gap-1.5 shrink-0"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Writeups</span>
             </Link>
-            <span className="text-text-secondary text-[11px]">
+            <span className="text-text-secondary text-[11px] font-mono">
               artifact: {article.meta.slug}
             </span>
           </div>
@@ -173,20 +175,20 @@ export default async function WriteupDetailPage({ params }: WriteupPageProps) {
       <div className="space-y-8 font-mono">
         {/* Navigation & Breadcrumb */}
         <header className="space-y-2 border-b border-border pb-4">
-          <div className="text-xs text-text-secondary flex items-center gap-1.5">
-            <Link href="/writeups" className="hover:text-accent flex items-center gap-1">
+          <div className="text-xs text-text-secondary flex items-center gap-1.5 min-w-0 flex-wrap">
+            <Link href="/writeups" className="hover:text-accent flex items-center gap-1 shrink-0">
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>writeups</span>
             </Link>
-            <span>/</span>
-            <span className="text-text-primary">{slug}</span>
+            <span className="shrink-0">/</span>
+            <span className="text-text-primary font-semibold break-all">{slug}</span>
           </div>
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold tracking-tight text-text-primary uppercase flex items-center gap-2">
-              <ShieldAlert className="w-5 h-5 text-rose-400" />
-              <span>{categoryLabel} Writeups</span>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h1 className="text-xl font-bold tracking-tight text-text-primary uppercase flex items-center gap-2 min-w-0">
+              <ShieldAlert className="w-5 h-5 text-rose-400 shrink-0" />
+              <span className="truncate">{categoryLabel} Writeups</span>
             </h1>
-            <span className="text-xs text-text-secondary">
+            <span className="text-xs text-text-secondary whitespace-nowrap shrink-0">
               [{categoryArticles.length} writeups]
             </span>
           </div>

@@ -10,7 +10,6 @@ import { getProjects } from "@/lib/projects";
 export default async function Home() {
   const projects = await getProjects();
 
-  // Pin authentic cyber-focused security repositories
   const cyberSlugs = ["persisthunt", "phishguard", "owt-bandit"];
   const pinnedProjects = cyberSlugs
     .map((slug) => projects.find((p) => p.slug === slug))
@@ -34,9 +33,9 @@ export default async function Home() {
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
             {/* GitHub Profile Picture - Circular Cyber Badge */}
-            <div className="relative group shrink-0 p-1">
+            <div className="relative group shrink-0 p-1 w-fit self-start sm:self-auto">
               <div className="relative p-1 rounded-full border border-border/80 bg-surface-2 transition-all duration-300 group-hover:border-accent/60 group-hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]">
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-accent/40 bg-surface transition-all duration-300 group-hover:border-accent">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-accent/40 bg-surface transition-all duration-300 group-hover:border-accent shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://github.com/0xraiven.png"
@@ -48,7 +47,7 @@ export default async function Home() {
                 </div>
               </div>
               <span
-                className="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-bg shadow-sm z-10"
+                className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-bg shadow-sm z-10"
                 title="Status: Active"
               >
                 <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
@@ -212,14 +211,14 @@ export default async function Home() {
 
         {/* Section 3: Pinned Proof-of-Work */}
         <section id="pinned-proof-of-work" className="space-y-4">
-          <div className="flex items-center justify-between border-b border-border pb-2">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-2">
             <h2 className="text-base font-semibold tracking-tight font-mono text-text-primary flex items-center gap-2">
-              <Layers className="w-4 h-4 text-accent" />
+              <Layers className="w-4 h-4 text-accent shrink-0" />
               <ScrambleText text="Pinned Proof-of-Work" as="span" />
             </h2>
             <Link
               href="/projects"
-              className="text-xs font-mono text-accent hover:underline flex items-center gap-1"
+              className="text-xs font-mono text-accent hover:underline flex items-center gap-1 shrink-0"
             >
               <span>View all ({projects.length})</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -243,10 +242,10 @@ export default async function Home() {
                   </span>
                   <span
                     className={`text-[11px] font-semibold ${project.status === "active"
-                        ? "text-emerald-400"
-                        : project.status === "building"
-                          ? "text-amber-400"
-                          : "text-text-secondary"
+                      ? "text-emerald-400"
+                      : project.status === "building"
+                        ? "text-amber-400"
+                        : "text-text-secondary"
                       }`}
                   >
                     {project.status}

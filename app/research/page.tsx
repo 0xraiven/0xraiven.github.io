@@ -62,7 +62,7 @@ export default async function ResearchPage() {
                 className="p-4 rounded border border-border bg-surface hover:border-accent/40 transition-colors group space-y-2.5"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-text-secondary">
-                  <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border font-semibold text-text-primary">
+                  <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border font-semibold text-text-primary whitespace-nowrap shrink-0">
                     {item.category}
                   </span>
 

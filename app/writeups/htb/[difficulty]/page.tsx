@@ -64,6 +64,8 @@ const TIER_META: Record<
   },
 };
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return VALID_DIFFICULTIES.map((difficulty) => ({ difficulty }));
 }

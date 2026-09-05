@@ -37,6 +37,8 @@ export async function generateMetadata({ params }: ResearchPageProps): Promise<M
   };
 }
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const research = await getArticles("research");
   const slugs = new Set(research.map((r) => r.slug));
@@ -66,17 +68,17 @@ export default async function ResearchDetailPage({ params }: ResearchPageProps) 
       <KnowledgeBaseLayout relatedItems={relatedItems}>
         <article className="space-y-6 font-mono">
           {/* Navigation & Breadcrumb */}
-          <div className="flex items-center justify-between text-xs text-text-secondary border-b border-border pb-3">
-            <div className="flex items-center gap-1.5">
-              <Link href="/research" className="hover:text-accent flex items-center gap-1">
+          <div className="flex flex-wrap items-center justify-between gap-y-2.5 gap-x-3 text-xs text-text-secondary border-b border-border pb-3">
+            <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
+              <Link href="/research" className="hover:text-accent flex items-center gap-1 shrink-0">
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>research</span>
               </Link>
-              <span>/</span>
-              <span className="text-text-primary">{article.meta.slug}</span>
+              <span className="shrink-0">/</span>
+              <span className="text-text-primary font-semibold break-all">{article.meta.slug}</span>
             </div>
 
-            <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border text-text-primary font-semibold">
+            <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border text-text-primary font-semibold whitespace-nowrap shrink-0">
               {article.meta.category}
             </span>
           </div>
@@ -139,15 +141,15 @@ export default async function ResearchDetailPage({ params }: ResearchPageProps) 
           </div>
 
           {/* Footer Back Link */}
-          <div className="pt-8 border-t border-border flex justify-between items-center text-xs">
+          <div className="pt-8 border-t border-border flex flex-wrap justify-between items-center gap-2 text-xs">
             <Link
               href="/research"
-              className="text-text-secondary hover:text-accent flex items-center gap-1.5"
+              className="text-text-secondary hover:text-accent flex items-center gap-1.5 shrink-0"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Research Directory</span>
             </Link>
-            <span className="text-text-secondary text-[11px]">
+            <span className="text-text-secondary text-[11px] font-mono">
               artifact: {article.meta.slug}
             </span>
           </div>
@@ -166,20 +168,20 @@ export default async function ResearchDetailPage({ params }: ResearchPageProps) 
         <div className="space-y-8 font-mono">
           {/* Navigation & Breadcrumb */}
           <header className="space-y-2 border-b border-border pb-4">
-            <div className="text-xs text-text-secondary flex items-center gap-1.5">
-              <Link href="/research" className="hover:text-accent flex items-center gap-1">
+            <div className="text-xs text-text-secondary flex items-center gap-1.5 min-w-0 flex-wrap">
+              <Link href="/research" className="hover:text-accent flex items-center gap-1 shrink-0">
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>research</span>
               </Link>
-              <span>/</span>
-              <span className="text-text-primary">{slug}</span>
+              <span className="shrink-0">/</span>
+              <span className="text-text-primary font-semibold break-all">{slug}</span>
             </div>
-            <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold tracking-tight text-text-primary uppercase flex items-center gap-2">
-                <FlaskConical className="w-5 h-5 text-accent" />
-                <span>{label}</span>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h1 className="text-xl font-bold tracking-tight text-text-primary uppercase flex items-center gap-2 min-w-0">
+                <FlaskConical className="w-5 h-5 text-accent shrink-0" />
+                <span className="truncate">{label}</span>
               </h1>
-              <span className="text-xs text-text-secondary">
+              <span className="text-xs text-text-secondary whitespace-nowrap shrink-0">
                 [{allResearch.length} papers]
               </span>
             </div>

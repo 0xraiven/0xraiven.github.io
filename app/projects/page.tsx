@@ -69,12 +69,12 @@ export default async function ProjectsPage() {
                 className="p-4 rounded border border-border bg-surface flex flex-col justify-between space-y-3 hover:border-accent/40 transition-colors group"
               >
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border text-text-secondary font-semibold">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-surface-2 border border-border text-text-secondary font-semibold whitespace-nowrap">
                       {project.category}
                     </span>
                     <span
-                      className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded border font-semibold ${pillStyle}`}
+                      className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded border font-semibold whitespace-nowrap ${pillStyle}`}
                     >
                       {project.status}
                     </span>

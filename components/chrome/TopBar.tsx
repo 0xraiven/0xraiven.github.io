@@ -97,7 +97,7 @@ export function TopBar({
         </div>
 
         {/* RIGHT: Search bar, GitHub, LinkedIn, Theme toggle, overflow menu */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {/* Topbar Search Box */}
           <TopbarSearch />
 

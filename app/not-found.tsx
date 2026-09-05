@@ -8,19 +8,19 @@ export default function NotFound() {
     <KnowledgeBaseLayout>
       <div className="space-y-8 font-mono text-text-primary py-4">
         {/* Breadcrumb */}
-        <div className="flex items-center justify-between text-xs text-text-secondary border-b border-border pb-3">
-          <div className="flex items-center gap-1.5">
-            <Link href="/" className="hover:text-accent flex items-center gap-1">
+        <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-3 text-xs text-text-secondary border-b border-border pb-3">
+          <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
+            <Link href="/" className="hover:text-accent flex items-center gap-1 shrink-0">
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>base</span>
             </Link>
-            <span>/</span>
+            <span className="shrink-0">/</span>
             <span className="text-rose-400 font-semibold">404</span>
-            <span>/</span>
+            <span className="shrink-0">/</span>
             <span className="text-text-secondary">NOT_FOUND</span>
           </div>
 
-          <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/30 text-rose-400 font-semibold">
+          <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/30 text-rose-400 font-semibold whitespace-nowrap shrink-0">
             STATUS 404
           </span>
         </div>

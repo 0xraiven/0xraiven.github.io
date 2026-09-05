@@ -170,14 +170,18 @@ export function TopbarSearch() {
 
   // Close on outside click
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
+    function handleClickOutside(e: MouseEvent | TouchEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsOpen(false);
         setIsFocused(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, []);
 
   // Global shortcut (⌘K, Ctrl+K, or '/') and CustomEvent listener
@@ -270,12 +274,25 @@ export function TopbarSearch() {
 
   return (
     <div ref={containerRef} className="relative">
+      {/* Mobile Backdrop Overlay */}
+      {showDropdown && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-40 sm:hidden animate-fade-in"
+          onClick={() => {
+            setIsOpen(false);
+            setIsFocused(false);
+            inputRef.current?.blur();
+          }}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Search Input Field */}
       <div
-        className={`relative flex items-center transition-all duration-300 ease-out ${
+        className={`relative flex items-center transition-all duration-300 ease-out z-50 ${
           isFocused
-            ? "w-48 xs:w-64 sm:w-80 md:w-96 lg:w-[420px]"
-            : "w-36 xs:w-48 sm:w-64 md:w-80 lg:w-88"
+            ? "w-40 xs:w-56 sm:w-80 md:w-96 lg:w-[420px]"
+            : "w-32 xs:w-44 sm:w-64 md:w-80 lg:w-88"
         }`}
       >
         <Search
@@ -302,7 +319,7 @@ export function TopbarSearch() {
           aria-expanded={showDropdown}
           role="combobox"
           aria-autocomplete="list"
-          className={`w-full h-8 pl-8 pr-16 rounded font-mono text-xs text-text-primary placeholder:text-text-secondary/70 transition-all duration-200 outline-none ${
+          className={`w-full h-8 pl-8 pr-8 sm:pr-14 rounded font-mono text-xs text-text-primary placeholder:text-text-secondary/70 transition-all duration-200 outline-none ${
             isFocused
               ? "bg-surface border border-accent/60 ring-1 ring-accent/30 shadow-[0_0_15px_rgba(239,68,68,0.12)]"
               : "bg-surface-2/60 border border-border hover:border-accent/40 hover:bg-surface-2"
@@ -336,10 +353,10 @@ export function TopbarSearch() {
         </div>
       </div>
 
-      {/* Attached Search Dropdown with Revealing Animation */}
+      {/* Attached Search Dropdown: Perfectly anchored on mobile and desktop */}
       {showDropdown && (
         <div
-          className="absolute top-full right-0 mt-2 w-[calc(100vw-1.5rem)] sm:w-[480px] md:w-[540px] max-w-[94vw] rounded-lg border border-border bg-surface/98 backdrop-blur-xl shadow-2xl overflow-hidden font-mono z-50 animate-search-reveal"
+          className="fixed left-3 right-3 top-[52px] sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 w-auto sm:w-[480px] md:w-[540px] max-w-[calc(100vw-1.5rem)] rounded-lg border border-border bg-surface/98 backdrop-blur-xl shadow-2xl overflow-hidden font-mono z-50 animate-search-reveal"
           role="listbox"
         >
           {/* Header Bar */}
