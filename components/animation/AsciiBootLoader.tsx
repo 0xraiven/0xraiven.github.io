@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { X, ArrowRight } from "lucide-react";
 
 /**
@@ -8,21 +8,77 @@ import { X, ArrowRight } from "lucide-react";
  * 
  * High-precision industrial LED dot matrix boot loader:
  * - Panoramic 25x9 LED micro-dot matrix (225 dots) occupying the full width of the card
- * - Zero circles covering the animation (clean, unhindered dot matrix visualizer)
- * - Robust asset-gated loading pipeline: monitors document.readyState, fonts, and avatar
- * - Seamless automatic dismissal at 100% with instant keyboard skip (Esc / Enter / Space)
+ * - 4 distinct choreographed cyberpunk sequences, each showcased for >= 2.0 seconds:
+ *     1. RADAR_SWEEP (0s - 2.2s): Bi-directional radar sweep with phosphor decay trails
+ *     2. SPECTRUM_EQ (2.2s - 4.4s): 25-channel kinetic harmonic VU meter with peak hold diodes
+ *     3. ORBITAL_LOCK (4.4s - 6.6s): Expanding concentric reticle & 64-bulb orbital perimeter tracer
+ *     4. SYSTEM_READY (6.6s - 8.6s): Calibrated center core glyph lock & horizon axes at 100%
+ * - Seamless automatic dismissal at completion with instant keyboard skip (Esc / Enter / Space)
  */
 export const BOOT_STORAGE_KEY = "r41n_booted";
+
+export interface BootPhaseConfig {
+  id: number;
+  tag: string;
+  name: string;
+  status: string;
+  startProgress: number;
+  endProgress: number;
+  durationMs: number;
+}
+
+export const BOOT_SEQUENCE_PHASES: BootPhaseConfig[] = [
+  {
+    id: 0,
+    tag: "( 01 )",
+    name: "RADAR_SWEEP",
+    status: "INITIALIZING RADAR KERNEL & SECTOR TELEMETRY...",
+    startProgress: 0,
+    endProgress: 28,
+    durationMs: 1000,
+  },
+  {
+    id: 1,
+    tag: "( 02 )",
+    name: "SPECTRUM_EQ",
+    status: "CALIBRATING 25-CH SPECTRUM HARMONICS & ASSET PIPELINE...",
+    startProgress: 29,
+    endProgress: 60,
+    durationMs: 1000,
+  },
+  {
+    id: 2,
+    tag: "( 03 )",
+    name: "ORBITAL_LOCK",
+    status: "SYNCHRONIZING ORBITAL REGISTERS & PERIMETER MESH...",
+    startProgress: 61,
+    endProgress: 88,
+    durationMs: 1000,
+  },
+  {
+    id: 3,
+    tag: "( 04 )",
+    name: "SYSTEM_READY",
+    status: "ALL SUBSYSTEMS AUTHENTICATED & LOCKED [100%]",
+    startProgress: 89,
+    endProgress: 100,
+    durationMs: 1000,
+  },
+];
 
 export function SystemMatrixBootLoader() {
   const [isVisible, setIsVisible] = useState(true);
   const [isDismissing, setIsDismissing] = useState(false);
+  const [phaseIndex, setPhaseIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [tick, setTick] = useState(0);
 
   // Asset loading telemetry
   const [isAssetsLoaded, setIsAssetsLoaded] = useState(false);
   const [assetStatus, setAssetStatus] = useState("INITIALIZING SYSTEM CORE...");
+
+  const startTimeRef = useRef<number>(Date.now());
+  const hasAutoDismissedRef = useRef(false);
 
   const dismiss = useCallback(() => {
     setIsDismissing(true);
@@ -77,11 +133,14 @@ export function SystemMatrixBootLoader() {
       try {
         sessionStorage.removeItem(BOOT_STORAGE_KEY);
       } catch { }
-      setIsVisible(true);
-      setIsDismissing(false);
+      startTimeRef.current = Date.now();
+      hasAutoDismissedRef.current = false;
+      setPhaseIndex(0);
       setProgress(0);
       setIsAssetsLoaded(false);
       setTick(0);
+      setIsDismissing(false);
+      setIsVisible(true);
       if (typeof document !== "undefined") {
         document.body.classList.remove("booting-complete");
         document.documentElement.classList.add("booting-active");
@@ -212,42 +271,72 @@ export function SystemMatrixBootLoader() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isVisible, dismiss]);
 
-  // Progress ticker: governed by asset readiness
+  // Sequential phase ticker: guarantees each sequence runs cleanly for exactly 1.0 second (1000ms)
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || isDismissing) return;
 
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (!isAssetsLoaded) {
-          // Hold at 88% while assets are decoding
-          if (prev < 88) {
-            return prev + Math.max(1, Math.floor((88 - prev) * 0.18));
-          }
-          return prev;
+    startTimeRef.current = Date.now();
+    hasAutoDismissedRef.current = false;
+
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTimeRef.current;
+
+      // Sequence 0: Radar Sweep (0ms - 1000ms)
+      if (elapsed < 1000) {
+        setPhaseIndex(0);
+        const ratio = Math.min(1, elapsed / 1000);
+        const p = Math.round(
+          BOOT_SEQUENCE_PHASES[0].startProgress +
+          (BOOT_SEQUENCE_PHASES[0].endProgress - BOOT_SEQUENCE_PHASES[0].startProgress) * ratio
+        );
+        setProgress(p);
+      }
+      // Sequence 1: 25-Channel VU Spectrum Equalizer (1000ms - 2000ms)
+      else if (elapsed < 2000) {
+        setPhaseIndex(1);
+        const ratio = Math.min(1, (elapsed - 1000) / 1000);
+        const p = Math.round(
+          BOOT_SEQUENCE_PHASES[1].startProgress +
+          (BOOT_SEQUENCE_PHASES[1].endProgress - BOOT_SEQUENCE_PHASES[1].startProgress) * ratio
+        );
+        setProgress(p);
+      }
+      // Sequence 2: Concentric Reticle & Orbital Perimeter Tracer (2000ms - 3000ms)
+      else if (elapsed < 3000) {
+        setPhaseIndex(2);
+        const ratio = Math.min(1, (elapsed - 2000) / 1000);
+        const p = Math.round(
+          BOOT_SEQUENCE_PHASES[2].startProgress +
+          (BOOT_SEQUENCE_PHASES[2].endProgress - BOOT_SEQUENCE_PHASES[2].startProgress) * ratio
+        );
+        setProgress(p);
+      }
+      // Sequence 3: System Core Lock & Authorization (3000ms - 4000ms)
+      else if (elapsed < 4000) {
+        setPhaseIndex(3);
+        const ratio = Math.min(1, (elapsed - 3000) / 750);
+        const p = Math.min(
+          100,
+          Math.round(
+            BOOT_SEQUENCE_PHASES[3].startProgress +
+            (100 - BOOT_SEQUENCE_PHASES[3].startProgress) * ratio
+          )
+        );
+        setProgress(p);
+      }
+      // Sequence Complete (4000ms+): Auto-dismiss into main page
+      else {
+        setPhaseIndex(3);
+        setProgress(100);
+        if (!hasAutoDismissedRef.current) {
+          hasAutoDismissedRef.current = true;
+          dismiss();
         }
+      }
+    }, 25);
 
-        // Once assets are ready, quickly ramp to 100%
-        if (prev >= 100) {
-          return 100;
-        }
-
-        return Math.min(100, prev + 10);
-      });
-    }, 45);
-
-    return () => clearInterval(progressInterval);
-  }, [isVisible, isAssetsLoaded]);
-
-  // Automatic dismissal when progress reaches 100%
-  useEffect(() => {
-    if (progress >= 100 && isAssetsLoaded && isVisible && !isDismissing) {
-      const timer = setTimeout(() => {
-        dismiss();
-      }, 350);
-
-      return () => clearTimeout(timer);
-    }
-  }, [progress, isAssetsLoaded, isVisible, isDismissing, dismiss]);
+    return () => clearInterval(interval);
+  }, [isVisible, isDismissing, dismiss]);
 
   // Panoramic 25x9 Dot Matrix Geometry (225 bulbs spanning full card width)
   const matrixDots = useMemo(() => {
@@ -270,8 +359,8 @@ export function SystemMatrixBootLoader() {
         let intensity = 0.08;
         let isGlow = false;
 
-        if (progress >= 95 && isAssetsLoaded) {
-          // Phase 4: Calibrated System Lock & Harmonic Horizon Glyph (95% - 100%)
+        if (phaseIndex === 3) {
+          // Phase 4: Calibrated System Lock & Harmonic Horizon Glyph
           const isCenterCore = Math.abs(r - centerR) + Math.abs((c - centerC) * 0.5) <= 1.8;
           const isHorizon = r === centerR && (c <= 4 || c >= 20);
           const isBracket =
@@ -289,8 +378,8 @@ export function SystemMatrixBootLoader() {
           } else {
             intensity = 0.08;
           }
-        } else if (progress < 35) {
-          // Phase 1: High-Speed Bi-Directional Radar Beam with Phosphor Trails (0% - 35%)
+        } else if (phaseIndex === 0) {
+          // Phase 1: High-Speed Bi-Directional Radar Beam with Phosphor Trails
           const distToScan = Math.abs(c - scanCol);
           const isHorizonAxis = r === centerR;
 
@@ -313,8 +402,8 @@ export function SystemMatrixBootLoader() {
             intensity = 1.0;
             isGlow = true;
           }
-        } else if (progress < 70) {
-          // Phase 2: 25-Channel Kinetic VU Spectrum Equalizer with Peak Hold Diodes (35% - 70%)
+        } else if (phaseIndex === 1) {
+          // Phase 2: 25-Channel Kinetic VU Spectrum Equalizer with Peak Hold Diodes
           const harmonic1 = Math.sin(c * 0.48 + tick * 0.3);
           const harmonic2 = Math.cos(c * 0.24 - tick * 0.2);
           const rawHeight = (harmonic1 * 0.65 + harmonic2 * 0.35 + 1) * 0.5;
@@ -335,7 +424,7 @@ export function SystemMatrixBootLoader() {
             intensity = 0.08;
           }
         } else {
-          // Phase 3: Cybernetic Concentric Reticle & Traveling Perimeter Orbit (70% - 95%)
+          // Phase 3: Cybernetic Concentric Reticle & Traveling Perimeter Orbit (phaseIndex === 2)
           const boxRadius = Math.max(Math.abs(c - centerC), Math.abs((r - centerR) * 2.6));
           const wavePhase = (boxRadius * 0.85 - tick * 0.4) % 6;
           const isRing = Math.abs(wavePhase) < 1.1;
@@ -373,9 +462,15 @@ export function SystemMatrixBootLoader() {
       }
     }
     return dots;
-  }, [progress, isAssetsLoaded, tick]);
+  }, [phaseIndex, tick]);
 
   if (!isVisible) return null;
+
+  const currentPhase = BOOT_SEQUENCE_PHASES[phaseIndex] || BOOT_SEQUENCE_PHASES[0];
+  const currentStatus =
+    isAssetsLoaded && phaseIndex === 3
+      ? "ALL SUBSYSTEMS AUTHENTICATED & LOCKED [100%]"
+      : currentPhase.status;
 
   // Segmented 16-bar progress indicator
   const totalSegments = 16;
@@ -388,9 +483,8 @@ export function SystemMatrixBootLoader() {
       aria-modal="true"
       aria-label="System Matrix Bootloader"
       suppressHydrationWarning
-      className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#070709] select-none cursor-pointer transition-all duration-700 ease-out ${
-        isDismissing ? "opacity-0 pointer-events-none" : "opacity-100"
-      }`}
+      className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#070709] select-none cursor-pointer transition-all duration-700 ease-out ${isDismissing ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
       style={{
         backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px)`,
         backgroundSize: "22px 22px",
@@ -398,11 +492,10 @@ export function SystemMatrixBootLoader() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative w-full max-w-lg rounded-2xl border border-white/10 bg-[#0c0c10]/95 backdrop-blur-xl p-5 sm:p-7 font-mono text-xs shadow-[0_20px_60px_rgba(0,0,0,0.8)] space-y-5 overflow-hidden transition-all duration-700 ease-out ${
-          isDismissing
-            ? "opacity-0 scale-[1.025] -translate-y-2 filter blur-[4px]"
-            : "opacity-100 scale-100 translate-y-0 filter blur-0"
-        } ${progress >= 100 && !isDismissing ? "animate-glyph-flash" : ""}`}
+        className={`relative w-full max-w-lg rounded-2xl border border-white/10 bg-[#0c0c10]/95 backdrop-blur-xl p-5 sm:p-7 font-mono text-xs shadow-[0_20px_60px_rgba(0,0,0,0.8)] space-y-5 overflow-hidden transition-all duration-700 ease-out ${isDismissing
+          ? "opacity-0 scale-[1.025] -translate-y-2 filter blur-[4px]"
+          : "opacity-100 scale-100 translate-y-0 filter blur-0"
+          } ${progress >= 100 && !isDismissing ? "animate-glyph-flash" : ""}`}
       >
         {/* Hardware Corner Registration Marks */}
         <span className="absolute top-2.5 left-2.5 text-[10px] text-white/20 font-mono select-none">+</span>
@@ -413,9 +506,9 @@ export function SystemMatrixBootLoader() {
         {/* Top Hardware Header */}
         <div className="flex items-center justify-between border-b border-white/10 pb-3 text-[11px] text-text-secondary">
           <div className="flex items-center gap-2.5">
-            <span className="font-pixel text-xs text-white/50 tracking-widest">( 01 )</span>
+            <span className="font-pixel text-xs text-accent tracking-widest">{currentPhase.tag}</span>
             <span className="font-mono font-bold tracking-widest text-text-primary text-[11px] uppercase">
-              SYSTEM // R41N
+              SYSTEM // {currentPhase.name}
             </span>
           </div>
 
@@ -457,10 +550,10 @@ export function SystemMatrixBootLoader() {
                 const fill = isPeak
                   ? "#ffffff"
                   : isActive
-                  ? "rgba(255, 255, 255, 0.85)"
-                  : isDim
-                  ? "rgba(255, 255, 255, 0.35)"
-                  : "rgba(255, 255, 255, 0.08)";
+                    ? "rgba(255, 255, 255, 0.85)"
+                    : isDim
+                      ? "rgba(255, 255, 255, 0.35)"
+                      : "rgba(255, 255, 255, 0.08)";
 
                 return (
                   <circle
@@ -491,17 +584,24 @@ export function SystemMatrixBootLoader() {
         <div className="space-y-2 pt-1 border-t border-white/10">
           <div className="flex items-center justify-between text-[10px] text-text-secondary">
             <span className="flex items-center gap-1.5">
-              <span className={`w-1.5 h-1.5 rounded-full ${isAssetsLoaded ? "bg-emerald-400" : "bg-accent animate-pulse"}`} />
-              <span className="font-mono uppercase tracking-wider">PIPELINE: {isAssetsLoaded ? "READY" : "LOADING"}</span>
+              <span className={`w-1.5 h-1.5 rounded-full ${phaseIndex === 3 ? "bg-emerald-400" : "bg-accent animate-pulse"}`} />
+              <span className="font-mono uppercase tracking-wider">
+                PIPELINE: {phaseIndex === 3 ? "READY" : `SEQUENCE 0${phaseIndex + 1}/04`}
+              </span>
             </span>
             <span className="font-pixel text-[10px] text-text-secondary tracking-wider">
-              {progress >= 100 ? "LOCKED" : "DECODING"}
+              {progress >= 100 ? "LOCKED" : "CALIBRATING"}
             </span>
           </div>
 
-          <div className="p-2 rounded bg-black/50 border border-white/5 text-[10px] text-text-secondary font-mono truncate">
-            <span className="text-accent mr-1.5">›</span>
-            <span>{assetStatus}</span>
+          <div className="p-2 rounded bg-black/50 border border-white/5 text-[10px] text-text-secondary font-mono truncate flex items-center justify-between">
+            <div className="flex items-center gap-1.5 truncate">
+              <span className="text-accent mr-1.5">›</span>
+              <span className="truncate">{currentStatus}</span>
+            </div>
+            <span className="font-pixel text-[9px] text-white/40 shrink-0 ml-2">
+              [{phaseIndex + 1}/4]
+            </span>
           </div>
 
           {/* 16-Segment Discrete Progress Bar */}

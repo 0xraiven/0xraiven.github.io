@@ -179,7 +179,8 @@
       "batch-script",
       "gaming",
       "low-end-pc",
-      "performance-optimization"
+      "performance-optimization",
+      "windows"
     ]
   },
   {
@@ -211,7 +212,8 @@
       "css3",
       "framer-motion",
       "reactjs",
-      "typescipt"
+      "typescipt",
+      "vercel-deployment"
     ]
   },
   {
@@ -239,7 +241,10 @@
       "linux",
       "persistent-storage",
       "python3",
-      "security-audit"
+      "security-audit",
+      "security-tools",
+      "shell",
+      "vulernability-scanner"
     ]
   },
   {
@@ -257,7 +262,15 @@
       "chrome-extensions",
       "cybersecurity",
       "cybersecurity-tools",
-      "flask"
+      "flask",
+      "machine-learning",
+      "phishing-detector",
+      "phishing-protection",
+      "python",
+      "security",
+      "shap",
+      "threat-detection",
+      "xai"
     ]
   },
   {
@@ -294,22 +307,6 @@
       "html",
       "js",
       "open-street-map"
-    ]
-  },
-  {
-    "id": "action-reboot",
-    "title": "Reboot System",
-    "description": "Trigger the hardware LED matrix boot sequence and reinitialize system telemetry.",
-    "url": "#reboot",
-    "kind": "page",
-    "category": "system",
-    "tags": [
-      "reboot",
-      "restart",
-      "boot",
-      "matrix",
-      "system",
-      "easter-egg"
     ]
   }
 ]
