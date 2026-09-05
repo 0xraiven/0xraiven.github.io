@@ -79,7 +79,7 @@ export function PageTransition({ children }: PageTransitionProps) {
       <div
         className={`transition-all duration-300 font-mono text-[11px] select-none flex items-center justify-between px-3.5 py-2 mb-5 rounded-xl border backdrop-blur-md ${
           isTransitioning
-            ? "border-white/20 bg-surface/95 shadow-[0_4px_20px_rgba(0,0,0,0.5)] opacity-100 translate-y-0"
+            ? "border-accent/40 bg-surface/95 shadow-[0_4px_20px_rgba(0,0,0,0.15)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] opacity-100 translate-y-0"
             : "border-border/60 bg-surface-2/40 opacity-70 hover:opacity-100 transition-opacity -translate-y-0.5"
         }`}
       >
@@ -91,7 +91,7 @@ export function PageTransition({ children }: PageTransitionProps) {
 
           {/* 7-Dot Micro LED Array */}
           <div
-            className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/50 border border-white/5 shadow-inner"
+            className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/50 border border-border/80 shadow-inner"
             aria-hidden="true"
           >
             {Array.from({ length: 7 }).map((_, i) => {
@@ -122,7 +122,7 @@ export function PageTransition({ children }: PageTransitionProps) {
             className={`font-pixel text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full transition-colors duration-200 ${
               isTransitioning
                 ? "bg-accent/15 text-accent border border-accent/30 animate-pulse"
-                : "bg-emerald-400/10 text-emerald-400 border border-emerald-400/20"
+                : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-medium"
             }`}
           >
             {isTransitioning ? "SYNC" : "READY"}

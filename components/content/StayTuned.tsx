@@ -57,9 +57,9 @@ export function StayTuned({
             <span className="font-pixel text-xs text-text-secondary tracking-widest">
               ( 00 )
             </span>
-            <div className="h-3 w-px bg-white/10" />
+            <div className="h-3 w-px bg-border" />
             {/* 5-dot micro array */}
-            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/50 border border-white/5 shadow-inner">
+            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/50 border border-border/80 shadow-inner">
               {[0, 1, 2, 3, 4].map((i) => (
                 <span
                   key={i}

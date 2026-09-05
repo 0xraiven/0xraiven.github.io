@@ -289,7 +289,7 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
                     <div className="px-2 pt-1 pb-1.5 select-none cursor-default">
                       <MalfunctioningBulbText
                         text={group.title}
-                        className="text-[13px] sm:text-[14px] font-pixel uppercase tracking-widest text-white font-semibold"
+                        className="text-[13px] sm:text-[14px] font-pixel uppercase tracking-wider text-text-primary font-normal"
                       />
                     </div>
                   )}

@@ -74,7 +74,7 @@ export function TopBar({
 
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm tracking-tight font-mono focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded px-1 py-0.5 group"
+            className="flex items-center gap-2 text-sm tracking-tight focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent rounded px-1 py-0.5 group"
           >
             <div className="relative w-6 h-6 rounded-full overflow-hidden border border-border group-hover:border-accent/60 transition-colors shrink-0 bg-surface-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -86,11 +86,11 @@ export function TopBar({
                 className="w-full h-full object-cover"
               />
             </div>
-            <span className="font-semibold text-text-primary group-hover:text-accent transition-colors">
+            <span className="font-mono font-bold text-text-primary group-hover:text-accent tracking-wide transition-colors">
               r41n
             </span>
-            <span className="text-text-secondary text-xs">•</span>
-            <span className="text-xs text-text-secondary hidden sm:inline truncate max-w-[200px] md:max-w-none">
+            <span className="text-text-secondary text-xs select-none">•</span>
+            <span className="font-sans text-xs text-text-secondary hidden sm:inline truncate max-w-[200px] md:max-w-none">
               Portfolio / Knowledge Base
             </span>
           </Link>

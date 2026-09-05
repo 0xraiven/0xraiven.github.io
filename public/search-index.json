@@ -244,7 +244,10 @@
       "linux",
       "persistent-storage",
       "python3",
-      "security-audit"
+      "security-audit",
+      "security-tools",
+      "shell",
+      "vulernability-scanner"
     ]
   },
   {
@@ -262,7 +265,15 @@
       "chrome-extensions",
       "cybersecurity",
       "cybersecurity-tools",
-      "flask"
+      "flask",
+      "machine-learning",
+      "phishing-detector",
+      "phishing-protection",
+      "python",
+      "security",
+      "shap",
+      "threat-detection",
+      "xai"
     ]
   },
   {
@@ -281,7 +292,8 @@
       "blockchain-technology",
       "icp",
       "internet-computer",
-      "motoko-lang"
+      "motoko-lang",
+      "on-chain"
     ]
   },
   {
@@ -298,7 +310,10 @@
       "css",
       "html",
       "js",
-      "open-street-map"
+      "open-street-map",
+      "openweathermap-api",
+      "weather-app",
+      "wttrin"
     ]
   }
 ]

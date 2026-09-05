@@ -23,6 +23,12 @@
   --glass-border: rgba(242, 238, 234, 0.09);
   --glass-highlight: rgba(209, 44, 75, 0.06);
   --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+
+  /* Bulb Neon/Filament tokens (Dark) */
+  --bulb-text: #f2eeea;
+  --bulb-glow-core: #ffffff;
+  --bulb-glow-mid: rgba(255, 255, 255, 0.85);
+  --bulb-glow-far: rgba(255, 255, 255, 0.4);
 }
 
 /* Explicit Dark Theme: Dark Obsidian with Wine Red palette */
@@ -43,6 +49,12 @@ html.dark,
   --glass-border: rgba(242, 238, 234, 0.09);
   --glass-highlight: rgba(209, 44, 75, 0.06);
   --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+
+  /* Bulb Neon tokens (Dark) */
+  --bulb-text: #f2eeea;
+  --bulb-glow-core: #ffffff;
+  --bulb-glow-mid: rgba(255, 255, 255, 0.85);
+  --bulb-glow-far: rgba(255, 255, 255, 0.4);
   color-scheme: dark;
 }
 
@@ -54,8 +66,8 @@ html.light,
   --surface-2: #f3eee4;
   --border: rgba(55, 30, 36, 0.11);
   --border-focus: rgba(158, 27, 50, 0.45);
-  --text-primary: #191214;
-  --text-secondary: #6c6065;
+  --text-primary: #120e10;
+  --text-secondary: #52474c;
   --accent: #9e1b32;
   --accent-hover: #b8233d;
   --accent-subtle: rgba(158, 27, 50, 0.09);
@@ -64,6 +76,12 @@ html.light,
   --glass-border: rgba(55, 30, 36, 0.11);
   --glass-highlight: rgba(158, 27, 50, 0.05);
   --glass-shadow: 0 8px 28px rgba(45, 25, 30, 0.07);
+
+  /* Bulb Filament tokens (Light) */
+  --bulb-text: #120e10;
+  --bulb-glow-core: rgba(18, 14, 16, 0.85);
+  --bulb-glow-mid: rgba(158, 27, 50, 0.45);
+  --bulb-glow-far: rgba(158, 27, 50, 0.2);
   color-scheme: light;
 }
 
@@ -75,8 +93,8 @@ html.light,
     --surface-2: #f3eee4;
     --border: rgba(55, 30, 36, 0.11);
     --border-focus: rgba(158, 27, 50, 0.45);
-    --text-primary: #191214;
-    --text-secondary: #6c6065;
+    --text-primary: #120e10;
+    --text-secondary: #52474c;
     --accent: #9e1b32;
     --accent-hover: #b8233d;
     --accent-subtle: rgba(158, 27, 50, 0.09);
@@ -85,6 +103,12 @@ html.light,
     --glass-border: rgba(55, 30, 36, 0.11);
     --glass-highlight: rgba(158, 27, 50, 0.05);
     --glass-shadow: 0 8px 28px rgba(45, 25, 30, 0.07);
+
+    /* Bulb Filament tokens (Light) */
+    --bulb-text: #120e10;
+    --bulb-glow-core: rgba(18, 14, 16, 0.85);
+    --bulb-glow-mid: rgba(158, 27, 50, 0.45);
+    --bulb-glow-far: rgba(158, 27, 50, 0.2);
     color-scheme: light;
   }
 }
@@ -443,21 +467,24 @@ code, kbd, samp, pre {
 
 /* Geist Pixel Font Utility */
 .font-pixel {
-  font-family: 'Geist Pixel', monospace;
+  font-family: 'Geist Pixel', 'Silkscreen', monospace;
   letter-spacing: 0.08em;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Malfunctioning Light Bulb Neon Effect for Non-Clickable Categories */
+/* Malfunctioning Light Bulb Neon / Filament Effect for Non-Clickable Categories */
 .bulb-sign {
   display: inline-flex;
   align-items: center;
   user-select: none;
   cursor: default;
-  color: #ffffff;
+  color: var(--bulb-text);
   text-shadow: 
-    0 0 2px #ffffff,
-    0 0 6px rgba(255, 255, 255, 0.8),
-    0 0 14px rgba(255, 255, 255, 0.4);
+    0 0 2px var(--bulb-glow-core),
+    0 0 6px var(--bulb-glow-mid),
+    0 0 14px var(--bulb-glow-far);
   animation: bulbMasterFlicker 5.5s infinite ease-in-out;
 }
 
@@ -479,9 +506,9 @@ code, kbd, samp, pre {
 .bulb-sign:hover {
   animation: bulbHoverArc 0.25s infinite alternate ease-in-out;
   text-shadow: 
-    0 0 3px #ffffff,
-    0 0 10px rgba(255, 255, 255, 0.95),
-    0 0 22px rgba(255, 255, 255, 0.6);
+    0 0 3px var(--bulb-glow-core),
+    0 0 10px var(--bulb-glow-mid),
+    0 0 22px var(--bulb-glow-far);
 }
 
 .bulb-sign:hover .bulb-char {
@@ -493,7 +520,7 @@ code, kbd, samp, pre {
 @keyframes bulbMasterFlicker {
   0%, 100% {
     opacity: 0.95;
-    text-shadow: 0 0 2px #ffffff, 0 0 6px rgba(255, 255, 255, 0.75), 0 0 14px rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 2px var(--bulb-glow-core), 0 0 6px var(--bulb-glow-mid), 0 0 14px var(--bulb-glow-far);
   }
   18% {
     opacity: 0.95;
@@ -504,7 +531,7 @@ code, kbd, samp, pre {
   }
   19% {
     opacity: 0.85;
-    text-shadow: 0 0 2px #ffffff, 0 0 5px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 2px var(--bulb-glow-core), 0 0 5px var(--bulb-glow-mid);
   }
   19.4% {
     opacity: 0.15;
@@ -512,14 +539,14 @@ code, kbd, samp, pre {
   }
   20% {
     opacity: 1;
-    text-shadow: 0 0 3px #ffffff, 0 0 8px rgba(255, 255, 255, 0.9), 0 0 18px rgba(255, 255, 255, 0.45);
+    text-shadow: 0 0 3px var(--bulb-glow-core), 0 0 8px var(--bulb-glow-mid), 0 0 18px var(--bulb-glow-far);
   }
   54% {
     opacity: 0.95;
   }
   54.4% {
     opacity: 0.4;
-    text-shadow: 0 0 1px #ffffff;
+    text-shadow: 0 0 1px var(--bulb-glow-core);
   }
   55% {
     opacity: 0.95;
@@ -540,14 +567,14 @@ code, kbd, samp, pre {
   }
   80.8% {
     opacity: 1;
-    text-shadow: 0 0 3px #ffffff, 0 0 7px rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 3px var(--bulb-glow-core), 0 0 7px var(--bulb-glow-mid);
   }
 }
 
 @keyframes bulbTubeFlicker1 {
   0%, 100% {
     opacity: 1;
-    text-shadow: 0 0 2px #ffffff, 0 0 6px rgba(255, 255, 255, 0.7);
+    text-shadow: 0 0 2px var(--bulb-glow-core), 0 0 6px var(--bulb-glow-mid);
   }
   8% {
     opacity: 1;
@@ -568,7 +595,7 @@ code, kbd, samp, pre {
   }
   11% {
     opacity: 1;
-    text-shadow: 0 0 2px #ffffff, 0 0 6px rgba(255, 255, 255, 0.7);
+    text-shadow: 0 0 2px var(--bulb-glow-core), 0 0 6px var(--bulb-glow-mid);
   }
   42% {
     opacity: 1;
@@ -619,7 +646,7 @@ code, kbd, samp, pre {
   }
   29.4% {
     opacity: 1;
-    text-shadow: 0 0 3px #ffffff, 0 0 7px rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 3px var(--bulb-glow-core), 0 0 7px var(--bulb-glow-mid);
   }
   63% {
     opacity: 0.92;
@@ -636,11 +663,11 @@ code, kbd, samp, pre {
 @keyframes bulbHoverArc {
   0% {
     opacity: 0.92;
-    text-shadow: 0 0 2px #fff, 0 0 6px rgba(255, 255, 0.8);
+    text-shadow: 0 0 2px var(--bulb-glow-core), 0 0 6px var(--bulb-glow-mid);
   }
   100% {
     opacity: 1;
-    text-shadow: 0 0 4px #fff, 0 0 12px rgba(255, 255, 255, 1), 0 0 24px rgba(255, 255, 255, 0.6);
+    text-shadow: 0 0 4px var(--bulb-glow-core), 0 0 12px var(--bulb-glow-mid), 0 0 24px var(--bulb-glow-far);
   }
 }
 
