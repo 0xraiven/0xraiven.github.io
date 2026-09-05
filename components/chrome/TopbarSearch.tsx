@@ -161,6 +161,15 @@ export function TopbarSearch() {
       setIsFocused(false);
       setQuery("");
       inputRef.current?.blur();
+      if (item.id === "action-reboot" || item.url === "#reboot") {
+        try {
+          sessionStorage.removeItem("r41n_booted");
+        } catch {}
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("r41n:boot"));
+        }
+        return;
+      }
       router.push(item.url);
     },
     [router]

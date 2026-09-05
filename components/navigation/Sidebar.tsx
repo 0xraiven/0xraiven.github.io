@@ -387,6 +387,27 @@ export function Sidebar() {
               </li>
             );
           })}
+          <li className="pt-1 mt-1 border-t border-border/40">
+            <button
+              type="button"
+              onClick={() => {
+                try {
+                  sessionStorage.removeItem("r41n_booted");
+                } catch {}
+                window.dispatchEvent(new CustomEvent("r41n:boot"));
+              }}
+              className="w-full flex items-center justify-between px-2 py-1.5 rounded font-mono text-text-secondary hover:text-accent hover:bg-surface-2 transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent text-left"
+              title="Reboot System [Easter Egg]"
+            >
+              <span className="flex items-center gap-2 text-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 group-hover:bg-accent transition-colors" />
+                <span className="truncate">reboot system</span>
+              </span>
+              <span className="text-[9px] font-pixel text-accent/70 group-hover:text-accent font-bold">
+                [BOOT]
+              </span>
+            </button>
+          </li>
         </ul>
       </div>
     </aside>

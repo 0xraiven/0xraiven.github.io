@@ -295,5 +295,21 @@
       "js",
       "open-street-map"
     ]
+  },
+  {
+    "id": "action-reboot",
+    "title": "Reboot System",
+    "description": "Trigger the hardware LED matrix boot sequence and reinitialize system telemetry.",
+    "url": "#reboot",
+    "kind": "page",
+    "category": "system",
+    "tags": [
+      "reboot",
+      "restart",
+      "boot",
+      "matrix",
+      "system",
+      "easter-egg"
+    ]
   }
 ]

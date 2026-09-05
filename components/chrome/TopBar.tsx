@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { GlassSurface } from "./GlassSurface";
 import { TopbarSearch } from "./TopbarSearch";
@@ -54,6 +54,27 @@ export function TopBar({
   const finalXUrl = xUrl || linkedinUrl || "https://x.com/0xraiven";
   const { openMobileSidebar, theme, resolvedTheme, cycleTheme, setTheme } = useUI();
   const [overflowOpen, setOverflowOpen] = useState(false);
+  const overflowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!overflowOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (overflowRef.current && !overflowRef.current.contains(e.target as Node)) {
+        setOverflowOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOverflowOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [overflowOpen]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 h-12">
@@ -137,13 +158,13 @@ export function TopBar({
             )}
           </button>
 
-          <div className="relative">
+          <div ref={overflowRef} className="relative sm:hidden">
             <button
               type="button"
               onClick={() => setOverflowOpen(!overflowOpen)}
               aria-label="More options"
               aria-expanded={overflowOpen}
-              className="p-1.5 rounded text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:hidden"
+              className="p-1.5 rounded text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
               <MoreVertical className="w-4 h-4" />
             </button>
@@ -192,8 +213,6 @@ export function TopBar({
                   onClick={() => {
                     setOverflowOpen(false);
                     try {
-                      sessionStorage.removeItem("r41n_matrix_booted_v3");
-                      sessionStorage.removeItem("r41n_glyph_booted_v2");
                       sessionStorage.removeItem("r41n_booted");
                     } catch {}
                     window.dispatchEvent(new CustomEvent("r41n:boot"));

@@ -211,6 +211,16 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
   const navigateToItem = useCallback(
     (item: SearchItem) => {
+      if (item.id === "action-reboot" || item.url === "#reboot") {
+        handleClose();
+        try {
+          sessionStorage.removeItem("r41n_booted");
+        } catch {}
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("r41n:boot"));
+        }
+        return;
+      }
       try {
         const updated = [item.id, ...recentIds.filter((id) => id !== item.id)].slice(0, 10);
         localStorage.setItem("r41n_recent_items", JSON.stringify(updated));

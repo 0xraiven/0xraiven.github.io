@@ -84,6 +84,14 @@ export default function RootLayout({
                   doc.classList.add(resolved);
                   doc.setAttribute('data-theme', resolved);
                   doc.setAttribute('data-mode', stored);
+
+                  // Synchronous bootloader gating to eliminate Flash of Unbooted Content (FOUC)
+                  var urlParams = new URLSearchParams(window.location.search);
+                  var forceBoot = urlParams.get('boot') === 'true' || urlParams.get('reboot') === 'true';
+                  var alreadyBooted = sessionStorage.getItem('r41n_booted');
+                  if (forceBoot || !alreadyBooted) {
+                    doc.classList.add('booting-active');
+                  }
                 } catch (e) {}
               })();
             `,

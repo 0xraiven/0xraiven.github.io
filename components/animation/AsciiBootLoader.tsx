@@ -12,8 +12,10 @@ import { X, ArrowRight } from "lucide-react";
  * - Robust asset-gated loading pipeline: monitors document.readyState, fonts, and avatar
  * - Seamless automatic dismissal at 100% with instant keyboard skip (Esc / Enter / Space)
  */
+export const BOOT_STORAGE_KEY = "r41n_booted";
+
 export function SystemMatrixBootLoader() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [isDismissing, setIsDismissing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [tick, setTick] = useState(0);
@@ -25,11 +27,12 @@ export function SystemMatrixBootLoader() {
   const dismiss = useCallback(() => {
     setIsDismissing(true);
     if (typeof document !== "undefined") {
+      document.documentElement.classList.remove("booting-active");
       document.body.classList.remove("booting-active");
       document.body.classList.add("booting-complete");
     }
     try {
-      sessionStorage.setItem("r41n_matrix_booted_v3", "true");
+      sessionStorage.setItem(BOOT_STORAGE_KEY, "true");
     } catch {
       // ignore
     }
@@ -47,26 +50,32 @@ export function SystemMatrixBootLoader() {
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const forceBoot = urlParams.get("boot") === "true" || urlParams.get("reboot") === "true";
-      const alreadyBooted = sessionStorage.getItem("r41n_matrix_booted_v3");
+      const alreadyBooted = sessionStorage.getItem(BOOT_STORAGE_KEY);
 
-      if (forceBoot || !alreadyBooted) {
+      if (!forceBoot && alreadyBooted) {
+        setIsVisible(false);
+        if (typeof document !== "undefined") {
+          document.documentElement.classList.remove("booting-active");
+          document.body.classList.remove("booting-active");
+        }
+      } else {
         setIsVisible(true);
         if (typeof document !== "undefined") {
+          document.documentElement.classList.add("booting-active");
           document.body.classList.add("booting-active");
         }
       }
     } catch {
       setIsVisible(true);
       if (typeof document !== "undefined") {
+        document.documentElement.classList.add("booting-active");
         document.body.classList.add("booting-active");
       }
     }
 
     const handleReboot = () => {
       try {
-        sessionStorage.removeItem("r41n_matrix_booted_v3");
-        sessionStorage.removeItem("r41n_glyph_booted_v2");
-        sessionStorage.removeItem("r41n_booted");
+        sessionStorage.removeItem(BOOT_STORAGE_KEY);
       } catch { }
       setIsVisible(true);
       setIsDismissing(false);
@@ -75,6 +84,7 @@ export function SystemMatrixBootLoader() {
       setTick(0);
       if (typeof document !== "undefined") {
         document.body.classList.remove("booting-complete");
+        document.documentElement.classList.add("booting-active");
         document.body.classList.add("booting-active");
       }
     };
@@ -83,6 +93,7 @@ export function SystemMatrixBootLoader() {
     return () => {
       window.removeEventListener("r41n:boot", handleReboot);
       if (typeof document !== "undefined") {
+        document.documentElement.classList.remove("booting-active");
         document.body.classList.remove("booting-active", "booting-complete");
       }
     };
@@ -372,9 +383,11 @@ export function SystemMatrixBootLoader() {
 
   return (
     <div
+      id="system-boot-loader"
       role="dialog"
       aria-modal="true"
       aria-label="System Matrix Bootloader"
+      suppressHydrationWarning
       className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#070709] select-none cursor-pointer transition-all duration-700 ease-out ${
         isDismissing ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}

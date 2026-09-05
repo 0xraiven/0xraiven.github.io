@@ -85,6 +85,7 @@ clearance  :: LEVEL-4 RESEARCH OPERATOR`,
   whoami                - Display active user identity & clearance
   ls                    - List directories & files
   uptime                - Print homelab cluster uptime
+  reboot                - Reboot hardware matrix & reinitialize system
   clear                 - Reset terminal session
   help                  - Show this manual`,
   },
@@ -214,6 +215,19 @@ drwxr-xr-x  r41n  staff   4096 Sep 04 23:40 research/
     } else if (lower.includes("uname")) {
       output = `Linux cyber-range 6.10.10-hardened-x86_64 #1 SMP PREEMPT_DYNAMIC GNU/Linux`;
       setActivePreset("");
+    } else if (lower === "reboot" || lower === "reboot system" || lower === "systemctl reboot") {
+      output = `[+] INITIATING SYSTEM HARDWARE REBOOT SEQUENCE...
+[+] FLUSHING TELEMETRY REGISTERS & CACHE...
+[+] RESTARTING SYSTEM CORE...`;
+      setActivePreset("");
+      setTimeout(() => {
+        try {
+          sessionStorage.removeItem("r41n_booted");
+        } catch {}
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("r41n:boot"));
+        }
+      }, 500);
     } else if (lower === "help") {
       const p = activePresets.find((x) => x.label === "help");
       output = p ? p.output : DEFAULT_PRESETS[4].output;
