@@ -112,7 +112,7 @@ export function TableOfContents({ headings: initialHeadings }: TableOfContentsPr
 
   return (
     <div className="space-y-2 text-xs font-mono select-none">
-      <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-text-secondary font-semibold">
+      <div className="flex items-center gap-1.5 text-[11px] font-pixel uppercase tracking-wider text-text-secondary font-semibold">
         <AlignLeft className="w-3.5 h-3.5" />
         <span>On this page</span>
       </div>

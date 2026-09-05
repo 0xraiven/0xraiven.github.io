@@ -130,6 +130,28 @@ export interface MobileSidebarProps {
   onOpenSearch: () => void;
 }
 
+function MalfunctioningBulbText({ text, className }: { text: string; className?: string }) {
+  return (
+    <span className={`bulb-sign ${className || ""}`}>
+      {text.split("").map((char, index) => {
+        if (char === " ") {
+          return <span key={index} className="inline-block w-2">&nbsp;</span>;
+        }
+        // Asynchronous loose-contact filaments simulating malfunctioning bulbs
+        const isFaulty1 = index === 3 || index === 7;
+        const isFaulty2 = index === 1 || index === 8;
+        const faultyClass = isFaulty1 ? "bulb-flicker-faulty-1" : isFaulty2 ? "bulb-flicker-faulty-2" : "";
+
+        return (
+          <span key={index} className={`bulb-char ${faultyClass}`}>
+            {char}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
 export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarProps) {
   const pathname = usePathname();
   const { theme, setTheme } = useUI();
@@ -254,7 +276,7 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
                       type="button"
                       onClick={() => toggleGroup(group.title)}
                       aria-expanded={isOpen}
-                      className="w-full flex items-center justify-between px-2 py-1 text-[11px] uppercase tracking-wider text-text-secondary hover:text-text-primary rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent group transition-colors"
+                      className="w-full flex items-center justify-between px-2 py-1 text-[11px] font-pixel uppercase tracking-wider text-text-secondary hover:text-text-primary rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent group transition-colors"
                     >
                       <span className="transition-colors group-hover:text-text-primary">{group.title}</span>
                       <ChevronDown
@@ -264,13 +286,12 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
                       />
                     </button>
                   ) : (
-                    <Link
-                      href="/"
-                      onClick={onClose}
-                      className="block px-2 py-1 text-[11px] uppercase tracking-wider text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
-                    >
-                      {group.title}
-                    </Link>
+                    <div className="px-2 pt-1 pb-1.5 select-none cursor-default">
+                      <MalfunctioningBulbText
+                        text={group.title}
+                        className="text-[13px] sm:text-[14px] font-pixel uppercase tracking-widest text-white font-semibold"
+                      />
+                    </div>
                   )}
 
                   <div
@@ -423,7 +444,7 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
           <div className="p-3 border-t border-border/70 shrink-0 bg-surface/50 space-y-3">
             {/* Pinned MISC */}
             <div>
-              <div className="px-2 py-0.5 text-[11px] font-mono uppercase tracking-wider text-text-secondary">
+              <div className="px-2 py-0.5 text-[11px] font-pixel uppercase tracking-wider text-text-secondary">
                 MISC
               </div>
               <ul className="space-y-0.5 mt-1 font-mono">

@@ -192,14 +192,16 @@ export function TopBar({
                   onClick={() => {
                     setOverflowOpen(false);
                     try {
+                      sessionStorage.removeItem("r41n_matrix_booted_v3");
+                      sessionStorage.removeItem("r41n_glyph_booted_v2");
                       sessionStorage.removeItem("r41n_booted");
                     } catch {}
                     window.dispatchEvent(new CustomEvent("r41n:boot"));
                   }}
                   className="w-full text-left px-3 py-1.5 text-text-secondary hover:text-accent hover:bg-surface-2 flex items-center justify-between font-mono"
                 >
-                  <span>Reboot Console</span>
-                  <span className="text-[10px] text-accent font-bold">[ASCII]</span>
+                  <span>Reboot System</span>
+                  <span className="text-[10px] text-accent font-bold">[BOOT]</span>
                 </button>
 
                 {/* Theme Selector in Mobile Overflow */}

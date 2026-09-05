@@ -51,15 +51,35 @@ export function StayTuned({
         {/* Subtle background glow */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
 
-        {/* ASCII Header */}
-        <pre className="text-[10px] sm:text-xs leading-tight text-accent overflow-x-auto select-none font-mono py-1">
-{`   _____ __                 ______                      __
-  / ___// /_____ ___  __   /_  __/_  ______  ___  ____/ /
-  \\__ \\/ __/ __ \`/ / / /    / / / / / / __ \\/ _ \\/ __  / 
- ___/ / /_/ /_/ / /_/ /    / / / /_/ / / / /  __/ /_/ /  
-/____/\\__/\\__,_/\\__, /    /_/  \\__,_/_/ /_/\\___/\\__,_/   
-               /____/                                    `}
-        </pre>
+        {/* Hardware Status Header */}
+        <div className="flex items-center justify-between border-b border-border/80 pb-3">
+          <div className="flex items-center gap-3">
+            <span className="font-pixel text-xs text-text-secondary tracking-widest">
+              ( 00 )
+            </span>
+            <div className="h-3 w-px bg-white/10" />
+            {/* 5-dot micro array */}
+            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-black/50 border border-white/5 shadow-inner">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <span
+                  key={i}
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    i < 3 ? "bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" : "bg-white/15"
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="font-pixel text-[11px] uppercase tracking-wider text-text-primary">
+              RELEASE PIPELINE // MATRIX
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="font-pixel text-[9px] uppercase tracking-wider text-text-secondary">
+              PENDING RELEASE
+            </span>
+          </div>
+        </div>
 
         {/* Title & Metadata */}
         <div className="space-y-2 border-t border-border/70 pt-4">

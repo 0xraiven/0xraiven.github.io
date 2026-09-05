@@ -65,6 +65,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sansFont.variable} ${monoFont.variable} dark`} suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Geist+Pixel&display=swap" rel="stylesheet" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -89,7 +92,9 @@ export default function RootLayout({
       <body className="h-full overflow-hidden bg-bg text-text-primary antialiased font-sans">
         <Providers>
           <AsciiBootLoader />
-          {children}
+          <div id="page-content-wrapper" className="h-full w-full">
+            {children}
+          </div>
         </Providers>
       </body>
     </html>

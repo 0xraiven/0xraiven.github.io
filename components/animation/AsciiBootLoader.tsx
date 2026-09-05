@@ -1,195 +1,525 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
-import { Terminal, Shield, ArrowRight, X } from "lucide-react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { X, ArrowRight } from "lucide-react";
 
-const ASCII_BANNER = `
-██████╗      ██╗  ██╗       ██╗     ███╗   ██╗
-██╔══██╗     ██║  ██║      ███║     ████╗  ██║
-██████╔╝     ███████║      ╚██║     ██╔██╗ ██║
-██╔══██╗     ╚════██║       ██║     ██║╚██╗██║
-██║  ██║          ██║       ██║     ██║ ╚████║
-╚═╝  ╚═╝          ╚═╝       ╚═╝     ╚═╝  ╚═══╝
-`;
-
-const BOOT_STEPS = [
-  { time: "[0.012]", msg: "INITIALIZING KERNEL DRIVERS", status: "OK" },
-  { time: "[0.048]", msg: "MOUNTING CRYPTOGRAPHIC VOLUMES", status: "OK" },
-  { time: "[0.092]", msg: "LOADING TOOLSETS", status: "OK" },
-  { time: "[0.141]", msg: "VERIFYING MATRIX CIPHER STREAMS", status: "OK" },
-  { time: "[0.195]", msg: "SYNCHRONIZING 0xRAIVEN GATEWAY", status: "OK" },
-];
-
-export function AsciiBootLoader() {
+/**
+ * System Matrix Boot Loader
+ * 
+ * High-precision industrial LED dot matrix boot loader:
+ * - Panoramic 25x9 LED micro-dot matrix (225 dots) occupying the full width of the card
+ * - Zero circles covering the animation (clean, unhindered dot matrix visualizer)
+ * - Robust asset-gated loading pipeline: monitors document.readyState, fonts, and avatar
+ * - Seamless automatic dismissal at 100% with instant keyboard skip (Esc / Enter / Space)
+ */
+export function SystemMatrixBootLoader() {
   const [isVisible, setIsVisible] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [isDismissing, setIsDismissing] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [isDone, setIsDone] = useState(false);
+  const [tick, setTick] = useState(0);
+
+  // Asset loading telemetry
+  const [isAssetsLoaded, setIsAssetsLoaded] = useState(false);
+  const [assetStatus, setAssetStatus] = useState("INITIALIZING SYSTEM CORE...");
 
   const dismiss = useCallback(() => {
-    setIsVisible(false);
+    setIsDismissing(true);
+    if (typeof document !== "undefined") {
+      document.body.classList.remove("booting-active");
+      document.body.classList.add("booting-complete");
+    }
     try {
-      sessionStorage.setItem("r41n_booted", "true");
+      sessionStorage.setItem("r41n_matrix_booted_v3", "true");
     } catch {
       // ignore
     }
+    setTimeout(() => {
+      setIsVisible(false);
+      setIsDismissing(false);
+      if (typeof document !== "undefined") {
+        document.body.classList.remove("booting-complete");
+      }
+    }, 750);
   }, []);
 
+  // Check session storage on mount + support URL force boot (?boot=true or ?reboot=true)
   useEffect(() => {
-    // Only display on the first visit of the browser session
     try {
-      const alreadyBooted = sessionStorage.getItem("r41n_booted");
-      if (!alreadyBooted) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const forceBoot = urlParams.get("boot") === "true" || urlParams.get("reboot") === "true";
+      const alreadyBooted = sessionStorage.getItem("r41n_matrix_booted_v3");
+
+      if (forceBoot || !alreadyBooted) {
         setIsVisible(true);
+        if (typeof document !== "undefined") {
+          document.body.classList.add("booting-active");
+        }
       }
     } catch {
-      // ignore
+      setIsVisible(true);
+      if (typeof document !== "undefined") {
+        document.body.classList.add("booting-active");
+      }
     }
 
     const handleReboot = () => {
+      try {
+        sessionStorage.removeItem("r41n_matrix_booted_v3");
+        sessionStorage.removeItem("r41n_glyph_booted_v2");
+        sessionStorage.removeItem("r41n_booted");
+      } catch { }
       setIsVisible(true);
-      setCurrentStep(0);
+      setIsDismissing(false);
       setProgress(0);
-      setIsDone(false);
+      setIsAssetsLoaded(false);
+      setTick(0);
+      if (typeof document !== "undefined") {
+        document.body.classList.remove("booting-complete");
+        document.body.classList.add("booting-active");
+      }
     };
 
     window.addEventListener("r41n:boot", handleReboot);
-    return () => window.removeEventListener("r41n:boot", handleReboot);
+    return () => {
+      window.removeEventListener("r41n:boot", handleReboot);
+      if (typeof document !== "undefined") {
+        document.body.classList.remove("booting-active", "booting-complete");
+      }
+    };
   }, []);
 
+  // Asset readiness monitor: DOM readiness + fonts + page avatar
   useEffect(() => {
     if (!isVisible) return;
 
-    // Handle Escape key to skip instantly
+    let cancelled = false;
+
+    async function monitorPageAssets() {
+      // 1. Wait for document ready
+      if (typeof document !== "undefined" && document.readyState !== "complete") {
+        setAssetStatus("AWAITING DOM READY STATE...");
+        await new Promise<void>((resolve) => {
+          const onComplete = () => {
+            window.removeEventListener("load", onComplete);
+            resolve();
+          };
+          window.addEventListener("load", onComplete);
+        });
+      }
+      if (cancelled) return;
+
+      // 2. Wait for fonts
+      setAssetStatus("VERIFYING SYSTEM FONTS [INTER + JETBRAINS]...");
+      if (typeof document !== "undefined" && document.fonts) {
+        try {
+          await document.fonts.ready;
+        } catch {
+          // font fallback
+        }
+      }
+      if (cancelled) return;
+
+      // 3. Track DOM images + profile avatar specifically
+      const avatarUrl = "https://github.com/0xraiven.png";
+      const imageSources = new Set<string>();
+      imageSources.add(avatarUrl);
+
+      const domImgs = Array.from(document.querySelectorAll<HTMLImageElement>("img"));
+      domImgs.forEach((img) => {
+        if (img.src) imageSources.add(img.src);
+      });
+
+      const promises = Array.from(imageSources).map((src) => {
+        return new Promise<void>((resolve) => {
+          const domImg = domImgs.find((i) => i.src === src);
+          if (domImg && domImg.complete && domImg.naturalWidth !== 0) {
+            if (!cancelled) {
+              setAssetStatus(`DECODED: ${src.split("/").pop() || "resource"}`);
+            }
+            resolve();
+            return;
+          }
+
+          const loader = new Image();
+          loader.src = src;
+          const onDone = () => {
+            if (!cancelled) {
+              setAssetStatus(`DECODED: ${src.split("/").pop() || "resource"}`);
+            }
+            resolve();
+          };
+
+          if (loader.complete && loader.naturalWidth !== 0) {
+            onDone();
+          } else {
+            loader.onload = onDone;
+            loader.onerror = onDone; // Do not hang indefinitely if an image 404s
+          }
+        });
+      });
+
+      // Cap at 3.0s maximum so offline / slow connections never get stuck
+      await Promise.race([
+        Promise.all(promises),
+        new Promise((resolve) => setTimeout(resolve, 3000)),
+      ]);
+
+      if (!cancelled) {
+        setAssetStatus("ALL PAGE ASSETS DECODED & LOCKED");
+        setIsAssetsLoaded(true);
+      }
+    }
+
+    monitorPageAssets();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isVisible]);
+
+  // Dot matrix animation timer
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const tickInterval = setInterval(() => {
+      setTick((t) => (t + 1) % 300);
+    }, 55);
+
+    return () => clearInterval(tickInterval);
+  }, [isVisible]);
+
+  // Keyboard shortcut (Escape / Enter / Space) to skip
+  useEffect(() => {
+    if (!isVisible) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
         dismiss();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isVisible, dismiss]);
 
-    // Progressive step sequence
-    const stepInterval = setInterval(() => {
-      setCurrentStep((prev) => {
-        if (prev < BOOT_STEPS.length) {
-          return prev + 1;
-        }
-        clearInterval(stepInterval);
-        return prev;
-      });
-    }, 140);
+  // Progress ticker: governed by asset readiness
+  useEffect(() => {
+    if (!isVisible) return;
 
-    // Progress bar animation
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
+        if (!isAssetsLoaded) {
+          // Hold at 88% while assets are decoding
+          if (prev < 88) {
+            return prev + Math.max(1, Math.floor((88 - prev) * 0.18));
+          }
+          return prev;
+        }
+
+        // Once assets are ready, quickly ramp to 100%
         if (prev >= 100) {
-          clearInterval(progressInterval);
-          setIsDone(true);
-          // Auto dismiss after completion
-          setTimeout(() => {
-            dismiss();
-          }, 350);
           return 100;
         }
-        return prev + 12;
-      });
-    }, 90);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      clearInterval(stepInterval);
-      clearInterval(progressInterval);
-    };
-  }, [isVisible, dismiss]);
+        return Math.min(100, prev + 10);
+      });
+    }, 45);
+
+    return () => clearInterval(progressInterval);
+  }, [isVisible, isAssetsLoaded]);
+
+  // Automatic dismissal when progress reaches 100%
+  useEffect(() => {
+    if (progress >= 100 && isAssetsLoaded && isVisible && !isDismissing) {
+      const timer = setTimeout(() => {
+        dismiss();
+      }, 350);
+
+      return () => clearTimeout(timer);
+    }
+  }, [progress, isAssetsLoaded, isVisible, isDismissing, dismiss]);
+
+  // Panoramic 25x9 Dot Matrix Geometry (225 bulbs spanning full card width)
+  const matrixDots = useMemo(() => {
+    const dots: { r: number; c: number; intensity: number; isGlow: boolean }[] = [];
+    const centerC = 12;
+    const centerR = 4;
+
+    // Ping-pong radar scanner column (0 to 24)
+    const scanCol = Math.round(Math.abs(((tick * 0.95) % 48) - 24));
+
+    // Outer perimeter sequence index for orbital tracer (64 bulbs around the border)
+    const perimeterTick = (tick * 2) % 64;
+
+    // Diagnostic sector coordinate ping
+    const pingC = (tick * 7) % 25;
+    const pingR = (tick * 11) % 9;
+
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 25; c++) {
+        let intensity = 0.08;
+        let isGlow = false;
+
+        if (progress >= 95 && isAssetsLoaded) {
+          // Phase 4: Calibrated System Lock & Harmonic Horizon Glyph (95% - 100%)
+          const isCenterCore = Math.abs(r - centerR) + Math.abs((c - centerC) * 0.5) <= 1.8;
+          const isHorizon = r === centerR && (c <= 4 || c >= 20);
+          const isBracket =
+            ((r === 1 || r === 7) && (c === 2 || c === 22)) ||
+            ((r === 2 || r === 6) && (c === 1 || c === 23));
+
+          if (isCenterCore) {
+            intensity = 0.95 + 0.05 * Math.sin(tick * 0.3);
+            isGlow = true;
+          } else if (isHorizon) {
+            intensity = 0.85;
+            isGlow = true;
+          } else if (isBracket) {
+            intensity = 0.75;
+          } else {
+            intensity = 0.08;
+          }
+        } else if (progress < 35) {
+          // Phase 1: High-Speed Bi-Directional Radar Beam with Phosphor Trails (0% - 35%)
+          const distToScan = Math.abs(c - scanCol);
+          const isHorizonAxis = r === centerR;
+
+          if (distToScan === 0) {
+            intensity = 1.0;
+            isGlow = true;
+          } else if (distToScan === 1) {
+            intensity = 0.75;
+          } else if (distToScan === 2) {
+            intensity = 0.45;
+          } else if (distToScan === 3) {
+            intensity = 0.22;
+          } else if (isHorizonAxis && (c % 2 === 0)) {
+            // Faint telemetry guide line
+            intensity = 0.28;
+          }
+
+          // Random sector coordinate ping
+          if (c === pingC && r === pingR) {
+            intensity = 1.0;
+            isGlow = true;
+          }
+        } else if (progress < 70) {
+          // Phase 2: 25-Channel Kinetic VU Spectrum Equalizer with Peak Hold Diodes (35% - 70%)
+          const harmonic1 = Math.sin(c * 0.48 + tick * 0.3);
+          const harmonic2 = Math.cos(c * 0.24 - tick * 0.2);
+          const rawHeight = (harmonic1 * 0.65 + harmonic2 * 0.35 + 1) * 0.5;
+          const barHeight = Math.max(1, Math.min(8, Math.round(rawHeight * 8)));
+
+          // Distance from bottom row (r = 8 is bottom, r = 0 is top)
+          const rowFromBottom = 8 - r;
+
+          if (rowFromBottom === barHeight) {
+            // Floating peak diode
+            intensity = 1.0;
+            isGlow = true;
+          } else if (rowFromBottom < barHeight) {
+            // Active column meter bar
+            intensity = rowFromBottom > barHeight - 2 ? 0.88 : 0.6;
+          } else {
+            // Standby bulb
+            intensity = 0.08;
+          }
+        } else {
+          // Phase 3: Cybernetic Concentric Reticle & Traveling Perimeter Orbit (70% - 95%)
+          const boxRadius = Math.max(Math.abs(c - centerC), Math.abs((r - centerR) * 2.6));
+          const wavePhase = (boxRadius * 0.85 - tick * 0.4) % 6;
+          const isRing = Math.abs(wavePhase) < 1.1;
+
+          // Perimeter orbital tracer
+          let isOrbital = false;
+          let perimeterIndex = -1;
+          if (r === 0) perimeterIndex = c;
+          else if (c === 24) perimeterIndex = 25 + (r - 1);
+          else if (r === 8) perimeterIndex = 32 + (24 - c);
+          else if (c === 0) perimeterIndex = 57 + (7 - r);
+
+          if (perimeterIndex >= 0) {
+            const orbitDist = Math.abs(perimeterIndex - perimeterTick);
+            if (orbitDist === 0 || orbitDist === 64) {
+              isOrbital = true;
+            }
+          }
+
+          if (isOrbital) {
+            intensity = 1.0;
+            isGlow = true;
+          } else if (isRing) {
+            intensity = 0.85;
+            isGlow = true;
+          } else if (Math.abs(c - centerC) <= 1 && Math.abs(r - centerR) <= 1) {
+            // Center reticle
+            intensity = 0.7;
+          } else {
+            intensity = 0.08;
+          }
+        }
+
+        dots.push({ r, c, intensity, isGlow });
+      }
+    }
+    return dots;
+  }, [progress, isAssetsLoaded, tick]);
 
   if (!isVisible) return null;
 
-  // Build 24-character ASCII progress bar
-  const totalBarWidth = 24;
-  const filledChars = Math.min(totalBarWidth, Math.floor((progress / 100) * totalBarWidth));
-  const progressBarString = "█".repeat(filledChars) + "░".repeat(Math.max(0, totalBarWidth - filledChars));
+  // Segmented 16-bar progress indicator
+  const totalSegments = 16;
+  const filledSegments = Math.min(totalSegments, Math.floor((progress / 100) * totalSegments));
 
   return (
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Terminal bootloader"
-      onClick={dismiss}
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-bg/95 backdrop-blur-md select-none cursor-pointer transition-opacity duration-300"
+      aria-label="System Matrix Bootloader"
+      className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#070709] select-none cursor-pointer transition-all duration-700 ease-out ${
+        isDismissing ? "opacity-0 pointer-events-none" : "opacity-100"
+      }`}
+      style={{
+        backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px)`,
+        backgroundSize: "22px 22px",
+      }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-xl rounded border border-accent/40 bg-surface p-4 sm:p-6 font-mono text-xs shadow-2xl space-y-4 overflow-hidden"
+        className={`relative w-full max-w-lg rounded-2xl border border-white/10 bg-[#0c0c10]/95 backdrop-blur-xl p-5 sm:p-7 font-mono text-xs shadow-[0_20px_60px_rgba(0,0,0,0.8)] space-y-5 overflow-hidden transition-all duration-700 ease-out ${
+          isDismissing
+            ? "opacity-0 scale-[1.025] -translate-y-2 filter blur-[4px]"
+            : "opacity-100 scale-100 translate-y-0 filter blur-0"
+        } ${progress >= 100 && !isDismissing ? "animate-glyph-flash" : ""}`}
       >
-        {/* Window Top Bar */}
-        <div className="flex items-center justify-between border-b border-border pb-2.5 text-[11px] text-text-secondary">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse inline-block" />
-            <span className="font-bold text-text-primary uppercase tracking-wider">
-              r41n // SEC_OPS_BOOT_SEQUENCE
+        {/* Hardware Corner Registration Marks */}
+        <span className="absolute top-2.5 left-2.5 text-[10px] text-white/20 font-mono select-none">+</span>
+        <span className="absolute top-2.5 right-2.5 text-[10px] text-white/20 font-mono select-none">+</span>
+        <span className="absolute bottom-2.5 left-2.5 text-[10px] text-white/20 font-mono select-none">+</span>
+        <span className="absolute bottom-2.5 right-2.5 text-[10px] text-white/20 font-mono select-none">+</span>
+
+        {/* Top Hardware Header */}
+        <div className="flex items-center justify-between border-b border-white/10 pb-3 text-[11px] text-text-secondary">
+          <div className="flex items-center gap-2.5">
+            <span className="font-pixel text-xs text-white/50 tracking-widest">( 01 )</span>
+            <span className="font-mono font-bold tracking-widest text-text-primary text-[11px] uppercase">
+              SYSTEM // R41N
             </span>
           </div>
+
           <button
             type="button"
             onClick={dismiss}
-            aria-label="Skip boot sequence"
+            aria-label="Skip initialization"
             className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-surface-2 border border-border text-text-secondary hover:text-text-primary hover:border-accent/40 transition-colors"
           >
-            <span>SKIP [ESC]</span>
+            <span className="font-pixel text-[9px]">ESC</span>
             <X className="w-3 h-3" />
           </button>
         </div>
 
-        {/* ASCII Banner */}
-        <div className="text-center overflow-x-auto select-none py-1">
-          <pre className="text-[9px] sm:text-[11px] leading-[1.15] text-accent font-bold inline-block text-left">
-            {ASCII_BANNER}
-          </pre>
-          <div className="text-[10px] text-text-secondary tracking-widest uppercase mt-1">
-            OFFENSIVE SECURITY • RED TEAM • TECHNICAL KB
+        {/* Center: Full Card Width Panoramic LED Dot Matrix (No Circles) */}
+        <div className="space-y-3 py-1 w-full select-none">
+          <div className="w-full p-3 sm:p-4 rounded-xl bg-black/60 border border-white/5 shadow-inner">
+            <svg
+              viewBox="0 0 380 130"
+              className="w-full h-28 sm:h-36"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <filter id="dotGlow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#ffffff" floodOpacity="0.95" />
+                </filter>
+              </defs>
+
+              {/* 25x9 Micro Dot Matrix spanning full card width */}
+              {matrixDots.map((dot, idx) => {
+                const cx = 14 + dot.c * 14.65;
+                const cy = 14 + dot.r * 12.75;
+                const isPeak = dot.intensity >= 0.85;
+                const isActive = dot.intensity >= 0.5;
+                const isDim = dot.intensity >= 0.2;
+
+                const radius = isPeak ? 3.05 : isActive ? 2.55 : isDim ? 2.05 : 1.75;
+                const fill = isPeak
+                  ? "#ffffff"
+                  : isActive
+                  ? "rgba(255, 255, 255, 0.85)"
+                  : isDim
+                  ? "rgba(255, 255, 255, 0.35)"
+                  : "rgba(255, 255, 255, 0.08)";
+
+                return (
+                  <circle
+                    key={idx}
+                    cx={cx}
+                    cy={cy}
+                    r={radius}
+                    fill={fill}
+                    filter={dot.isGlow ? "url(#dotGlow)" : undefined}
+                    style={{
+                      transition: "r 50ms cubic-bezier(0.4, 0, 0.2, 1), fill 50ms cubic-bezier(0.4, 0, 0.2, 1)",
+                    }}
+                  />
+                );
+              })}
+            </svg>
+          </div>
+
+          {/* Dotted Matrix Percentage Display */}
+          <div className="text-center">
+            <span className="font-pixel text-base sm:text-lg text-text-primary tracking-widest">
+              [ {progress.toString().padStart(3, "0")}% ]
+            </span>
           </div>
         </div>
 
-        {/* Boot Sequence Lines */}
-        <div className="space-y-1 py-1 text-[11px] font-mono border-t border-b border-border/70 my-2">
-          {BOOT_STEPS.slice(0, currentStep).map((step, idx) => (
-            <div key={idx} className="flex items-center justify-between animate-page-reveal">
-              <span className="text-text-secondary">
-                <span className="text-accent">{step.time}</span> {step.msg}
-              </span>
-              <span className="text-emerald-500 font-bold ml-2">[{step.status}]</span>
-            </div>
-          ))}
-          {currentStep < BOOT_STEPS.length && (
-            <div className="flex items-center gap-2 text-accent">
-              <span className="animate-pulse">⠋</span>
-              <span className="animate-terminal-blink">EXECUTING_SYSCALL...</span>
-            </div>
-          )}
+        {/* Real-time Telemetry & Asset Decoding Status (No raw asset count) */}
+        <div className="space-y-2 pt-1 border-t border-white/10">
+          <div className="flex items-center justify-between text-[10px] text-text-secondary">
+            <span className="flex items-center gap-1.5">
+              <span className={`w-1.5 h-1.5 rounded-full ${isAssetsLoaded ? "bg-emerald-400" : "bg-accent animate-pulse"}`} />
+              <span className="font-mono uppercase tracking-wider">PIPELINE: {isAssetsLoaded ? "READY" : "LOADING"}</span>
+            </span>
+            <span className="font-pixel text-[10px] text-text-secondary tracking-wider">
+              {progress >= 100 ? "LOCKED" : "DECODING"}
+            </span>
+          </div>
+
+          <div className="p-2 rounded bg-black/50 border border-white/5 text-[10px] text-text-secondary font-mono truncate">
+            <span className="text-accent mr-1.5">›</span>
+            <span>{assetStatus}</span>
+          </div>
+
+          {/* 16-Segment Discrete Progress Bar */}
+          <div className="flex items-center gap-1 pt-1">
+            {Array.from({ length: totalSegments }).map((_, i) => {
+              const isFilled = i < filledSegments;
+              const isLeading = i === filledSegments - 1;
+              return (
+                <div
+                  key={i}
+                  className={`h-1.5 flex-1 rounded-[1px] transition-all duration-150 ${isLeading
+                    ? "bg-accent shadow-[0_0_6px_rgba(209,44,75,0.9)]"
+                    : isFilled
+                      ? "bg-white shadow-[0_0_4px_rgba(255,255,255,0.8)]"
+                      : "bg-white/10"
+                    }`}
+                />
+              );
+            })}
+          </div>
         </div>
 
-        {/* Progress bar */}
-        <div className="space-y-1.5 pt-1">
-          <div className="flex items-center justify-between text-[11px] font-mono">
-            <span className="text-text-secondary">BUFFER_INITIALIZATION</span>
-            <span className="text-accent font-bold">{progress}%</span>
-          </div>
-          <div className="flex items-center gap-2 text-accent font-mono text-xs">
-            <span>[</span>
-            <span className="tracking-wider">{progressBarString}</span>
-            <span>]</span>
-          </div>
-        </div>
-
-        {/* Click to enter action bar */}
-        <div className="pt-2 flex items-center justify-between text-[10px] text-text-secondary border-t border-border/60">
-          <span className="hidden sm:inline">ARCH: x86_64_LINUX // 0xRAIVEN</span>
+        {/* Footer Technical Bar */}
+        <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[10px] text-text-secondary">
+          <span className="font-pixel uppercase tracking-widest text-white/40">SYSTEM // MATRIX</span>
           <button
             type="button"
             onClick={dismiss}
-            className="flex items-center gap-1 text-accent hover:underline ml-auto font-semibold"
+            className="flex items-center gap-1 text-accent hover:text-accent-hover font-semibold transition-colors font-mono"
           >
-            <span>{isDone ? "ENTER CONSOLE >>" : "PRESS ANY KEY TO SKIP"}</span>
+            <span>{progress >= 100 ? "ENTER SYSTEM >>" : "SKIP [ESC]"}</span>
             <ArrowRight className="w-3 h-3" />
           </button>
         </div>
@@ -197,3 +527,8 @@ export function AsciiBootLoader() {
     </div>
   );
 }
+
+// Re-export for layout compatibility
+export const AsciiBootLoader = SystemMatrixBootLoader;
+export const GlyphBootLoader = SystemMatrixBootLoader;
+export default SystemMatrixBootLoader;

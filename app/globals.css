@@ -372,3 +372,293 @@ code, kbd, samp, pre {
 .animate-search-item {
   animation: searchItemReveal 0.16s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
+/* Nothing OS Glyph Matrix Animations */
+@keyframes glyphRedPulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.92);
+    filter: drop-shadow(0 0 2px rgba(209, 44, 75, 0.4));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 10px rgba(209, 44, 75, 0.95)) drop-shadow(0 0 20px rgba(209, 44, 75, 0.5));
+  }
+}
+
+.animate-glyph-red {
+  animation: glyphRedPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes glyphLightGlow {
+  0%, 100% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 22px rgba(255, 255, 255, 0.45));
+  }
+}
+
+.animate-glyph-glow {
+  animation: glyphLightGlow 2s ease-in-out infinite;
+}
+
+@keyframes glyphFlash {
+  0% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-glyph-flash {
+  animation: glyphFlash 0.35s ease-out both;
+}
+
+@keyframes glyphSweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(500%);
+  }
+}
+
+.animate-glyph-sweep {
+  animation: glyphSweep 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Geist Pixel Font Utility */
+.font-pixel {
+  font-family: 'Geist Pixel', monospace;
+  letter-spacing: 0.08em;
+}
+
+/* Malfunctioning Light Bulb Neon Effect for Non-Clickable Categories */
+.bulb-sign {
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+  cursor: default;
+  color: #ffffff;
+  text-shadow: 
+    0 0 2px #ffffff,
+    0 0 6px rgba(255, 255, 255, 0.8),
+    0 0 14px rgba(255, 255, 255, 0.4);
+  animation: bulbMasterFlicker 5.5s infinite ease-in-out;
+}
+
+.bulb-char {
+  display: inline-block;
+  transition: opacity 0.05s ease-out, text-shadow 0.05s ease-out;
+}
+
+/* Specific erratic flickering filaments simulating loose socket / failing ballast */
+.bulb-flicker-faulty-1 {
+  animation: bulbTubeFlicker1 3.8s infinite ease-in-out;
+}
+
+.bulb-flicker-faulty-2 {
+  animation: bulbTubeFlicker2 4.9s infinite ease-in-out;
+}
+
+/* Interactive hover: intense arc spark and full stabilization */
+.bulb-sign:hover {
+  animation: bulbHoverArc 0.25s infinite alternate ease-in-out;
+  text-shadow: 
+    0 0 3px #ffffff,
+    0 0 10px rgba(255, 255, 255, 0.95),
+    0 0 22px rgba(255, 255, 255, 0.6);
+}
+
+.bulb-sign:hover .bulb-char {
+  opacity: 1 !important;
+  animation: none !important;
+}
+
+/* Keyframes simulating authentic incandescent / neon bulb electrical flutter */
+@keyframes bulbMasterFlicker {
+  0%, 100% {
+    opacity: 0.95;
+    text-shadow: 0 0 2px #ffffff, 0 0 6px rgba(255, 255, 255, 0.75), 0 0 14px rgba(255, 255, 255, 0.3);
+  }
+  18% {
+    opacity: 0.95;
+  }
+  18.5% {
+    opacity: 0.25;
+    text-shadow: none;
+  }
+  19% {
+    opacity: 0.85;
+    text-shadow: 0 0 2px #ffffff, 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+  19.4% {
+    opacity: 0.15;
+    text-shadow: none;
+  }
+  20% {
+    opacity: 1;
+    text-shadow: 0 0 3px #ffffff, 0 0 8px rgba(255, 255, 255, 0.9), 0 0 18px rgba(255, 255, 255, 0.45);
+  }
+  54% {
+    opacity: 0.95;
+  }
+  54.4% {
+    opacity: 0.4;
+    text-shadow: 0 0 1px #ffffff;
+  }
+  55% {
+    opacity: 0.95;
+  }
+  79% {
+    opacity: 0.95;
+  }
+  79.3% {
+    opacity: 0.2;
+    text-shadow: none;
+  }
+  79.8% {
+    opacity: 0.9;
+  }
+  80.2% {
+    opacity: 0.25;
+    text-shadow: none;
+  }
+  80.8% {
+    opacity: 1;
+    text-shadow: 0 0 3px #ffffff, 0 0 7px rgba(255, 255, 255, 0.8);
+  }
+}
+
+@keyframes bulbTubeFlicker1 {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 2px #ffffff, 0 0 6px rgba(255, 255, 255, 0.7);
+  }
+  8% {
+    opacity: 1;
+  }
+  8.4% {
+    opacity: 0.15;
+    text-shadow: none;
+  }
+  9% {
+    opacity: 0.8;
+  }
+  9.5% {
+    opacity: 0.1;
+    text-shadow: none;
+  }
+  10.2% {
+    opacity: 0.3;
+  }
+  11% {
+    opacity: 1;
+    text-shadow: 0 0 2px #ffffff, 0 0 6px rgba(255, 255, 255, 0.7);
+  }
+  42% {
+    opacity: 1;
+  }
+  42.5% {
+    opacity: 0.2;
+    text-shadow: none;
+  }
+  43.2% {
+    opacity: 1;
+  }
+  71% {
+    opacity: 1;
+  }
+  71.5% {
+    opacity: 0.18;
+    text-shadow: none;
+  }
+  72.1% {
+    opacity: 0.85;
+  }
+  72.6% {
+    opacity: 0.22;
+    text-shadow: none;
+  }
+  73.4% {
+    opacity: 1;
+  }
+}
+
+@keyframes bulbTubeFlicker2 {
+  0%, 100% {
+    opacity: 0.92;
+  }
+  27% {
+    opacity: 0.92;
+  }
+  27.4% {
+    opacity: 0.18;
+    text-shadow: none;
+  }
+  28.1% {
+    opacity: 0.75;
+  }
+  28.6% {
+    opacity: 0.12;
+    text-shadow: none;
+  }
+  29.4% {
+    opacity: 1;
+    text-shadow: 0 0 3px #ffffff, 0 0 7px rgba(255, 255, 255, 0.8);
+  }
+  63% {
+    opacity: 0.92;
+  }
+  63.5% {
+    opacity: 0.2;
+    text-shadow: none;
+  }
+  64.1% {
+    opacity: 0.92;
+  }
+}
+
+@keyframes bulbHoverArc {
+  0% {
+    opacity: 0.92;
+    text-shadow: 0 0 2px #fff, 0 0 6px rgba(255, 255, 0.8);
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 4px #fff, 0 0 12px rgba(255, 255, 255, 1), 0 0 24px rgba(255, 255, 255, 0.6);
+  }
+}
+
+/* Smooth Bootloader to Page Cross-Dissolve Transition */
+body.booting-active #page-content-wrapper {
+  opacity: 0;
+  transform: scale(0.988) translateY(6px);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+body.booting-complete #page-content-wrapper {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  filter: blur(0px);
+  transition: opacity 750ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 750ms cubic-bezier(0.16, 1, 0.3, 1),
+              filter 750ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+

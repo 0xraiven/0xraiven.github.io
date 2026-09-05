@@ -149,7 +149,10 @@
       "React",
       "Tailwind CSS",
       "Keystatic CMS",
-      "Markdoc"
+      "Markdoc",
+      "Roff",
+      "CSS",
+      "JavaScript"
     ]
   },
   {
@@ -179,7 +182,8 @@
       "batch-script",
       "gaming",
       "low-end-pc",
-      "performance-optimization"
+      "performance-optimization",
+      "windows"
     ]
   },
   {
@@ -211,7 +215,8 @@
       "css3",
       "framer-motion",
       "reactjs",
-      "typescipt"
+      "typescipt",
+      "vercel-deployment"
     ]
   },
   {
