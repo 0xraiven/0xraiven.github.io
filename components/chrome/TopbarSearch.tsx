@@ -11,10 +11,8 @@ import {
   FileText,
   Box,
   CornerDownLeft,
-  ArrowRight,
   ShieldAlert,
   Sparkles,
-  Command,
 } from "lucide-react";
 import type { SearchItem } from "@/lib/search-index";
 

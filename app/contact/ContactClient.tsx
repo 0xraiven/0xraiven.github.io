@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import {
   Mail,
   Copy,
@@ -14,8 +13,6 @@ import {
   MessageSquare,
   Sparkles,
   Globe,
-  ArrowRight,
-  Code2,
   Box,
 } from "lucide-react";
 import { ScrambleText } from "@/components/animation/ScrambleText";

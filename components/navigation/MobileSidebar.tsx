@@ -3,10 +3,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GlassSurface } from "@/components/chrome/GlassSurface";
 import {
   BookOpen,
-  Search,
   FolderGit2,
   FileCode2,
   FileText,
@@ -14,7 +12,6 @@ import {
   User,
   FileDown,
   ChevronDown,
-  ChevronRight,
   ShieldAlert,
   Terminal,
   Box,
@@ -215,6 +212,28 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
     };
   }, [isOpen]);
 
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Orchestrate slide-in and slide-out transitions
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      const frameId = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsVisible(true);
+        });
+      });
+      return () => cancelAnimationFrame(frameId);
+    } else {
+      setIsVisible(false);
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   const toggleGroup = (title: string) => {
     setOpenGroups((prev) => ({
       ...prev,
@@ -222,29 +241,40 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
     }));
   };
 
-  if (!isOpen) return null;
+  if (!shouldRender) return null;
 
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-label="Mobile navigation drawer"
-      className="fixed inset-0 z-50 md:hidden overflow-hidden"
+      className={`fixed inset-0 z-50 md:hidden overflow-hidden ${
+        isVisible ? "pointer-events-auto" : "pointer-events-none"
+      }`}
     >
-      {/* Dimmed backdrop - flat, unblurred per architecture §4.4 */}
+      {/* Dimmed backdrop with smooth fade */}
       <div
-        className="fixed inset-0 bg-black/60 transition-opacity duration-200"
+        className={`fixed inset-0 bg-black/60 transition-opacity duration-300 motion-reduce:transition-none ${
+          isVisible ? "opacity-100" : "opacity-0"
+        }`}
+        style={{
+          transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Drawer with GlassSurface */}
+      {/* Drawer */}
       <aside
-        className="fixed top-0 bottom-0 left-0 w-72 max-w-[85vw] h-full z-10 transition-transform duration-200 ease-out transform translate-x-0 motion-reduce:transition-none"
+        className={`fixed top-0 bottom-0 left-0 w-72 max-w-[85vw] h-full z-10 transform transition-transform duration-300 motion-reduce:transition-none will-change-transform bg-surface border-r border-border shadow-2xl flex flex-col ${
+          isVisible ? "translate-x-0" : "-translate-x-full"
+        }`}
+        style={{
+          transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
       >
-        <GlassSurface className="h-full w-full rounded-none border-r border-y-0 border-l-0 shadow-2xl flex flex-col p-0">
-          {/* Drawer Header */}
-          <div className="flex items-center justify-between px-4 h-12 border-b border-border/70 shrink-0">
+        {/* Drawer Header */}
+        <div className="flex items-center justify-between px-4 h-12 border-b border-border/70 shrink-0">
             <Link
               href="/"
               onClick={onClose}
@@ -517,7 +547,6 @@ export function MobileSidebar({ isOpen, onClose, onOpenSearch }: MobileSidebarPr
               </div>
             </div>
           </div>
-        </GlassSurface>
       </aside>
     </div>
   );

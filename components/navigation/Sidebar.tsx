@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { useUI } from "@/providers";
 import {
   BookOpen,
-  Search,
   FolderGit2,
   FileCode2,
   FileText,

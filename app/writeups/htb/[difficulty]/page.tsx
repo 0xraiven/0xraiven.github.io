@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { KnowledgeBaseLayout } from "@/components/layout/KnowledgeBaseLayout";
 import { getArticles } from "@/lib/articles";
 import { StayTuned } from "@/components/content/StayTuned";
-import { ArrowLeft, ArrowRight, Box, Shield, Terminal, Zap, Skull, Calendar, Clock, Tag } from "lucide-react";
+import { ArrowLeft, ArrowRight, Box, Shield, Terminal, Zap, Skull, Calendar, Clock } from "lucide-react";
 import { ScrambleText } from "@/components/animation/ScrambleText";
 
 const VALID_DIFFICULTIES = ["low", "medium", "hard", "insane"] as const;

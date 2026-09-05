@@ -216,11 +216,6 @@ code, kbd, samp, pre {
  * --------------------------------------------------------------------------
  */
 
-@keyframes terminalBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
 @keyframes pageReveal {
   0% {
     opacity: 0;
@@ -232,35 +227,6 @@ code, kbd, samp, pre {
     transform: translateY(0);
     filter: blur(0);
   }
-}
-
-@keyframes matrixStream {
-  0% { transform: translateY(-20%); opacity: 0.2; }
-  50% { opacity: 1; }
-  100% { transform: translateY(20%); opacity: 0.2; }
-}
-
-@keyframes shutterBladeTop {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-100%); }
-}
-
-@keyframes shutterBladeBottom {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(100%); }
-}
-
-@keyframes cyberGlitch {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 1px); }
-  40% { transform: translate(2px, -1px); }
-  60% { transform: translate(-1px, -1px); }
-  80% { transform: translate(1px, 1px); }
-  100% { transform: translate(0); }
-}
-
-.animate-terminal-blink {
-  animation: terminalBlink 0.9s step-start infinite;
 }
 
 /* Progressive Stagger Reveal Classes */
@@ -398,38 +364,6 @@ code, kbd, samp, pre {
 }
 
 /* Nothing OS Glyph Matrix Animations */
-@keyframes glyphRedPulse {
-  0%, 100% {
-    opacity: 0.35;
-    transform: scale(0.92);
-    filter: drop-shadow(0 0 2px rgba(209, 44, 75, 0.4));
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.08);
-    filter: drop-shadow(0 0 10px rgba(209, 44, 75, 0.95)) drop-shadow(0 0 20px rgba(209, 44, 75, 0.5));
-  }
-}
-
-.animate-glyph-red {
-  animation: glyphRedPulse 1.6s ease-in-out infinite;
-}
-
-@keyframes glyphLightGlow {
-  0%, 100% {
-    opacity: 0.85;
-    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
-  }
-  50% {
-    opacity: 1;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 22px rgba(255, 255, 255, 0.45));
-  }
-}
-
-.animate-glyph-glow {
-  animation: glyphLightGlow 2s ease-in-out infinite;
-}
-
 @keyframes glyphFlash {
   0% {
     opacity: 1;
